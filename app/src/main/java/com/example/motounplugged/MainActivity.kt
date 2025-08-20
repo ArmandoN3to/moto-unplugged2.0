@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             TopAppBar(
-                                title = { Text("Moto Unplugged") },
+                                title = { Text("") },
                                 navigationIcon = {
                                     IconButton(onClick = {
                                         scope.launch {
