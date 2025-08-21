@@ -28,6 +28,25 @@ fun AppDrawer(
 
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
+
+        }
+        Spacer(Modifier.height(450.dp))
+        HorizontalDivider(Modifier.padding(start = 24.dp , end = 24.dp))
+        DrawerItems.BottomItems.forEach { item ->
+            NavigationDrawerItem(
+
+                label = { Text(item.title) },
+                selected = selectedItem == item.route,
+                onClick = { onItemSelected(item) },
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.title
+                    )
+                },
+
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
         }
     }
 }
