@@ -98,3 +98,7 @@ Para manter nosso histórico de commits limpo e legível, vamos seguir um padrã
 Seguir esses padrões tornará nosso histórico muito mais fácil de entender no futuro\!
 
 -----
+
+### Template de Pull Request
+<img width="740" height="773" alt="image" src="https://github.com/user-attachments/assets/3dde558a-1cc1-4178-8311-fab94922db3c" />
+
