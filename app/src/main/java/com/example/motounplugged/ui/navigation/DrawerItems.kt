@@ -16,6 +16,6 @@ object DrawerItems {
     val BottomItems = listOf(
         NavigationItem("Usuário", Icons.Default.AccountCircle, AppScreens.User.route),
         NavigationItem("Configurações", Icons.Default.Settings, AppScreens.Settings.route),
-        NavigationItem("Logout", Icons.Default.ExitToApp, "logout_action")
+        NavigationItem("Sair", Icons.Default.ExitToApp, "logout_action")
     )
 }

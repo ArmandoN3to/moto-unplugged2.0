@@ -30,7 +30,7 @@ fun AppDrawer(
             )
 
         }
-        Spacer(Modifier.height(450.dp))
+        Spacer(Modifier.height(380.dp))
         HorizontalDivider(Modifier.padding(start = 24.dp , end = 24.dp))
         DrawerItems.BottomItems.forEach { item ->
             NavigationDrawerItem(
