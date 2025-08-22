@@ -31,7 +31,7 @@ fun MotoUnpluggedApp() {
                 onItemSelected = { item ->
                     scope.launch { drawerState.close() }
                     if (item.route == "logout_action") {
-                        // Lógica de logout aqui
+
                     } else {
                         navController.navigate(item.route) {
                             launchSingleTop = true

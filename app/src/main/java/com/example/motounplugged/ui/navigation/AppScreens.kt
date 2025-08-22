@@ -1,5 +1,6 @@
 package com.example.motounplugged.ui.navigation
 
+//rotas
 sealed class AppScreens(val route: String) {
     object Home : AppScreens("home")
     object Schedule : AppScreens("schedule")
@@ -7,4 +8,5 @@ sealed class AppScreens(val route: String) {
     object Profiles : AppScreens("profiles")
     object User : AppScreens("user")
     object Settings : AppScreens("settings")
+    object Streak : AppScreens("streak")
 }

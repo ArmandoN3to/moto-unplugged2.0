@@ -38,6 +38,9 @@ fun AppNavHost(
         composable(AppScreens.Settings.route) {
             GenericScreen("Tela Configurações")
         }
+        composable(AppScreens.Streak.route) {
+            GenericScreen("Tela Streak")
+        }
     }
 }
 
