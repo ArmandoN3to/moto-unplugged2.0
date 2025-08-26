@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.motounplugged.ui.screens.ProfilesScreen
 
 @Composable
 fun AppNavHost(
@@ -30,7 +31,7 @@ fun AppNavHost(
             GenericScreen("Tela Estatísticas")
         }
         composable(AppScreens.Profiles.route) {
-            GenericScreen("Tela Perfis")
+            ProfilesScreen()
         }
         composable(AppScreens.User.route) {
             GenericScreen("Tela Usuário")
