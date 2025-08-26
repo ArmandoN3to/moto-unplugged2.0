@@ -15,9 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
-
-//import com.example.motounplugged.ui.components.CustomToast
-//import com.example.motounplugged.ui.components.Icon_Edit_Profile
+import com.example.motounplugged.ui.components.CustomToast
+import com.example.motounplugged.ui.components.Icon_Edit_Profile
 
 @Composable
 fun ProfilesScreen(modifier: Modifier = Modifier) {
@@ -80,7 +79,7 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ){
                         Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF000000))
-//                        Icon_Edit_Profile()
+                        Icon_Edit_Profile()
 
                     }
 
@@ -139,7 +138,7 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
         }
         if (showToast) {
             Spacer(modifier = Modifier.height(8.dp))
-//            CustomToast("Perfil Ativado")
+            CustomToast("Perfil Ativado")
             LaunchedEffect(Unit) {
                 delay(2000)
                 showToast = false
