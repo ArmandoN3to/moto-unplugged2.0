@@ -26,10 +26,11 @@ fun AppNavHost(
             GenericScreen("Tela Início")
         }
         composable(AppScreens.Schedule.route) {
-            GenericScreen("Tela Agendar")
+            ScheduleScreen()
         }
         composable(AppScreens.Stats.route) {
-            ScheduleScreen()
+            GenericScreen("Tela estatisticas")
+
         }
         composable(AppScreens.Profiles.route) {
             ProfilesScreen()
