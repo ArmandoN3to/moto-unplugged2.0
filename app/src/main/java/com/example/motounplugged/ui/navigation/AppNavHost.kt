@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.motounplugged.ui.screens.ProfilesScreen
+import com.example.motounplugged.ui.screens.ScheduleScreen
 
 @Composable
 fun AppNavHost(
@@ -28,7 +29,7 @@ fun AppNavHost(
             GenericScreen("Tela Agendar")
         }
         composable(AppScreens.Stats.route) {
-            GenericScreen("Tela Estatísticas")
+            ScheduleScreen()
         }
         composable(AppScreens.Profiles.route) {
             ProfilesScreen()

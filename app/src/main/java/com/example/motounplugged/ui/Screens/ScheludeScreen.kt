@@ -10,21 +10,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import android.app.TimePickerDialog
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+
 
 
 @Composable
 fun ScheduleScreen() {
+    val scrollState = rememberScrollState()
     val weekDays = listOf("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab")
     val selectedDays = remember { mutableStateListOf<String>() }
 
@@ -35,8 +38,8 @@ fun ScheduleScreen() {
 
     val profiles = listOf("Profile 1", "Profile 2", "Profile 3")
     val scheduledSessions = listOf(
-        "Monday to Friday\n08:00 - 30 min",
-        "Saturday\n19:00 - 1 hour"
+        "Segunda a Sexta \n08:00 - 30 min",
+        "Sábado \n19:00 - 1 hour"
     )
 
     var showTimePicker by remember { mutableStateOf(false) }
@@ -45,15 +48,20 @@ fun ScheduleScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState) // habilita o scroll
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Agendamento", fontWeight=FontWeight.Bold, fontSize = 18.sp, fontFamily = FontFamily.SansSerif )
+        Text("Agendamento", fontWeight=FontWeight.Bold,
+            fontSize = 20.sp,
+            fontFamily = FontFamily.SansSerif )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Weekdays selection
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
             weekDays.forEach { day ->
                 val isSelected = selectedDays.contains(day)
                 Button(
@@ -63,32 +71,55 @@ fun ScheduleScreen() {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isSelected) Color.Gray else Color.LightGray
                     ),
-                    shape = CircleShape
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                                .width(44.dp)
+                                .height(38.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text(day)
+                    Text(day, fontSize = 16.sp)
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // Time
-        Text("Hora", fontWeight=FontWeight.Bold, fontSize = 18.sp, fontFamily = FontFamily.SansSerif)
-        Text(time.format(DateTimeFormatter.ofPattern("HH:mm")))
-        Button(onClick = { showTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
-            Text("Select time", fontWeight=FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+        Text("Hora",
+            fontWeight=FontWeight.Bold,
+            fontSize = 20.sp,
+            fontFamily = FontFamily.SansSerif)
+
+        Text(text = time.format(DateTimeFormatter.ofPattern("HH:mm")),
+            fontWeight = FontWeight.Bold,
+            fontSize = 36.sp,
+            fontFamily = FontFamily.SansSerif)
+
+        Button(onClick = { showTimePicker = true },
+            colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecione a Hora",
+                fontWeight= FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif)
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Duration
-        Text("Duração", fontWeight=FontWeight.Bold, fontSize = 18.sp, fontFamily = FontFamily.SansSerif)
+        Text("Duração",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            fontFamily = FontFamily.SansSerif)
         Text(
             String.format("%02d:%02d", durationHours, durationMinutes),
-            style = MaterialTheme.typography.displayMedium
+            fontWeight = FontWeight.Bold,
+            fontSize = 36.sp,
+            fontFamily = FontFamily.SansSerif
         )
-        Button(onClick = { showDurationPicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
-            Text("Selecione a duração.", fontWeight=FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+        Button(onClick = { showDurationPicker = true },
+            colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecione a duração",
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
