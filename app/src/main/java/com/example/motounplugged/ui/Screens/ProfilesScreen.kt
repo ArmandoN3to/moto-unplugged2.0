@@ -29,79 +29,53 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
         Pair("Conforto", 6)
     )
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-
-    ) {
-
-
-        Column (
-            modifier = Modifier
+    Scaffold(
+        floatingActionButton = {
+            FAB_new_profile {
+                // Ação ao clicar no FAB
+                showToast = true
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp)
-        ){
-            Text(text = "Seus Perfis",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 18.sp,
-                fontFamily = FontFamily.SansSerif,
-                color = Color.Black
-            )
-
-        }
-        Column (
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .align(Alignment.CenterHorizontally)
-
-        ){  cards.forEach { (title, count) ->
-            ProfileCard(title = title, count = count)
-        }
-        }
-
-
-//        Row (
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 10.dp),
-//            horizontalArrangement = Arrangement.Center
-//        ){
-//          implementar o floataction button
-//            Button(
-//                onClick = {
-//                    // tela criar perfil
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth(0.9f)
-//                    .height(40.dp)
-//                    .align(Alignment.CenterVertically),
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color.Black,
-//                    contentColor = Color.White)
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.Add,
-//                    contentDescription = "Adicionar"
-//                )
-//                Spacer(modifier = Modifier
-//                    .width(8.dp)
-//                )
-//                Text(text = "Criar Novo Perfil")
-//            }
-
-        FloatingActionButton(
-            onClick = { },
         ) {
-            Icon(Icons.Filled.Add, "Floating action button.")
-        }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp)
+            ) {
+                Text(
+                    text = "Seus Perfis",
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    color = Color.Black
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                cards.forEach { (title, count) ->
+                    ProfileCard(title = title, count = count)
+                }
+            }
         }
     }
+}
 
-
-
-
-@Preview(showBackground = true)
 @Composable
-fun ProfilesScreenPreview() {
-    ProfilesScreen()
+fun FAB_new_profile(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = { onClick() },
+        containerColor = Color.LightGray,
+        contentColor = Color.Black
+    ) {
+        Icon(Icons.Filled.Add, contentDescription = "Adicionar perfil")
+    }
 }

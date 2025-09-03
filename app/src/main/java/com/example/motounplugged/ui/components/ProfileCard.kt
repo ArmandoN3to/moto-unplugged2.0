@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import com.example.motounplugged.ui.components.Icon_Edit_Profile
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
