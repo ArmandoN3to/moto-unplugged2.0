@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+import com.example.motounplugged.ui.components.SelectOptions
+
 
 
 @Composable
@@ -125,23 +127,8 @@ fun ScheduleScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Profile selection
-        var dropdownExpanded by remember { mutableStateOf(false) }
-        Box {
-            OutlinedButton(onClick = { dropdownExpanded = true }) {
-                Text(selectedProfile.ifEmpty { "Escolha um perfil" })
-            }
-            DropdownMenu(expanded = dropdownExpanded, onDismissRequest = { dropdownExpanded = false }) {
-                profiles.forEach { profile ->
-                    DropdownMenuItem(
-                        text = { Text(profile) },
-                        onClick = {
-                            selectedProfile = profile
-                            dropdownExpanded = false
-                        }
-                    )
-                }
-            }
-        }
+        SelectOptions()
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -154,7 +141,7 @@ fun ScheduleScreen() {
             Text("Agendar Sessão", fontWeight=FontWeight.Bold, fontSize = 18.sp, fontFamily = FontFamily.SansSerif)
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Scheduled sessions
         Text("Sessões Agendadads", fontWeight=FontWeight.Bold, fontSize = 18.sp, fontFamily = FontFamily.SansSerif)
