@@ -17,8 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import android.app.TimePickerDialog
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.font.FontFamily
@@ -26,9 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 import com.example.motounplugged.ui.components.SelectOptions
-import com.example.motounplugged.models.Profile
-import com.example.motounplugged.models.sampleProfiles
-import com.example.motounplugged.ui.components.ProfileCard
 
 
 @Composable
