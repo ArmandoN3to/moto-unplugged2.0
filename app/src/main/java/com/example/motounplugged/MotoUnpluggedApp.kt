@@ -63,12 +63,12 @@ fun MotoUnpluggedApp() {
 
 
             },
+
             floatingActionButton = {
                 when (selectedRoute) {
                     AppScreens.Profiles.route-> {
                         FAB_new_profile {
-                            // Ação ao clicar no FAB
-                            //showToast = true
+                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
                             }
                     }
                 }

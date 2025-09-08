@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
+import com.example.motounplugged.ui.Screens.CreateProfileScreen
 
 @Composable
 fun AppNavHost(
@@ -43,6 +44,9 @@ fun AppNavHost(
         }
         composable(AppScreens.Streak.route) {
             GenericScreen("Tela Streak")
+        }
+        composable(AppScreens.CreateProfile.route) {
+            CreateProfileScreen(navController = navController)
         }
     }
 }
