@@ -19,14 +19,16 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.motounplugged.models.sampleProfiles
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectOptions() {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("Select Options") }
+    var selectedOption by remember { mutableStateOf("Selecione o Perfil") }
 
-    val options = listOf("Opção 1", "Opção 2", "Opção 3")
+    val profiles = sampleProfiles.map { it.title }
+
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -67,11 +69,11 @@ fun SelectOptions() {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            options.forEach { option ->
+            profiles.forEach { profile ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(profile) },
                     onClick = {
-                        selectedOption = option
+                        selectedOption = profile
                         expanded = false
                     }
                 )

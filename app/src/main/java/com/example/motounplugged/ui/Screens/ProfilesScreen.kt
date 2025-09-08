@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.motounplugged.ui.components.ProfileCard
 import com.example.motounplugged.models.Profile
+import com.example.motounplugged.models.sampleProfiles
 
 
 @Composable
@@ -25,15 +26,7 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
 
 
 
-    val profiles = listOf(
-        Profile("Trabalho", 4),
-        Profile("Estudo", 6),
-        Profile("Academia", 5),
-        Profile("armando", 5),
-        Profile("claudio", 5),
-        Profile("adasd", 5),
-        Profile("adasdfdf", 5)
-    )
+    var profiles = sampleProfiles
 
 
         Box(
