@@ -176,7 +176,7 @@ fun ScheduleScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-    }
+
         scheduledSessions.forEach { session ->
             Card(
                 modifier = Modifier
@@ -250,4 +250,5 @@ fun ScheduleScreen() {
             }
         )
     }
+  }
 }
