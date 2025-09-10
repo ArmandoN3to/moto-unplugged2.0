@@ -38,36 +38,13 @@ fun CreateProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(
-        modifier = Modifier.
-        padding(horizontal = 1.dp),
-
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar"
-                        )
-                    }
-                },
-                actions = {
-                    TextButton(onClick = { viewModel.onEvent(CreateProfileEvent.OnSaveProfileClick) }) {
-                        Text("Salvar", fontWeight = FontWeight.Bold)
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        CreateProfileContent(
-            modifier = Modifier.padding(innerPadding),
-            uiState = uiState,
-            onEvent = viewModel::onEvent // Passa a referência da função de eventos
-        )
-    }
+    CreateProfileContent(
+        modifier = Modifier.padding(),
+        uiState = uiState,
+        onEvent = viewModel::onEvent // Passa a referência da função de eventos
+    )
 }
+
 
 @Composable
 private fun CreateProfileContent(
