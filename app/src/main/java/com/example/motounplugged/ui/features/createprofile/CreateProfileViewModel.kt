@@ -9,12 +9,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// Representa todo o estado que a nossa UI pode ter
 data class CreateProfileUiState(
     val profileName: String = "",
     val selectedApps: List<String> = emptyList(),
     val isImmediatelyActive: Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val appCount: Int = 0// provisorio
+)
+
+val sampleProfiles = listOf(
+    CreateProfileUiState(profileName = "Trabalho", appCount = 4 ),
+    CreateProfileUiState(profileName = "Academia", appCount = 4 ),
+    CreateProfileUiState(profileName = "Estudo", appCount = 4 ),
+    CreateProfileUiState(profileName = "teste", appCount = 4 ),
 )
 
 
