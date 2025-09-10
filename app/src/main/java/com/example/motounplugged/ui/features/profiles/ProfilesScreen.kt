@@ -14,7 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.motounplugged.ui.components.ProfileCard
 import com.example.motounplugged.ui.features.createprofile.CreateProfileUiState
-import com.example.motounplugged.models.sampleProfiles
+//import com.example.motounplugged.models.sampleProfiles
+import com.example.motounplugged.ui.features.createprofile.sampleProfiles
+
 
 
 @Composable
@@ -45,10 +47,10 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
             ) {
                 items(
                     items = profiles,
-                    key = { profile -> profile.title }
+                    key = { profile -> profile.profileName }
                 ) { profile ->
                     ProfileCard(
-                        title = profile.title,
+                        title = profile.profileName,
                         count = profile.appCount
                     )
                 }
