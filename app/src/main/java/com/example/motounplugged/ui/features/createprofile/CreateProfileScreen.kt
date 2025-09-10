@@ -148,7 +148,7 @@ private fun CreateProfileContent(
     }
 }
 
-// --- Componentes Reutilizáveis para a Tela ---
+
 
 @Composable
 private fun SettingsRow(
@@ -205,7 +205,7 @@ private fun SettingsSwitchRow(
 private fun CreateProfileScreenPreview() {
     MotoUnpluggedTheme {
         CreateProfileContent(
-            uiState = CreateProfileUiState(profileName = "Trabalho"),
+            uiState = CreateProfileUiState(profileName = "Trabalho", appCount = 4),
             onEvent = {}
         )
     }
