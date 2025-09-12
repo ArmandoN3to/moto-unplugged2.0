@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.motounplugged.database.entities.ProfilesEntity
 import kotlinx.coroutines.flow.Flow
-import java.util.concurrent.Flow as JavaUtilConcurrentFlow
+//import java.util.concurrent.Flow as JavaUtilConcurrentFlow
 
 @Dao
 interface ProfilesDao {

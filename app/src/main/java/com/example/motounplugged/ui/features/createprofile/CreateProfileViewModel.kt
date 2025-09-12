@@ -3,7 +3,7 @@ package com.example.motounplugged.ui.features.createprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motounplugged.database.entities.ProfilesEntity
-import com.example.motounplugged.models.Profile
+//import com.example.motounplugged.models.Profile
 import com.example.motounplugged.repositories.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

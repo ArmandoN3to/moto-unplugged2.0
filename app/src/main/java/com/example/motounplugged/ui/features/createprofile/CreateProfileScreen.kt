@@ -96,11 +96,16 @@ private fun CreateProfileContent(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
+    }
+    }
 
-        Spacer(Modifier.height(24.dp))
+
+
+
+       // Spacer(Modifier.height(24.dp))
 
         // Card para selecionar apps
-        Card(
+        /*Card(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.clickable { onEvent(CreateProfileEvent.OnSelectAppsClick) }
         ) {
@@ -146,10 +151,10 @@ private fun CreateProfileContent(
             onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
         )
     }
-}
+}*/
 
 
-
+/*
 @Composable
 private fun SettingsRow(
     icon: ImageVector,
@@ -173,9 +178,9 @@ private fun SettingsRow(
         }
         Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
     }
-}
+}*/
 
-@Composable
+/*@Composable
 private fun SettingsSwitchRow(
     icon: ImageVector,
     title: String,
@@ -198,9 +203,9 @@ private fun SettingsSwitchRow(
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
+*/
 
-
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 private fun CreateProfileScreenPreview() {
     MotoUnpluggedTheme {
@@ -209,4 +214,4 @@ private fun CreateProfileScreenPreview() {
             onEvent = {}
         )
     }
-}
+}*/

@@ -46,11 +46,10 @@ android {
 dependencies {
 
     //implementação koin(injeção de dependência)
-    // Koin 3.6.3
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.viewmodel)
+    val koinVersion = "4.1.1"
+    implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
+
 
 
 

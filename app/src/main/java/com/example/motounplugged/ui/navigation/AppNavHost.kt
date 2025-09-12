@@ -11,6 +11,9 @@ import androidx.navigation.compose.composable
 import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
+import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun AppNavHost(
@@ -33,7 +36,8 @@ fun AppNavHost(
 
         }
         composable(AppScreens.Profiles.route) {
-            ProfilesScreen()
+            val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
+            ProfilesScreen( viewModel =  profilesViewModel)
         }
         composable(AppScreens.User.route) {
             GenericScreen("Tela Usuário")
