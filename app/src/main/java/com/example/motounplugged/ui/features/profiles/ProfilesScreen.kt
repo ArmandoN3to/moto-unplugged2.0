@@ -16,17 +16,16 @@ import com.example.motounplugged.ui.components.ProfileCard
 import com.example.motounplugged.ui.features.createprofile.CreateProfileUiState
 //import com.example.motounplugged.models.sampleProfiles
 import com.example.motounplugged.ui.features.createprofile.sampleProfiles
-
+import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 
 
 @Composable
-fun ProfilesScreen(modifier: Modifier = Modifier) {
-    var showToast by remember { mutableStateOf(false) }
+fun ProfilesScreen(
+    viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
+    modifier: Modifier = Modifier) {
 
-
-
-    var profiles = sampleProfiles
-
+       // profiles vai receber o meu stateflow e coletar esse estado
+       val profiles by viewModel.profiles.collectAsState()
 
         Box(
             modifier = modifier
@@ -35,7 +34,6 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.CenterStart
 
         ) {
-
 
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 10.dp),
@@ -47,10 +45,10 @@ fun ProfilesScreen(modifier: Modifier = Modifier) {
             ) {
                 items(
                     items = profiles,
-                    key = { profile -> profile.profileName }
+                    key = { it.id}
                 ) { profile ->
                     ProfileCard(
-                        title = profile.profileName,
+                        title = profile.ProfileName,
                         count = profile.appCount
                     )
                 }
@@ -70,8 +68,8 @@ fun FAB_new_profile(onClick: () -> Unit) {
         Icon(Icons.Filled.Add, contentDescription = "Adicionar perfil")
     }
 }
-@Preview
+/*@Preview
 @Composable
 fun ProfilesScreenPreview() {
     ProfilesScreen()
-}
+}*/
