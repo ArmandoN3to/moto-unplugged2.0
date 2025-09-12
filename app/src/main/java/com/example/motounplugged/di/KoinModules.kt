@@ -15,7 +15,7 @@ import org.koin.androidx.compose.koinViewModel
 
 val databaseModule = module {
     single {
-        val db = Room.databaseBuilder(
+         Room.databaseBuilder(
             androidContext(),
             MotoUnpluggedDataBase::class.java,
             "profile.db"
