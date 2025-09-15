@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
+import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -26,7 +27,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(AppScreens.Home.route) {
-            GenericScreen("Tela Início")
+            HomeScreen()
         }
         composable(AppScreens.Schedule.route) {
             ScheduleScreen()
