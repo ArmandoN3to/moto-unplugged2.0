@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -41,7 +43,8 @@ fun CreateProfileScreen(
     CreateProfileContent(
         modifier = Modifier.padding(),
         uiState = uiState,
-        onEvent = viewModel::onEvent // Passa a referência da função de eventos
+        onEvent = viewModel::onEvent, // Passa a referência da função de eventos
+        navController = navController
     )
 }
 
@@ -50,7 +53,8 @@ fun CreateProfileScreen(
 private fun CreateProfileContent(
     modifier: Modifier = Modifier,
     uiState: CreateProfileUiState,
-    onEvent: (CreateProfileEvent) -> Unit
+    onEvent: (CreateProfileEvent) -> Unit,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -74,18 +78,16 @@ private fun CreateProfileContent(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
-    }
-    }
 
 
-
-
-       // Spacer(Modifier.height(24.dp))
+         Spacer(Modifier.height(24.dp))
 
         // Card para selecionar apps
-        /*Card(
+        Card(
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clickable { onEvent(CreateProfileEvent.OnSelectAppsClick) }
+
+            modifier = Modifier.clickable {//navController.navigate(AppScreens.Lista de Apps.route
+            }
         ) {
             Row(
                 modifier = Modifier
@@ -96,7 +98,11 @@ private fun CreateProfileContent(
                 Icon(Icons.Default.Apps, contentDescription = null, modifier = Modifier.size(28.dp))
                 Spacer(Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Aplicativos Bloqueados", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        "Aplicativos Bloqueados",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold
+                    )
                     Text(
                         if (uiState.selectedApps.isEmpty()) "Nenhum aplicativo selecionado" else "${uiState.selectedApps.size} aplicativos selecionados",
                         style = MaterialTheme.typography.bodyMedium,
@@ -106,30 +112,32 @@ private fun CreateProfileContent(
                 Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
             }
         }
-
-        Spacer(Modifier.height(16.dp))
-
-
-        // Item para Agendamento
-        SettingsRow(
-            icon = Icons.Default.Notifications,
-            title = "Agendamento",
-            subtitle = "Definir horários de ativação",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
-        )
-
-        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-
-        // Item para o Switch
-        SettingsSwitchRow(
-            icon = Icons.Default.Password,
-            title = "Ativar ao salvar",
-            subtitle = "O perfil será ativado imediatamente",
-            checked = uiState.isImmediatelyActive,
-            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
-        )
     }
-}*/
+}
+//
+//        Spacer(Modifier.height(16.dp))
+//
+//
+//        // Item para Agendamento
+//        SettingsRow(
+//            icon = Icons.Default.Notifications,
+//            title = "Agendamento",
+//            subtitle = "Definir horários de ativação",
+//            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+//        )
+//
+//        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+//
+//        // Item para o Switch
+//        SettingsSwitchRow(
+//            icon = Icons.Default.Password,
+//            title = "Ativar ao salvar",
+//            subtitle = "O perfil será ativado imediatamente",
+//            checked = uiState.isImmediatelyActive,
+//            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
+//        )
+//    }
+//}}
 
 
 /*
