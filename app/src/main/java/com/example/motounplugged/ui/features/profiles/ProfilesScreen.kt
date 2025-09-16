@@ -31,7 +31,7 @@ fun ProfilesScreen(
             modifier = modifier
                 .padding()
                 .fillMaxSize(),
-            contentAlignment = Alignment.CenterStart
+            contentAlignment = Alignment.TopCenter
 
         ) {
 
