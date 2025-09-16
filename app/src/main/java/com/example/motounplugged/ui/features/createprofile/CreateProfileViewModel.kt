@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 data class CreateProfileUiState(
     val profileName: String = "",
     //será implementado futuramente
-   /* val selectedApps: List<String> = emptyList(), // lista de app bloqueados
-     val isImmediatelyActive: Boolean = true, // switch de ativar perfil logo ao criar
-    val isLoading: Boolean = false,*/ // carregamento
+    val selectedApps: List<String> = emptyList(), // lista de app bloqueados
+//     val isImmediatelyActive: Boolean = true, // switch de ativar perfil logo ao criar
+//    val isLoading: Boolean = false, // carregamento
     val appCount: Int = 0// provisorio
 )
 
