@@ -112,6 +112,33 @@ private fun CreateProfileContent(
                 Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
             }
         }
+        Spacer(Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                if (uiState.profileName.isNotBlank()){
+                    onEvent(CreateProfileEvent.OnSaveProfileClick)
+                    navController.navigate(AppScreens.Profiles.route)}
+
+                else{
+                    println("Nome do perfil não pode ser vazio")
+                }
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = MaterialTheme.shapes.medium,
+            enabled = uiState.profileName.isNotBlank()
+
+
+        ) {
+            Text(
+                text = "Salvar",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 //
