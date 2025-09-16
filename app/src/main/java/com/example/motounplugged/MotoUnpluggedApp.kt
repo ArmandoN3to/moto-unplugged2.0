@@ -80,21 +80,24 @@ fun MotoUnpluggedApp() {
                         }
                     },
 
-                    actions = {
-                        // Verificamos a rota para adicionar ações específicas
-                        when (selectedRoute) {
-                            AppScreens.CreateProfile.route -> {
-                                TextButton(
-                                    onClick = {
-                                        println("Botão Salvar clicado!")
-                                    }
-                                ) {
-                                    Text("Salvar", fontWeight = FontWeight.Bold)
-                                }
-                            }
-                            // Adicionar ações para outras telas
-                        }
-                    }
+                 //utilizar essa seçao quando for mudar algum comportamento na topappbar
+
+//                    actions = {
+//                        // Verificamos a rota para adicionar ações específicas
+//                        when (selectedRoute) {
+//                            AppScreens.CreateProfile.route -> {
+//                                TextButton(
+//                                    onClick = {
+//                                        println("Botão Salvar clicado!")
+//                                    }
+//                                ) {
+//                                    Text("Salvar", fontWeight = FontWeight.Bold)
+//                                }
+//                            }
+//                            // Adicionar ações para outras telas
+//                        }
+//                    }
+
                 )
             },
 
