@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.room.common.jvm)
     //implementação koin(injeção de dependência)
     val koinVersion = "4.1.1"
     implementation("io.insert-koin:koin-android:$koinVersion")

@@ -7,10 +7,9 @@ import com.example.motounplugged.repositories.ProfileRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class ProfilesScreenViewModel(
-    repository: ProfileRepository
-): ViewModel(){
+class ProfilesScreenViewModel(private val repository: ProfileRepository): ViewModel() {
     // objetivo aqui é mostrar o que atualizou na criação de perfis
     // vai observar o estado flow da minha profilesentity
     // que vem do meu repositorio de perfis
@@ -21,4 +20,22 @@ class ProfilesScreenViewModel(
             started = SharingStarted.WhileSubscribed(5000), // manter ativo até 5s
             initialValue = emptyList() // para a lista não ser nula
         )
+
+    fun save(profile: ProfilesEntity) {
+        viewModelScope.launch {
+            repository.save(profile)
+        }
+    }
+
+    fun update(profile: ProfilesEntity) {
+        viewModelScope.launch {
+            repository.update(profile)
+        }
+    }
+
+    fun delete(profile: ProfilesEntity) {
+        viewModelScope.launch {
+            repository.delete(profile)
+        }
+    }
 }

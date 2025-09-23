@@ -15,6 +15,10 @@ class ProfileRepository (
         dao.save(profiles)
     }
 
+    suspend fun update(profile: ProfilesEntity) {
+        dao.update(profile)
+    }
+
     suspend fun delete(profiles:ProfilesEntity){
         dao.delete(profiles)
     }

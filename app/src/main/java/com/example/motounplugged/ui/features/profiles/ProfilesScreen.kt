@@ -10,12 +10,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.ui.components.EditProfileDialog
 import com.example.motounplugged.ui.components.ProfileCard
-import com.example.motounplugged.ui.features.createprofile.CreateProfileUiState
-//import com.example.motounplugged.models.sampleProfiles
-import com.example.motounplugged.ui.features.createprofile.sampleProfiles
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 
 
@@ -26,6 +24,7 @@ fun ProfilesScreen(
 
        // profiles vai receber o meu stateflow e coletar esse estado
        val profiles by viewModel.profiles.collectAsState()
+       var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
         Box(
             modifier = modifier
@@ -34,14 +33,11 @@ fun ProfilesScreen(
             contentAlignment = Alignment.TopCenter
 
         ) {
-
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(3.dp),
                 modifier = Modifier.fillMaxWidth().padding(),
                 horizontalAlignment = Alignment.CenterHorizontally
-
-
             ) {
                 items(
                     items = profiles,
@@ -49,10 +45,27 @@ fun ProfilesScreen(
                 ) { profile ->
                     ProfileCard(
                         title = profile.ProfileName,
-                        count = profile.appCount
+                        count = profile.appCount,
+                        isActive = profile.isImmediatelyActive,
+                        onToggle = { newValue ->
+                            val updated = profile.copy(isImmediatelyActive = newValue)
+                            viewModel.update(updated)
+                        }
                     )
                 }
             }
+        }
+
+        // se um perfil foi selecionado para edição
+        editingProfile?.let { profile ->
+            EditProfileDialog(
+                profile = profile,
+                onDismiss = { editingProfile = null },
+                onSave = { updated ->
+                    viewModel.update(updated)
+                    editingProfile = null
+                }
+            )
         }
     }
 
@@ -68,8 +81,4 @@ fun FAB_new_profile(onClick: () -> Unit) {
         Icon(Icons.Filled.Add, contentDescription = "Adicionar perfil")
     }
 }
-/*@Preview
-@Composable
-fun ProfilesScreenPreview() {
-    ProfilesScreen()
-}*/
+
