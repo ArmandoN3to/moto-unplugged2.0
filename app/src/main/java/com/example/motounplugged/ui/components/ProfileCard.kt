@@ -81,15 +81,3 @@ fun ProfileCard(
         }
     }
 }
-
-@Preview(showBackground = true, widthDp = 360)
-@Composable
-fun ProfilesCardPreview() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ProfileCard(title = "Trabalho", count = 2, isActive = false, onToggle = { newValue -> })
-        ProfileCard(title = "Pessoal", count = 5, isActive = false, onToggle = false)
-    }
-}
