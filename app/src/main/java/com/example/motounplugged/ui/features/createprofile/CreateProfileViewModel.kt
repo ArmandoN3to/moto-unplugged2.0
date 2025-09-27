@@ -16,7 +16,7 @@ data class CreateProfileUiState(
     val profileName: String = "",
     //será implementado futuramente
     val selectedApps: List<String> = emptyList(), // lista de app bloqueados
-//     val isImmediatelyActive: Boolean = true, // switch de ativar perfil logo ao criar
+     val isImmediatelyActive: Boolean = true, // switch de ativar perfil logo ao criar
 //    val isLoading: Boolean = false, // carregamento
     val appCount: Int = 0// provisorio
 )
@@ -34,9 +34,9 @@ val sampleProfiles = listOf(
 // Eventos que a UI pode enviar para o ViewModel ex: clicar em salvar
 sealed interface CreateProfileEvent {
     data class OnProfileNameChange(val name: String) : CreateProfileEvent
-    //data object OnSelectAppsClick : CreateProfileEvent
-    //data object OnSchedulingClick : CreateProfileEvent
-    //data class OnActivateImmediatelyChange(val isActive: Boolean) : CreateProfileEvent
+    data object OnSelectAppsClick : CreateProfileEvent
+    data object OnSchedulingClick : CreateProfileEvent
+    data class OnActivateImmediatelyChange(val isActive: Boolean) : CreateProfileEvent
     data object OnSaveProfileClick : CreateProfileEvent
 }
 
@@ -52,15 +52,15 @@ class CreateProfileViewModel(
             is CreateProfileEvent.OnProfileNameChange -> {
                 _uiState.update { it.copy(profileName = event.name) }
             }
-            /*is CreateProfileEvent.OnActivateImmediatelyChange -> {
+            is CreateProfileEvent.OnActivateImmediatelyChange -> {
                 _uiState.update { it.copy(isImmediatelyActive = event.isActive) }
-            }*/
+            }
             CreateProfileEvent.OnSaveProfileClick -> {
                 saveProfile()
             }
             // A lógica de navegação para as outras telas seria tratada aqui
-           // CreateProfileEvent.OnSelectAppsClick -> { /* Navegar para seleção de apps */ }
-           // CreateProfileEvent.OnSchedulingClick -> { /* Navegar para agendamento */ }
+            CreateProfileEvent.OnSelectAppsClick -> { /* Navegar para seleção de apps */ }
+            CreateProfileEvent.OnSchedulingClick -> { /* Navegar para agendamento */ }
         }
     }
 
