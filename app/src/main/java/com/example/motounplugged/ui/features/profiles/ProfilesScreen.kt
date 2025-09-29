@@ -3,6 +3,8 @@ package com.example.motounplugged.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -10,7 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.components.EditProfileDialog
 import com.example.motounplugged.ui.components.ProfileCard
@@ -25,7 +30,38 @@ fun ProfilesScreen(
        // profiles vai receber o meu stateflow e coletar esse estado
        val profiles by viewModel.profiles.collectAsState()
        var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
+    Column (
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp)
+            .fillMaxSize()
 
+    ){
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+            Text(
+                text = "Perfis de Foco",
+                fontStyle = FontStyle.Normal,
+                fontSize = 25.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Crie e personalize seus perfis",
+                fontStyle = FontStyle.Normal,
+                fontSize = 20.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .align(Alignment.CenterHorizontally)
+
+            )
+        }
+    }
         Box(
             modifier = modifier
                 .padding()

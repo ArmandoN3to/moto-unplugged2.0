@@ -13,6 +13,10 @@ import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.settings.SettingsScreen
+import com.example.motounplugged.ui.features.stats.StatsScreen
+import com.example.motounplugged.ui.features.streak.StreakScreen
+import com.example.motounplugged.ui.features.user.UserScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -33,21 +37,20 @@ fun AppNavHost(
             ScheduleScreen()
         }
         composable(AppScreens.Stats.route) {
-            GenericScreen("Tela estatisticas")
-
+            StatsScreen()
         }
         composable(AppScreens.Profiles.route) {
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel)
         }
         composable(AppScreens.User.route) {
-            GenericScreen("Tela Usuário")
+            UserScreen()
         }
         composable(AppScreens.Settings.route) {
-            GenericScreen("Tela Configurações")
+            SettingsScreen()
         }
         composable(AppScreens.Streak.route) {
-            GenericScreen("Tela Streak")
+            StreakScreen()
         }
         composable(AppScreens.CreateProfile.route) {
             CreateProfileScreen(navController = navController)
