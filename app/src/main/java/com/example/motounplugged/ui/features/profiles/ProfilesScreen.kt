@@ -30,80 +30,68 @@ fun ProfilesScreen(
        // profiles vai receber o meu stateflow e coletar esse estado
        val profiles by viewModel.profiles.collectAsState()
        var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
-    Column (
+
+    Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp)
             .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Textos de Título e Subtítulo
+        Text(
+            text = "Perfis de Foco",
+            fontStyle = FontStyle.Normal,
+            fontSize = 25.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        Text(
+            text = "Crie e personalize seus perfis",
+            fontStyle = FontStyle.Normal,
+            fontSize = 20.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
+        )
 
-    ){
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-            Text(
-                text = "Perfis de Foco",
-                fontStyle = FontStyle.Normal,
-                fontSize = 25.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Crie e personalize seus perfis",
-                fontStyle = FontStyle.Normal,
-                fontSize = 20.sp,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 5.dp)
-                    .align(Alignment.CenterHorizontally)
-
-            )
-        }
-    }
-        Box(
-            modifier = modifier
-                .padding()
-                .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
-
+        // Lista de Perfis que Otimiza a Rolagem
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-                modifier = Modifier.fillMaxWidth().padding(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(
-                    items = profiles,
-                    key = { it.id}
-                ) { profile ->
-                    ProfileCard(
-                        title = profile.ProfileName,
-                        count = profile.appCount,
-                        isActive = profile.isImmediatelyActive,
-                        onToggle = { newValue ->
-                            val updated = profile.copy(isImmediatelyActive = newValue)
-                            viewModel.update(updated)
-                        }
-                    )
-                }
+            items(
+                items = profiles,
+                key = { it.id }
+            ) { profile ->
+                ProfileCard(
+                    title = profile.ProfileName,
+                    count = profile.appCount,
+                    isActive = profile.isImmediatelyActive,
+                    onToggle = { newValue ->
+                        val updated = profile.copy(isImmediatelyActive = newValue)
+                        viewModel.update(updated)
+                    }
+                )
             }
         }
-
-        // se um perfil foi selecionado para edição
-        editingProfile?.let { profile ->
-            EditProfileDialog(
-                profile = profile,
-                onDismiss = { editingProfile = null },
-                onSave = { updated ->
-                    viewModel.update(updated)
-                    editingProfile = null
-                }
-            )
-        }
     }
+
+    // se um perfil foi selecionado para edição
+    editingProfile?.let { profile ->
+        EditProfileDialog(
+            profile = profile,
+            onDismiss = { editingProfile = null },
+            onSave = { updated ->
+                viewModel.update(updated)
+                editingProfile = null
+            }
+        )
+    }
+}
+
+
 
 
 
