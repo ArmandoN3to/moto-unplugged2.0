@@ -90,8 +90,7 @@ private fun CreateProfileContent(
         // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
-
-            modifier = Modifier.clickable {//navController.navigate(AppScreens.Lista de Apps.route
+            modifier = Modifier.clickable {navController.navigate(AppScreens.SelectApps.route)
             }
         ) {
             Row(
