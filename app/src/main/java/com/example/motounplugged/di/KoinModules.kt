@@ -3,11 +3,16 @@ package com.example.motounplugged.di
 import androidx.room.Room
 import com.example.motounplugged.database.MotoUnpluggedDataBase
 import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.domain.usecase.GetInstalledAppsUseCase
 import com.example.motounplugged.repositories.ProfileRepository
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.selectapps.SelectAppsViewModel
+
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.android.ext.koin.androidApplication
+
 //import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.koin.androidx.compose.koinViewModel
@@ -34,7 +39,15 @@ val repositoryModule = module {
     }
 }
 
+val useCaseModule = module {
+    // Koin vai prover o Context para criar o Use Case
+    factory { GetInstalledAppsUseCase(androidApplication()) }
+}
+
 val viewModelModule = module {
+    viewModel {
+        SelectAppsViewModel(get())
+    }
     viewModel {
         CreateProfileViewModel(get())
     }
