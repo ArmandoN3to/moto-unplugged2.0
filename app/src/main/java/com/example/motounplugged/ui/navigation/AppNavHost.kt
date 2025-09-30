@@ -17,6 +17,7 @@ import com.example.motounplugged.ui.features.settings.SettingsScreen
 import com.example.motounplugged.ui.features.stats.StatsScreen
 import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.user.UserScreen
+import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -54,6 +55,9 @@ fun AppNavHost(
         }
         composable(AppScreens.CreateProfile.route) {
             CreateProfileScreen(navController = navController)
+        }
+        composable(AppScreens.SelectApps.route) {
+            SelectAppsScreen(navController = navController)
         }
     }
 }
