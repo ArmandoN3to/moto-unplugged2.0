@@ -31,7 +31,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(AppScreens.Home.route) {
-            HomeScreen()
+            HomeScreen(onClick = {})
         }
         composable(AppScreens.Schedule.route) {
             ScheduleScreen()
