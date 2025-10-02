@@ -1,9 +1,11 @@
 // ui/features/selectapps/SelectAppsScreen.kt
 package com.example.motounplugged.ui.features.selectapps
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 import com.example.motounplugged.ui.components.AppListItem
+import kotlin.math.round
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,8 +76,16 @@ fun SelectAppsScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 placeholder = { Text("Search app") },
+                shape = RoundedCornerShape(30.dp),
                 leadingIcon = { Icon(Icons.Default.Search, null) },
-                singleLine = true
+                singleLine = true ,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = com.example.motounplugged.ui.theme.Gray20, // Fill color when focused
+                    focusedBorderColor = com.example.motounplugged.ui.theme.Gray20,
+                    unfocusedContainerColor = com.example.motounplugged.ui.theme.Gray20,  // Fill color when not focused
+                    unfocusedBorderColor = com.example.motounplugged.ui.theme.Gray20
+
+                )
             )
 
             // Select All
