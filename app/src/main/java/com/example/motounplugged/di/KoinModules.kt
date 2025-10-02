@@ -40,7 +40,6 @@ val repositoryModule = module {
 }
 
 val useCaseModule = module {
-    // Koin vai prover o Context para criar o Use Case
     factory { GetInstalledAppsUseCase(androidApplication()) }
 }
 

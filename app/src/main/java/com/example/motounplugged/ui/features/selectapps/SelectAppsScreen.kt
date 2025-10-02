@@ -58,7 +58,7 @@ fun SelectAppsScreen(
                 modifier = Modifier.padding(top = 16.dp)
             )
             Text(
-                text = "Selecione os apps permitidos na sessão Moto Unplugged",
+                text = "Selecione os apps permitidos ",
                 fontStyle = FontStyle.Normal,
                 fontSize = 20.sp,
                 color = Color.Gray,

@@ -23,13 +23,13 @@ data class SelectAppsUiState(
 }
 
 sealed interface SelectAppsEvent {
-    // Evento para quando o texto da busca muda, carregando a nova 'query'
+    // Evento para o texto da busca
     data class OnSearchQueryChange(val query: String) : SelectAppsEvent
 
-    // Evento para quando um checkbox de app é marcado/desmarcado
+    // Evento checkbox de app é marcado/desmarcado
     data class OnAppSelectionChange(val packageName: String, val isSelected: Boolean) : SelectAppsEvent
 
-    // Evento para o clique no checkbox "Selecionar Tudo"
+    // Evento para checkbox "Selecionar Tudo"
     data object OnSelectAllClick : SelectAppsEvent
 
     // Evento para o clique no botão Salvar
@@ -57,7 +57,6 @@ class SelectAppsViewModel(
         }
     }
 
-    // ESTE BLOCO 'when' AGORA VAI FUNCIONAR, POIS TODOS OS CASOS ESTÃO DEFINIDOS ACIMA
     fun onEvent(event: SelectAppsEvent) {
         when (event) {
             is SelectAppsEvent.OnSearchQueryChange -> _uiState.update { it.copy(searchQuery = event.query) }
