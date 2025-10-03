@@ -37,7 +37,6 @@ fun ProfilesScreen(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Textos de Título e Subtítulo
         Text(
             text = "Perfis de Foco",
             fontStyle = FontStyle.Normal,
@@ -54,11 +53,10 @@ fun ProfilesScreen(
             modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
         )
 
-        // Lista de Perfis que Otimiza a Rolagem
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(horizontal = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(

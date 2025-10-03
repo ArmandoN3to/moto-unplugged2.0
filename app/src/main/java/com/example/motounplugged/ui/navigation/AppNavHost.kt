@@ -32,7 +32,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(AppScreens.Home.route) {
-            HomeScreen()
+            HomeScreen( navController = navController,onClick = {})
         }
         composable(AppScreens.Schedule.route) {
             ScheduleScreen()
