@@ -22,12 +22,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.motounplugged.database.entities.SessionsEntity
 
 import com.example.motounplugged.ui.components.SelectOptions
+import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 
 
 @Composable
-fun ScheduleScreen() {
+fun ScheduleScreen(
+    viewModel: ScheduleScreenViewModel // agora a tela recebe o ViewModel
+) {
     val scrollState = rememberScrollState()
     val weekDays = listOf("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab")
     val selectedDays = remember { mutableStateListOf<String>() }
@@ -36,25 +40,20 @@ fun ScheduleScreen() {
     var timeEnd by remember { mutableStateOf(LocalTime.of(0, 0)) }
     var selectedProfile by remember { mutableStateOf("") }
 
-
-
     var showTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
+
+    // Coletar sessões salvas no banco
+    val sessions by viewModel.sessions.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState) // habilita o scroll
+            .verticalScroll(scrollState)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Text("Agendamento", fontWeight=FontWeight.Bold,
-//            fontSize = 20.sp,
-//            fontFamily = FontFamily.SansSerif )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Weekdays selection
+        // --- Seleção dos dias da semana ---
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -68,7 +67,8 @@ fun ScheduleScreen() {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isSelected) Color.Gray else Color.LightGray
                     ),
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
                         .width(44.dp)
                         .height(38.dp),
                     contentPadding = PaddingValues(0.dp),
@@ -81,95 +81,92 @@ fun ScheduleScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Time
-        Text(
-            "Hora Início",
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            fontFamily = FontFamily.SansSerif
-        )
-
+        // --- Hora de Início ---
+        Text("Hora Início", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
             text = time.format(DateTimeFormatter.ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
-            fontSize = 36.sp,
-            fontFamily = FontFamily.SansSerif
+            fontSize = 36.sp
         )
-
-        Button(
-            onClick = { showTimePicker = true },
-            colors = ButtonDefaults.buttonColors(Color.Gray)
-        ) {
-            Text(
-                "Selecione a Hora de Início",
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
-            )
+        Button(onClick = { showTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecione a Hora de Início", fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // TimeEnd
+        // --- Hora de Fim ---
+        Text("Hora Fim", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
-            "Hora Fim",
+            text = timeEnd.format(DateTimeFormatter.ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            fontFamily = FontFamily.SansSerif
+            fontSize = 36.sp
         )
-        Text(
-            text = time.format(DateTimeFormatter.ofPattern("HH:mm")),
-            fontWeight = FontWeight.Bold,
-            fontSize = 36.sp,
-            fontFamily = FontFamily.SansSerif
-        )
-        Button(
-            onClick = { showEndTimePicker = true },
-            colors = ButtonDefaults.buttonColors(Color.Gray)
-        ) {
-            Text(
-                "Selecione a Hora de Fim",
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
-            )
+        Button(onClick = { showEndTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecione a Hora de Fim", fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Profile selection
-        SelectOptions()
+        // --- Seleção do Perfil ---
+        SelectOptions(onProfileSelected = { profile ->
+            selectedProfile = profile
+        })
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Schedule button
+        // --- Botão para salvar agendamento ---
         Button(
-            onClick = { /* Logic to schedule session */ },
+            onClick = {
+                val session = SessionsEntity(
+                    namePerfil = selectedProfile,
+                    startHour = time.format(DateTimeFormatter.ofPattern("HH:mm")),
+                    endHour = timeEnd.format(DateTimeFormatter.ofPattern("HH:mm")),
+                    isActive = true
+                )
+                viewModel.save(session)
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = selectedProfile.isNotEmpty()
         ) {
-            Text(
-                "Agendar Sessão",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                fontFamily = FontFamily.SansSerif
-            )
+            Text("Agendar Sessão", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Scheduled sessions
-        Text(
-            "Sessões Agendadas",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            fontFamily = FontFamily.SansSerif
-        )
+        // --- Sessões agendadas ---
+        Text("Sessões Agendadas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        sessions.forEach { session ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(session.namePerfil, fontWeight = FontWeight.Bold)
+                        Text("${session.startHour} - ${session.endHour}")
+                    }
+                    Switch(
+                        checked = session.isActive,
+                        onCheckedChange = { viewModel.update(session.copy(isActive = it)) }
+                    )
+                }
+            }
+        }
+    }
 
-
-
-    // TimePicker (using AndroidView)
+    // --- TimePicker início ---
     if (showTimePicker) {
         val context = LocalContext.current
         LaunchedEffect(Unit) {
@@ -179,28 +176,48 @@ fun ScheduleScreen() {
                     time = LocalTime.of(hour, minute)
                     showTimePicker = false
                 },
-                time.hour,
-                time.minute,
-                true
+                time.hour, time.minute, true
             ).show()
         }
     }
 
-        // TimePicker (using AndroidView)
-        if (showEndTimePicker) {
-            val context = LocalContext.current
-            LaunchedEffect(Unit) {
-                TimePickerDialog(
-                    context,
-                    { _, hour, minute ->
-                        timeEnd = LocalTime.of(hour, minute)
-                        showEndTimePicker = false
-                    },
-                    timeEnd.hour,
-                    timeEnd.minute,
-                    true
-                ).show()
+    // --- TimePicker fim ---
+    if (showEndTimePicker) {
+        val context = LocalContext.current
+        LaunchedEffect(Unit) {
+            TimePickerDialog(
+                context,
+                { _, hour, minute ->
+                    timeEnd = LocalTime.of(hour, minute)
+                    showEndTimePicker = false
+                },
+                timeEnd.hour, timeEnd.minute, true
+            ).show()
+        }
+    }
+}
+
+@Composable
+fun SelectOptions(
+    onProfileSelected: (String) -> Unit
+) {
+    val profiles = listOf("Trabalho", "Faculdade", "Cinema") // exemplo
+    var selectedProfile by remember { mutableStateOf("") }
+
+    Column {
+        profiles.forEach { profile ->
+            Button(
+                onClick = {
+                    selectedProfile = profile
+                    onProfileSelected(profile) // <-- chama o callback
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectedProfile == profile) Color.Gray else Color.LightGray
+                )
+            ) {
+                Text(profile)
             }
         }
-  }
+    }
 }
+

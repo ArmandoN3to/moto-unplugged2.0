@@ -9,18 +9,23 @@ import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribut
     tableName = "Sessions",
     foreignKeys = [
         ForeignKey(
-          entity = ProfilesEntity::class,
-          parentColumns = ["id"],
-          childColumns = ["id_user"]
+            entity = ProfilesEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["id_user"],
+            onDelete = ForeignKey.CASCADE // bom para deletar sessões junto com o perfil
         ),
         ForeignKey(
             entity = WeekDaysAtribute::class,
             parentColumns = ["id"],
-            childColumns = ["id_day"]
+            childColumns = ["id_day"],
+            onDelete = ForeignKey.CASCADE
         )
-    ])
-data class SessionsEntity (
-    @PrimaryKey (autoGenerate = true) val id: Int = 0,
+    ]
+)
+data class SessionsEntity(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val id_user: Int? = 0,   // FK para ProfilesEntity
+    val id_day: Int? = 0,    // FK para WeekDaysAtribute
     val namePerfil: String,
     val startHour: String,
     val endHour: String,
