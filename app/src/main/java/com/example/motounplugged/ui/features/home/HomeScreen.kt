@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -39,12 +40,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    navController: NavHostController
 ){
     Column (
         modifier = modifier
@@ -78,8 +83,11 @@ fun HomeScreen(
             )
         }
 
+        Spacer(modifier = Modifier
+            .height(30.dp))
 
-       //card de perfis
+
+        //card de perfis
         OutlinedCard (
             border = BorderStroke(1.dp,Color.Black),
             modifier = Modifier
@@ -105,7 +113,8 @@ fun HomeScreen(
 
                 ElevatedButton(onClick = { onClick() },
                     modifier = Modifier
-                        .padding(horizontal = 10.dp)) {
+                        .padding(horizontal = 10.dp)
+                        .padding(top = 2.dp)) {
                     Text(
                         text = "Ativo",
                         fontWeight = FontWeight.Bold,
@@ -163,56 +172,213 @@ fun HomeScreen(
                     color = Color.Black
                 )
             }
-                ElevatedCard(
-                    shape = RoundedCornerShape(5.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    modifier = Modifier
-                        .size(width = 270.dp, height = 50.dp)
-                        .padding(start = 15.dp, top = 5.dp)
+            ElevatedCard(
+                shape = RoundedCornerShape(5.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                modifier = Modifier
+                    .size(width = 270.dp, height = 50.dp)
+                    .padding(start = 15.dp, top = 5.dp)
 
-                ) {
-                    Row {
-                        Text(
-                            text = "Horário da sessão",
-                            fontSize = 10.sp,
-                            fontStyle = FontStyle.Italic,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(start = 5.dp),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    Row {
-                        Text(
-                            text = "14:00 -16:00",
-                            fontSize = 10.sp,
-                            fontStyle = FontStyle.Italic,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(start = 6.dp, end = 10.dp),
-                            textAlign = TextAlign.Center,
-                        )
-
-                    }
-
-
+            ) {
+                Row {
+                    Text(
+                        text = "Horário da sessão",
+                        fontSize = 10.sp,
+                        fontStyle = FontStyle.Italic,
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .padding(start = 5.dp),
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                Row {
+                    Text(
+                        text = "14:00 - 16:00",
+                        fontSize = 10.sp,
+                        fontStyle = FontStyle.Italic,
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .padding(start = 6.dp, end = 10.dp),
+                        textAlign = TextAlign.Center,
+                    )
 
                 }
 
+
+            }
+
+        }
+
+        OutlinedCard (
+            border = BorderStroke(1.dp,Color.Black),
+            modifier = Modifier
+                .size(width = 350.dp, height = 160.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 30.dp)
+        ){
+            Row {
+                Text(
+                    text = "Estastísticas",
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                ElevatedButton(onClick = { onClick() },
+                    modifier = Modifier
+                        .size(width = 130.dp, height = 45.dp)
+                        .padding(end = 15.dp, top = 10.dp)
+                ) {
+                    Text(
+                        text = "Ver mais",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp,
+                        fontStyle = FontStyle.Normal,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .padding(1.dp)
+                    )
+                }
             }
 
 
+            Row {
+
+                Text(
+                    text = "3h 42m",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(start = 100.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                Text(
+                    text = "45 min ",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(end = 100.dp)
+                )
+            }
+            Row (
+                modifier = Modifier
+                    .padding(top = 5.dp)
+            ){
+
+                Text(
+                    text = "Hoje",
+                    fontSize = 10.sp,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(start = 110.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                Text(
+                    text = "Média",
+                    fontSize = 10.sp,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(end = 115.dp)
+                )
+            }
         }
-    }
 
-@Preview(showBackground = true
-)
-@Composable
-private fun Homescreen(){
-    MotoUnpluggedTheme {
-        HomeScreen(onClick = {})
-    }
+        OutlinedCard (
+            border = BorderStroke(1.dp,Color.Black),
+            modifier = Modifier
+                .size(width = 350.dp, height = 190.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 30.dp)
+        ){
+            Row {
+                Text(
+                    text = "Acesso rápido",
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+            }
+            ElevatedButton(
+                onClick = { navController.navigate(AppScreens.Profiles.route) },
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .padding(start = 15.dp)
+                    .size(width = 320.dp, height = 40.dp)
+            ) {
+                Text(
+                    text = "Gerenciar Perfis",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp,
+                    fontStyle = FontStyle.Normal,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+            }
+            ElevatedButton(
+                onClick = { navController.navigate(AppScreens.Schedule.route) },
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .padding(start = 15.dp)
+                    .size(width = 320.dp, height = 40.dp)
+            ) {
+                Text(
+                    text = "Agendar",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp,
+                    fontStyle = FontStyle.Normal,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+            }
+        }
 
+
+
+
+
+    }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenPreview() {
+    MotoUnpluggedTheme {
+        val navController = rememberNavController()
+        HomeScreen(
+            navController = navController,
+            onClick = {}
+        )
+    }
+}
+
