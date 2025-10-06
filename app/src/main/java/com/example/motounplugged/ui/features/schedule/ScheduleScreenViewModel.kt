@@ -2,6 +2,7 @@ package com.example.motounplugged.ui.features.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
 import com.example.motounplugged.repositories.SessionsRepository
 import kotlinx.coroutines.flow.SharingStarted

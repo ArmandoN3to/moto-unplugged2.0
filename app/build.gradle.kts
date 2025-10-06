@@ -53,7 +53,6 @@ dependencies {
 
 
 
-
     //implementação do room
 
     implementation(libs.androidx.room.runtime)

@@ -119,7 +119,6 @@ fun ScheduleScreen(
         Button(
             onClick = {
                 val session = SessionsEntity(
-                    id_user = 0,
                     namePerfil = selectedProfile,
                     startHour = time.format(DateTimeFormatter.ofPattern("HH:mm")),
                     endHour = timeEnd.format(DateTimeFormatter.ofPattern("HH:mm")),
