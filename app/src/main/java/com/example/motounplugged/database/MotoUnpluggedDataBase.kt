@@ -52,7 +52,7 @@ abstract class MotoUnpluggedDataBase : RoomDatabase() {
                             }
                         }
                     })
-                    .fallbackToDestructiveMigration(true) // ❌ Remove o parâmetro `true`, não é necessário
+                    .fallbackToDestructiveMigration(true)
                     .build()
 
                 INSTANCE = instance

@@ -1,50 +1,44 @@
 package com.example.motounplugged.ui.screens
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-
-
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import android.app.TimePickerDialog
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.SessionsEntity
-
-import com.example.motounplugged.ui.components.SelectOptions
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
-
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ScheduleScreen(
-    viewModel: ScheduleScreenViewModel // agora a tela recebe o ViewModel
+    viewModel: ScheduleScreenViewModel
 ) {
     val scrollState = rememberScrollState()
     val weekDays = listOf("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab")
     val selectedDays = remember { mutableStateListOf<String>() }
 
-    var time by remember { mutableStateOf(LocalTime.of(0, 0)) }
-    var timeEnd by remember { mutableStateOf(LocalTime.of(0, 0)) }
+    var startTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
+    var endTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
     var selectedProfile by remember { mutableStateOf("") }
 
-    var showTimePicker by remember { mutableStateOf(false) }
+    var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
 
-    // Coletar sessões salvas no banco
     val sessions by viewModel.sessions.collectAsState()
+    val profiles by viewModel.profiles.collectAsState()
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -81,54 +75,66 @@ fun ScheduleScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // --- Hora de Início ---
-        Text("Hora Início", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        // --- Hora de início ---
+        Text("Hora de Início", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
-            text = time.format(DateTimeFormatter.ofPattern("HH:mm")),
+            text = startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
             fontSize = 36.sp
         )
-        Button(onClick = { showTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
-            Text("Selecione a Hora de Início", fontWeight = FontWeight.Bold)
+        Button(onClick = { showStartTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecionar Hora de Início", fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- Hora de Fim ---
-        Text("Hora Fim", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        // --- Hora de fim ---
+        Text("Hora de Fim", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
-            text = timeEnd.format(DateTimeFormatter.ofPattern("HH:mm")),
+            text = endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
             fontSize = 36.sp
         )
         Button(onClick = { showEndTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
-            Text("Selecione a Hora de Fim", fontWeight = FontWeight.Bold)
+            Text("Selecionar Hora de Fim", fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- Seleção do Perfil ---
-        SelectOptions(onProfileSelected = { profile ->
-            selectedProfile = profile
-        })
+        // --- Seleção de perfil ---
+        Text("Selecione o Perfil", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        profiles.forEach { profile ->
+            Button(
+                onClick = { selectedProfile = profile.ProfileName },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectedProfile == profile.ProfileName) Color.Gray else Color.LightGray
+                )
+            ) {
+                Text(profile.ProfileName)
+            }
+        }
 
+        Spacer(modifier = Modifier.height(20.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // --- Botão para salvar agendamento ---
+        // --- Botão para salvar sessão ---
         Button(
             onClick = {
                 val session = SessionsEntity(
+                    id = 0, // autogerado pelo Room
                     namePerfil = selectedProfile,
-                    startHour = time.format(DateTimeFormatter.ofPattern("HH:mm")),
-                    endHour = timeEnd.format(DateTimeFormatter.ofPattern("HH:mm")),
-                    dayOfWeek = "Seg",
-                    isActive = true
+                    startHour = startTime.toString(),
+                    endHour = endTime.toString(),
+                    dayOfWeek = selectedDays.toList(), // agora é uma lista
+                    isActive = true,
+                    id_user = 1 // ajuste conforme o usuário logado
                 )
                 viewModel.save(session)
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = selectedProfile.isNotEmpty()
+            enabled = selectedProfile.isNotEmpty() && selectedDays.isNotEmpty()
         ) {
             Text("Agendar Sessão", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
@@ -137,7 +143,6 @@ fun ScheduleScreen(
 
         // --- Sessões agendadas ---
         Text("Sessões Agendadas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-
         Spacer(modifier = Modifier.height(8.dp))
 
         sessions.forEach { session ->
@@ -157,6 +162,7 @@ fun ScheduleScreen(
                     Column {
                         Text(session.namePerfil, fontWeight = FontWeight.Bold)
                         Text("${session.startHour} - ${session.endHour}")
+                        Text("Dias: ${session.dayOfWeek.joinToString(", ")}")
                     }
                     Switch(
                         checked = session.isActive,
@@ -168,57 +174,26 @@ fun ScheduleScreen(
     }
 
     // --- TimePicker início ---
-    if (showTimePicker) {
-        val context = LocalContext.current
-        LaunchedEffect(Unit) {
-            TimePickerDialog(
-                context,
-                { _, hour, minute ->
-                    time = LocalTime.of(hour, minute)
-                    showTimePicker = false
-                },
-                time.hour, time.minute, true
-            ).show()
-        }
+    if (showStartTimePicker) {
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                startTime = LocalTime.of(hour, minute)
+                showStartTimePicker = false
+            },
+            startTime.hour, startTime.minute, true
+        ).show()
     }
 
     // --- TimePicker fim ---
     if (showEndTimePicker) {
-        val context = LocalContext.current
-        LaunchedEffect(Unit) {
-            TimePickerDialog(
-                context,
-                { _, hour, minute ->
-                    timeEnd = LocalTime.of(hour, minute)
-                    showEndTimePicker = false
-                },
-                timeEnd.hour, timeEnd.minute, true
-            ).show()
-        }
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                endTime = LocalTime.of(hour, minute)
+                showEndTimePicker = false
+            },
+            endTime.hour, endTime.minute, true
+        ).show()
     }
 }
-
-@Composable
-fun SelectOptions(
-    onProfileSelected: (String) -> Unit
-) {
-    val profiles = listOf("Trabalho", "Faculdade", "Cinema") // exemplo
-    var selectedProfile by remember { mutableStateOf("") }
-
-    Column {
-        profiles.forEach { profile ->
-            Button(
-                onClick = {
-                    selectedProfile = profile
-                    onProfileSelected(profile) // <-- chama o callback
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedProfile == profile) Color.Gray else Color.LightGray
-                )
-            ) {
-                Text(profile)
-            }
-        }
-    }
-}
-

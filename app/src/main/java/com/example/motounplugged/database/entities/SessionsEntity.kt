@@ -19,7 +19,7 @@ import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribut
 data class SessionsEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val id_user: Int,
-    val dayOfWeek: String, // "Seg", "Ter", etc.
+    val dayOfWeek: List<WeekDaysAtribute>,
     val namePerfil: String,
     val startHour: String,
     val endHour: String,
