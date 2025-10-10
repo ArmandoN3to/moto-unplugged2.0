@@ -4,13 +4,17 @@ import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +43,8 @@ import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 @Composable
 fun StreakScreen(
     modifier: Modifier = Modifier,
+    streakCount: Int,
+    daysInMonth: Int = 30 // mock: 30 dias do "mês"
 
 ) {
     Column (
@@ -137,9 +143,61 @@ fun StreakScreen(
                 }
 
             }
-
-
         }
+
+        Column(
+            modifier = Modifier.padding(16.dp, top = 30.dp)
+        ) {
+            Text(
+                text = "Calendário de Foco",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            // Grade de 7 colunas
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(7),
+                modifier = Modifier.height(300.dp)
+            ) {
+                // cria os itens com base no numero de dias do mes no caso 28 para o exemplo de vizualização
+                items(daysInMonth) {dayIndex ->
+                    val day = dayIndex + 1
+                    val color = when {
+                        day <= 9 && day <= streakCount -> Color(0xFFF7F0BE)
+                        day in 10..16 && day <= streakCount -> Color(0xFFB20027)
+                        day in 17..24 && day <= streakCount -> Color(0xFFC3D48B)
+                        day >= 25 && day <= streakCount -> Color(0xFFBB86FC)
+                        else -> Color.LightGray
+                    }
+                    //cria a box para fazer a sobreposição com o dia
+                    Box(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(color),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "$day",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+        }
+
+        
+
+
+
+
 
 
 
@@ -150,6 +208,8 @@ fun StreakScreen(
 @Composable
 private fun streakscreenview(){
     MotoUnpluggedTheme {
-        StreakScreen()
+        StreakScreen(
+            streakCount = 28 // exemplo: 12 dias seguidos
+        )
     }
 }
