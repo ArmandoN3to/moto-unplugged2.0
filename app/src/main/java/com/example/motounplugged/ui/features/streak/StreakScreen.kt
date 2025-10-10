@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -59,13 +60,13 @@ fun StreakScreen(
             IconButton(
                 onClick = {},
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(50.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Share,
                     contentDescription = "Share button",
                     modifier = Modifier
-                        .size(width = 60.dp, height = 100.dp)
+                        .size(width = 50.dp, height = 90.dp)
                         .padding(start = 16.dp)
                         .padding(top = 7.dp)
                 )
@@ -105,7 +106,7 @@ fun StreakScreen(
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = "Star icon",
-                    tint = Color.Yellow,
+                    tint = Color(0xFFBB86FC),
                     modifier = Modifier
                         .size(width = 150.dp, height = 100.dp)
                         .padding(start = 16.dp)
@@ -119,21 +120,21 @@ fun StreakScreen(
                     .padding(top = 45.dp)
                         .padding(10.dp)
                         .border(
-                            width = 2.dp,
+                            width = 3.dp,
                             color = Color.LightGray,
                             shape = RoundedCornerShape(5.dp),
                         )
                 ){
                     Text(
-                        text = "1",
+                        text = "28",
                         fontStyle = FontStyle.Italic,
                         fontSize = 20.sp,
                         color = Color.Black,
                         modifier =  Modifier
-                            .padding(start = 90.dp)
+                            .padding(start = 80.dp)
                     )
                     Text(
-                        text = "Dias  de Ofensivas",
+                        text = "Dias de Ofensivas",
                         fontStyle = FontStyle.Italic,
                         fontSize = 20.sp,
                         color = Color.Black,
@@ -193,7 +194,118 @@ fun StreakScreen(
             }
         }
 
-        
+        Column (
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .border(
+                    width = 3.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(5.dp),
+                )
+        ){
+            Row(
+                modifier = Modifier
+                    .width(300.dp)
+                    .padding(start = 25.dp)
+            ){
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star icon",
+                    tint = Color.LightGray,
+                    modifier = Modifier
+                        .size(width = 50.dp, height = 100.dp)
+                        .padding(start = 10.dp)
+                        .padding(top = 5.dp)
+                )
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star icon",
+                    tint = Color(0xFFF7F0BE),
+                    modifier = Modifier
+                        .size(width = 50.dp, height = 100.dp)
+                        .padding(start = 10.dp)
+                        .padding(top = 7.dp)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star icon",
+                    tint = Color(0xFFB20027),
+                    modifier = Modifier
+                        .size(width = 50.dp, height = 100.dp)
+                        .padding(start = 10.dp)
+                        .padding(top = 7.dp)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star icon",
+                    tint = Color(0xFFC3D48B),
+                    modifier = Modifier
+                        .size(width = 50.dp, height = 100.dp)
+                        .padding(start = 10.dp)
+                        .padding(top = 7.dp)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star icon",
+                    tint = Color(0xFFBB86FC),
+                    modifier = Modifier
+                        .size(width = 50.dp, height = 100.dp)
+                        .padding(start = 10.dp)
+                        .padding(top = 7.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Row(
+
+            ){
+                Text(
+                    text = "1 dia",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                        .padding(start = 13.dp)
+                )
+
+                Text(
+                    text = "10 dias",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                )
+
+                Text(
+                    text = "20 dias",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                        .padding(start = 7.dp)
+                )
+
+                Text(
+                    text = "50 dias",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                        .padding(start = 7.dp)
+                )
+
+                Text(
+                    text = "100 dias",
+                    fontSize = 15.sp,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                        .padding(start = 10.dp,end = 7.dp)
+                )
+
+
+            }
+        }
 
 
 
@@ -209,7 +321,7 @@ fun StreakScreen(
 private fun streakscreenview(){
     MotoUnpluggedTheme {
         StreakScreen(
-            streakCount = 28 // exemplo: 12 dias seguidos
+            streakCount = 28 // 28 dias para fins de vizualização de todos os modos de ofensiva
         )
     }
 }
