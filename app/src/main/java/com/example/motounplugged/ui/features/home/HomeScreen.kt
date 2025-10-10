@@ -89,7 +89,8 @@ fun HomeScreen(
 
         //card de perfis
         OutlinedCard (
-            border = BorderStroke(1.dp,Color.Black),
+
+            border = BorderStroke(3.dp,Color.Gray),
             modifier = Modifier
                 .size(width = 350.dp, height = 180.dp)
                 .align(Alignment.CenterHorizontally)
@@ -212,7 +213,7 @@ fun HomeScreen(
         }
 
         OutlinedCard (
-            border = BorderStroke(1.dp,Color.Black),
+            border = BorderStroke(3.dp,Color.Gray),
             modifier = Modifier
                 .size(width = 350.dp, height = 160.dp)
                 .align(Alignment.CenterHorizontally)
@@ -310,7 +311,7 @@ fun HomeScreen(
         }
 
         OutlinedCard (
-            border = BorderStroke(1.dp,Color.Black),
+            border = BorderStroke(3.dp,Color.Gray),
             modifier = Modifier
                 .size(width = 350.dp, height = 190.dp)
                 .align(Alignment.CenterHorizontally)
@@ -328,6 +329,7 @@ fun HomeScreen(
                 )
             }
             ElevatedButton(
+                border = BorderStroke(2.dp,Color.LightGray),
                 onClick = { navController.navigate(AppScreens.Profiles.route) },
                 modifier = Modifier
                     .padding(top = 5.dp)
@@ -345,6 +347,7 @@ fun HomeScreen(
                 )
             }
             ElevatedButton(
+                border = BorderStroke(2.dp,Color.LightGray),
                 onClick = { navController.navigate(AppScreens.Schedule.route) },
                 modifier = Modifier
                     .padding(top = 10.dp)

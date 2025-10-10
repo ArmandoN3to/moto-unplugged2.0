@@ -51,7 +51,9 @@ fun AppNavHost(
             SettingsScreen()
         }
         composable(AppScreens.Streak.route) {
-            StreakScreen()
+            StreakScreen(
+                streakCount = 28
+            )
         }
         composable(AppScreens.CreateProfile.route) {
             CreateProfileScreen(navController = navController)
