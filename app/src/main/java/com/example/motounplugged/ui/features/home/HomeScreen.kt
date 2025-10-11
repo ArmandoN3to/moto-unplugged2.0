@@ -1,6 +1,7 @@
 package com.example.motounplugged.ui.features.home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.AppBlocking
 import androidx.compose.material.icons.filled.AppShortcut
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -31,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.motounplugged.R
 import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
@@ -58,6 +63,23 @@ fun HomeScreen(
             .fillMaxSize()
 
     ){
+        Row (
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        ){
+            Image(
+                painter = painterResource(R.drawable.img),
+                contentDescription = "Logo Motounplugged",
+                modifier = Modifier
+                    .size(width = 50.dp, height = 50.dp)
+                    .padding(top = 15.dp)
+
+            )
+
+        }
+        Spacer(modifier = Modifier .height(10.dp))
+
+
         Column (
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,11 +112,15 @@ fun HomeScreen(
         //card de perfis
         OutlinedCard (
 
-            border = BorderStroke(3.dp,Color.Gray),
             modifier = Modifier
                 .size(width = 350.dp, height = 180.dp)
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 10.dp)
+                .border(
+                    width = 3.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(5.dp)
+                )
         ){
             Row {
                 Text(
@@ -211,13 +237,20 @@ fun HomeScreen(
             }
 
         }
+        Spacer( modifier = Modifier.height(10.dp))
+        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 30.dp))
 
         OutlinedCard (
-            border = BorderStroke(3.dp,Color.Gray),
+
             modifier = Modifier
                 .size(width = 350.dp, height = 160.dp)
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 30.dp)
+                .padding(top = 20.dp)
+                .border(
+                    width = 3.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(5.dp)
+                )
         ){
             Row {
                 Text(
@@ -256,12 +289,12 @@ fun HomeScreen(
             Row {
 
                 Text(
-                    text = "3h 42m",
+                    text = "3h 42min",
                     fontSize = 15.sp,
                     fontStyle = FontStyle.Italic,
                     color = Color.Black,
                     modifier = Modifier
-                        .padding(start = 100.dp)
+                        .padding(start = 90.dp)
                 )
 
                 Spacer(
@@ -309,13 +342,19 @@ fun HomeScreen(
                 )
             }
         }
+        Spacer( modifier = Modifier.height(10.dp))
+        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 30.dp))
 
         OutlinedCard (
-            border = BorderStroke(3.dp,Color.Gray),
             modifier = Modifier
                 .size(width = 350.dp, height = 190.dp)
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 30.dp)
+                .padding(top = 20.dp)
+                .border(
+                    width = 3.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(5.dp)
+                )
         ){
             Row {
                 Text(
