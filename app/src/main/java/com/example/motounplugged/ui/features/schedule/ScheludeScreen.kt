@@ -15,7 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
+import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribute
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -30,7 +32,7 @@ fun ScheduleScreen(
 
     var startTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
     var endTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
-    var selectedProfile by remember { mutableStateOf("") }
+    var selectedProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
@@ -104,37 +106,52 @@ fun ScheduleScreen(
         // --- Seleção de perfil ---
         Text("Selecione o Perfil", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         profiles.forEach { profile ->
+            val isSelected = selectedProfile?.id == profile.id
             Button(
-                onClick = { selectedProfile = profile.ProfileName },
+                onClick = { selectedProfile = profile },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedProfile == profile.ProfileName) Color.Gray else Color.LightGray
+                    containerColor = if (isSelected) Color.Gray else Color.LightGray
                 )
             ) {
                 Text(profile.ProfileName)
             }
         }
-
         Spacer(modifier = Modifier.height(20.dp))
 
         // --- Botão para salvar sessão ---
         Button(
             onClick = {
-                val session = SessionsEntity(
-                    id = 0, // autogerado pelo Room
-                    namePerfil = selectedProfile,
-                    startHour = startTime.toString(),
-                    endHour = endTime.toString(),
-                    dayOfWeek = selectedDays.toList(), // agora é uma lista
-                    isActive = true,
-                    id_user = 1 // ajuste conforme o usuário logado
-                )
-                viewModel.save(session)
+                val selectedDaysEnums = selectedDays.mapNotNull { day ->
+                    when (day) {
+                        "Dom" -> WeekDaysAtribute.DOMINGO
+                        "Seg" -> WeekDaysAtribute.SEGUNDA
+                        "Ter" -> WeekDaysAtribute.TERCA
+                        "Qua" -> WeekDaysAtribute.QUARTA
+                        "Qui" -> WeekDaysAtribute.QUINTA
+                        "Sex" -> WeekDaysAtribute.SEXTA
+                        "Sab" -> WeekDaysAtribute.SABADO
+                        else -> null
+                    }
+                }
+
+                selectedProfile?.let { profile ->
+                    val session = SessionsEntity(
+                        id = 0, // autogerado pelo Room
+                        namePerfil = profile.ProfileName,
+                        startHour = startTime.toString(),
+                        endHour = endTime.toString(),
+                        dayOfWeek = selectedDaysEnums, // agora é uma lista
+                        isActive = true,
+                        id_profile = profile.id
+                    )
+                    viewModel.save(session)
+                }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = selectedProfile.isNotEmpty() && selectedDays.isNotEmpty()
+            enabled = selectedProfile != null && selectedDays.isNotEmpty()
         ) {
             Text("Agendar Sessão", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }

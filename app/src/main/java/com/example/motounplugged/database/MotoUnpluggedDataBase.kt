@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.TypeConverters
 import com.example.motounplugged.database.dao.ProfilesDao
 import com.example.motounplugged.database.dao.SessionsDao
 import com.example.motounplugged.database.entities.ProfilesEntity
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
     version = 2, // ⬅️ Incrementado para refletir nova entidade
     exportSchema = false
 )
-abstract class MotoUnpluggedDataBase : RoomDatabase() {
+@TypeConverters(Converters::class)
+     abstract class MotoUnpluggedDataBase : RoomDatabase() {
 
     abstract fun profilesDao(): ProfilesDao
     abstract fun sessionsDao(): SessionsDao
@@ -44,11 +46,6 @@ abstract class MotoUnpluggedDataBase : RoomDatabase() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 // Use o instance diretamente, não getDatabase()
                                 val repository = ProfileRepository(INSTANCE!!.profilesDao())
-
-                                // Perfis padrão
-                                repository.save(ProfilesEntity(ProfileName = "Trabalho", appCount = 4))
-                                repository.save(ProfilesEntity(ProfileName = "Estudo", appCount = 4))
-                                repository.save(ProfilesEntity(ProfileName = "Academia", appCount = 3))
                             }
                         }
                     })

@@ -36,5 +36,5 @@ val repositoryModule = module {
 val viewModelModule = module {
     viewModel { CreateProfileViewModel(get()) }
     viewModel { ProfilesScreenViewModel(get()) }
-    viewModel { ScheduleScreenViewModel(get()) } // novo ViewModel
+    viewModel { ScheduleScreenViewModel(get(), get()) }
 }
