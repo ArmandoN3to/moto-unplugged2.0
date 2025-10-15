@@ -21,9 +21,7 @@ import kotlinx.coroutines.delay
 fun ProfileCard(
     title: String,
     count: Int,
-    modifier: Modifier = Modifier,
-    isActive: Boolean,
-    onToggle: (Boolean) -> Unit
+    modifier: Modifier = Modifier
 ) {
     var checked by remember { mutableStateOf(true) }
     var showToast by remember { mutableStateOf(false) }
@@ -68,8 +66,8 @@ fun ProfileCard(
 
 
                 Switch(
-                    checked = isActive,
-                    onCheckedChange = { onToggle(it) },
+                    checked = checked,
+                    onCheckedChange = { checked = it },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = Color.Black,
@@ -79,5 +77,24 @@ fun ProfileCard(
                 )
             }
         }
+    }
+}
+
+
+
+
+
+
+
+
+@Preview(showBackground = true, widthDp = 360)
+@Composable
+fun ProfilesCardPreview() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ProfileCard(title = "Trabalho", count = 2)
+        ProfileCard(title = "Pessoal", count = 5)
     }
 }

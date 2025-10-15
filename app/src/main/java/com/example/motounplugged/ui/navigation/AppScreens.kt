@@ -9,5 +9,4 @@ sealed class AppScreens(val route: String) {
     object User : AppScreens("user")
     object Settings : AppScreens("settings")
     object Streak : AppScreens("streak")
-    object CreateProfile : AppScreens("create_profile")
 }
