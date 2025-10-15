@@ -2,9 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp")
-
-
 }
 
 android {
@@ -45,23 +42,8 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.room.common.jvm)
-    //implementação koin(injeção de dependência)
-    val koinVersion = "4.1.1"
-    implementation("io.insert-koin:koin-android:$koinVersion")
-    implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
-
-
-
-    //implementação do room
-
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.material.icons.extended.android)
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
