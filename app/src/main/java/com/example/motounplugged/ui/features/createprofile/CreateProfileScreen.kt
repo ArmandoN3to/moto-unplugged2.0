@@ -8,16 +8,21 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -80,13 +85,12 @@ private fun CreateProfileContent(
         )
 
 
-         Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(24.dp))
 
         // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
-
-            modifier = Modifier.clickable {//navController.navigate(AppScreens.Lista de Apps.route
+            modifier = Modifier.clickable {navController.navigate(AppScreens.SelectApps.route)
             }
         ) {
             Row(
@@ -112,15 +116,62 @@ private fun CreateProfileContent(
                 Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
             }
         }
-        Spacer(Modifier.height(24.dp))
+
+
+        Spacer(Modifier.height(16.dp))
+        SettingsRow(
+            icon = Icons.Default.Apps,
+            title = "App layout",
+            subtitle = "4x5",
+            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+        )
+
+
+
+        SettingsRow(
+            icon = Icons.Default.Wallpaper,
+            title = "Wallpaper",
+            subtitle = "",
+            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+        )
+
+
+
+        // Item para Agendamento
+        SettingsRow(
+            icon = Icons.Default.Alarm,
+            title = "Duraçao",
+            subtitle = "duraçao do modo ",
+            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+        )
+
+
+        SettingsRow(
+            icon = Icons.Default.NotificationsNone,
+            title = "Interruptions",
+            subtitle = "Manage alerts and notifications",
+            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+        )
+
+        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+
+        // Item para o Switch
+        SettingsSwitchRow(
+            icon = Icons.Default.Password,
+            title = "Require Password",
+            subtitle = "Enter a password before ending a session",
+            checked = uiState.isImmediatelyActive,
+            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
+        )
+
+        Spacer(Modifier.height(16.dp))
 
         Button(
             onClick = {
-                if (uiState.profileName.isNotBlank()){
+                if (uiState.profileName.isNotBlank()) {
                     onEvent(CreateProfileEvent.OnSaveProfileClick)
-                    navController.navigate(AppScreens.Profiles.route)}
-
-                else{
+                    navController.navigate(AppScreens.Profiles.route)
+                } else {
                     println("Nome do perfil não pode ser vazio")
                 }
 
@@ -139,35 +190,16 @@ private fun CreateProfileContent(
                 fontWeight = FontWeight.Bold
             )
         }
+
+
+
     }
-}
-//
-//        Spacer(Modifier.height(16.dp))
-//
-//
-//        // Item para Agendamento
-//        SettingsRow(
-//            icon = Icons.Default.Notifications,
-//            title = "Agendamento",
-//            subtitle = "Definir horários de ativação",
-//            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
-//        )
-//
-//        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-//
-//        // Item para o Switch
-//        SettingsSwitchRow(
-//            icon = Icons.Default.Password,
-//            title = "Ativar ao salvar",
-//            subtitle = "O perfil será ativado imediatamente",
-//            checked = uiState.isImmediatelyActive,
-//            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
-//        )
-//    }
-//}}
+        }
 
 
-/*
+
+
+
 @Composable
 private fun SettingsRow(
     icon: ImageVector,
@@ -186,14 +218,14 @@ private fun SettingsRow(
         Icon(icon, contentDescription = null, modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
     }
-}*/
+}
 
-/*@Composable
+@Composable
 private fun SettingsSwitchRow(
     icon: ImageVector,
     title: String,
@@ -216,7 +248,7 @@ private fun SettingsSwitchRow(
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
-*/
+
 
 /*@Preview(showBackground = true)
 @Composable

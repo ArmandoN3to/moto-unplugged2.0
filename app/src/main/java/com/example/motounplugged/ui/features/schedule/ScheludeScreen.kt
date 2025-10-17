@@ -12,6 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import android.app.TimePickerDialog
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,9 +56,36 @@ fun ScheduleScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- Seleção dos dias da semana ---
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+          Text(
+              text = "Agendamento",
+              color = Color.Black,
+              fontWeight = FontWeight.Bold,
+              fontSize = 25.sp,
+              fontStyle = FontStyle.Normal,
+              modifier = Modifier
+                  .padding(2.dp)
+                  .align(Alignment.CenterHorizontally)
+          )
+            Text(
+                text = "Agende seu horário de foco",
+                fontSize = 20.sp,
+                color = Color.Gray,
+                fontStyle = FontStyle.Normal,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
+
+        // Weekdays selection
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             weekDays.forEach { day ->

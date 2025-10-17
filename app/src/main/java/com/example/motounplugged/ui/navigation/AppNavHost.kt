@@ -14,6 +14,11 @@ import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.settings.SettingsScreen
+import com.example.motounplugged.ui.features.stats.StatsScreen
+import com.example.motounplugged.ui.features.streak.StreakScreen
+import com.example.motounplugged.ui.features.user.UserScreen
+import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -29,31 +34,35 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(AppScreens.Home.route) {
-            HomeScreen()
+            HomeScreen( navController = navController,onClick = {})
         }
         composable(AppScreens.Schedule.route) {
             val ScheduleScreenViewModel: ScheduleScreenViewModel = koinViewModel()
             ScheduleScreen( viewModel = ScheduleScreenViewModel)
         }
         composable(AppScreens.Stats.route) {
-            GenericScreen("Tela estatisticas")
-
+            StatsScreen()
         }
         composable(AppScreens.Profiles.route) {
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel)
         }
         composable(AppScreens.User.route) {
-            GenericScreen("Tela Usuário")
+            UserScreen()
         }
         composable(AppScreens.Settings.route) {
-            GenericScreen("Tela Configurações")
+            SettingsScreen()
         }
         composable(AppScreens.Streak.route) {
-            GenericScreen("Tela Streak")
+            StreakScreen(
+                streakCount = 28
+            )
         }
         composable(AppScreens.CreateProfile.route) {
             CreateProfileScreen(navController = navController)
+        }
+        composable(AppScreens.SelectApps.route) {
+            SelectAppsScreen(navController = navController)
         }
     }
 }
