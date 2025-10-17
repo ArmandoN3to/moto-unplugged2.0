@@ -8,6 +8,6 @@ data class ProfilesEntity (
     @PrimaryKey (autoGenerate = true) val id: Int = 0,
     val ProfileName: String,
     val appCount: Int = 0,
-    val isImmediatelyActive: Boolean = true
+    val isImmediatelyActive: Boolean = false
 )
 

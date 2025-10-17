@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,7 @@ import com.example.motounplugged.ui.features.stats.StatsScreen
 import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.user.UserScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
+import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -35,7 +37,8 @@ fun AppNavHost(
             HomeScreen( navController = navController,onClick = {})
         }
         composable(AppScreens.Schedule.route) {
-            ScheduleScreen()
+            val ScheduleScreenViewModel: ScheduleScreenViewModel = koinViewModel()
+            ScheduleScreen( viewModel = ScheduleScreenViewModel)
         }
         composable(AppScreens.Stats.route) {
             StatsScreen()
