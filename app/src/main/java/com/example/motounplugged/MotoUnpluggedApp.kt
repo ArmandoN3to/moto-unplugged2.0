@@ -1,13 +1,13 @@
 package com.example.motounplugged
 
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppDrawer
@@ -27,6 +27,16 @@ fun MotoUnpluggedApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val selectedRoute = navBackStackEntry?.destination?.route ?: AppScreens.Home.route
 
+
+    // Verifica se rota atual é uma tela secundária
+    val isSecondaryScreen = remember(selectedRoute) {
+        selectedRoute in listOf(  //lista de rotas secundarias
+            AppScreens.CreateProfile.route,
+            "edit_profile/{profileTitle}",
+
+
+            )
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -49,27 +59,54 @@ fun MotoUnpluggedApp() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { },
+                    title = {},
+                    // --- 1. ÍCONE DE NAVEGAÇÃO DINÂMICO ---
                     navigationIcon = {
-                        IconButton(onClick = {
-                            scope.launch {
-                                drawerState.apply { if (isClosed) open() else close() }
+                        if (isSecondaryScreen) {
+                            // Se for uma tela secundária, mostra o btn "voltar"
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Voltar"
+                                )
                             }
-                        }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                        } else {
+                            // Senão, mostra o menu gaveta
+                            IconButton(onClick = {
+                                scope.launch { drawerState.open() }
+                            }) {
+                                Icon(Icons.Default.Menu, contentDescription = "Menu")
+                            }
                         }
                     },
+
+                 //utilizar essa seçao quando for mudar algum comportamento na topappbar
+
+//                    actions = {
+//                        // Verificamos a rota para adicionar ações específicas
+//                        when (selectedRoute) {
+//                            AppScreens.CreateProfile.route -> {
+//                                TextButton(
+//                                    onClick = {
+//                                        println("Botão Salvar clicado!")
+//                                    }
+//                                ) {
+//                                    Text("Salvar", fontWeight = FontWeight.Bold)
+//                                }
+//                            }
+//                            // Adicionar ações para outras telas
+//                        }
+//                    }
+
                 )
-
-
             },
+
             floatingActionButton = {
                 when (selectedRoute) {
                     AppScreens.Profiles.route-> {
                         FAB_new_profile {
-                            // Ação ao clicar no FAB
-                            //showToast = true
-                            }
+                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
+                        }
                     }
                 }
             }
