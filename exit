@@ -1,0 +1,41 @@
+[33mcommit 9694de4d7ca7b5af8330411dacd42993a3de21f9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat-sidebar[m[33m, [m[1;31morigin/feat-sidebar[m[33m)[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Thu Aug 21 17:15:43 2025 -0400
+
+    refactor: modularize and separate MainActivity content
+
+[33mcommit 250963b279405d0865d5a8073869ef5d6a6b0d96[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Thu Aug 21 13:57:33 2025 -0400
+
+    feat: add bottom itens to sidebar
+
+[33mcommit 39cd3603aae6c740fae035c0bb21c9141bca4595[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Wed Aug 20 19:53:22 2025 -0400
+
+    fix:test
+
+[33mcommit f6e7b13c30cc7ac5d1a677afe2d68fb0ecff7f92[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Wed Aug 20 19:47:02 2025 -0400
+
+    teste
+
+[33mcommit f3a6275b5095c9f1e0096711897c47be48f0e463[m
+Author: reerod <renan071199@gmail.com>
+Date:   Wed Aug 20 18:53:51 2025 -0400
+
+    style: remove topbar tittle
+
+[33mcommit ca56dcc74e5a927164ebac81de7d4d5f6168833b[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Wed Aug 20 15:52:25 2025 -0400
+
+    implementing functional side-bar
+
+[33mcommit 74d28aae6ce39e48754f3038735670676ecbdf2c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/development[m[33m, [m[1;32mmain[m[33m, [m[1;32mdevelopment[m[33m)[m
+Author: ArmandoN3to <armandogoncalves2@hotmail.com>
+Date:   Wed Aug 20 13:53:01 2025 -0400
+
+    Create project
