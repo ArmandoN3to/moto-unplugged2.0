@@ -36,7 +36,9 @@ fun ProfilesScreen(
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(3.dp),
-                modifier = Modifier.fillMaxWidth().padding(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(
@@ -48,6 +50,13 @@ fun ProfilesScreen(
                         count = profile.appCount,
                         isActive = profile.isImmediatelyActive,
                         onToggle = { newValue ->
+                            if (newValue){
+                                profiles.forEach { other ->
+                                    if (other.id != profile.id && other.isImmediatelyActive){
+                                        viewModel.update(other.copy(isImmediatelyActive = false))
+                                    }
+                                }
+                            }
                             val updated = profile.copy(isImmediatelyActive = newValue)
                             viewModel.update(updated)
                         }
