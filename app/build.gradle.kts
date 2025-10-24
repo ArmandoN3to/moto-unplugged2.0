@@ -51,6 +51,10 @@ dependencies {
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
 
+    //dependencia para o photopicker
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+
 
 
     //implementação do room

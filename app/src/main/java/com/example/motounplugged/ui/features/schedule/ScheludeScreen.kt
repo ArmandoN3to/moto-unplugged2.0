@@ -1,7 +1,6 @@
 package com.example.motounplugged.ui.screens
 
 import android.app.TimePickerDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,10 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import android.app.TimePickerDialog
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -26,8 +21,7 @@ import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
 import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribute
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+
 
 @Composable
 fun ScheduleScreen(
