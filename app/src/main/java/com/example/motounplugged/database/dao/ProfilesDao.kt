@@ -16,6 +16,8 @@ interface ProfilesDao {
     @Query("SELECT * FROM Profiles")
     fun findAll(): Flow<List<ProfilesEntity>>
 
+    @Query("SELECT * FROM Profiles WHERE idProfile== :id LIMIT 1")
+    suspend fun getProfileById(id: Int): ProfilesEntity?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(profiles: ProfilesEntity)
 

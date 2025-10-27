@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,9 +37,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
+    profileId: Int = -1,
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val profileId = navController.currentBackStackEntry
+        ?.arguments
+        ?.getInt("profileId")
+
 
     CreateProfileContent(
         modifier = Modifier.padding(),
@@ -46,6 +52,12 @@ fun CreateProfileScreen(
         onEvent = viewModel::onEvent, // Passa a referência da função de eventos
         navController = navController
     )
+
+    LaunchedEffect(profileId) {
+        if (profileId != null) {
+            viewModel.loadProfile(profileId)
+        }
+    }
 }
 
 

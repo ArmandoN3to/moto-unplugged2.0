@@ -31,6 +31,7 @@ val sampleProfiles = listOf(
 
 
 
+
 // Eventos que a UI pode enviar para o ViewModel ex: clicar em salvar
 sealed interface CreateProfileEvent {
     data class OnProfileNameChange(val name: String) : CreateProfileEvent
@@ -46,6 +47,14 @@ class CreateProfileViewModel(
 
     private val _uiState = MutableStateFlow(CreateProfileUiState())
     val uiState: StateFlow<CreateProfileUiState> = _uiState.asStateFlow()
+
+    data class CreateProfileUiState(
+        val profileId: Int? = null,
+        val profileName: String = "",
+        val isImmediatelyActive: Boolean = false,
+        val appCount: Int = 0,
+        val isEditing: Boolean = false
+    )
 
     fun onEvent(event: CreateProfileEvent) {
         when (event) {
@@ -66,19 +75,35 @@ class CreateProfileViewModel(
 
     private fun saveProfile() {
         viewModelScope.launch {
-            //_uiState.update { it.copy(isLoading = true) }
+            val currentState = _uiState.value
 
-            // variavel profile recebe a entidade de profiles com o estado
-            // do meu profile name e appcount ( pega o que ta sendo digitado)
             val profile = ProfilesEntity(
-                ProfileName = _uiState.value.profileName,
-                appCount = _uiState.value.appCount
+                idProfile = currentState.profileId ?: 0,
+                ProfileName = currentState.profileName,
+                appCount = currentState.appCount
             )
 
-            // salva o novo perfil no repository
-            repository.save(profile)
+            if (currentState.isEditing) {
+                repository.update(profile)
+            } else {
+                repository.save(profile)
+            }
+        }
+    }
 
-            //_uiState.update { it.copy(isLoading = false) }
+    fun loadProfile(id: Int) {
+        viewModelScope.launch {
+            val profile = repository.getProfileById(id)
+            if (profile != null) {
+                _uiState.update {
+                    it.copy(
+                        profileId = profile.idProfile,
+                        profileName = profile.ProfileName,
+                        appCount = profile.appCount,
+                        isEditing = true
+                    )
+                }
+            }
         }
     }
 }
