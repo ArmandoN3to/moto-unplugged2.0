@@ -64,7 +64,7 @@ fun CreateProfileScreen(
 @Composable
 private fun CreateProfileContent(
     modifier: Modifier = Modifier,
-    uiState: CreateProfileUiState,
+    uiState: CreateProfileViewModel.CreateProfileUiState,
     onEvent: (CreateProfileEvent) -> Unit,
     navController: NavController
 ) {
@@ -115,11 +115,11 @@ private fun CreateProfileContent(
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold
                     )
-                    Text(
+                    /*Text(
                         if (uiState.selectedApps.isEmpty()) "Nenhum aplicativo selecionado" else "${uiState.selectedApps.size} aplicativos selecionados",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    )*/
                 }
                 Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
             }

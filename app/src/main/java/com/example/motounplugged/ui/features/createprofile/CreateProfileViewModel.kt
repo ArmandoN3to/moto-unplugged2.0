@@ -11,26 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-//guarda o estado da minha tela para caso eu saia os dados sejam mantidos
-data class CreateProfileUiState(
-    val profileName: String = "",
-    //será implementado futuramente
-    val selectedApps: List<String> = emptyList(), // lista de app bloqueados
-//     val isImmediatelyActive: Boolean = true, // switch de ativar perfil logo ao criar
-//    val isLoading: Boolean = false, // carregamento
-    val appCount: Int = 0// provisorio
-)
-
-// para teste mas é para remover
-val sampleProfiles = listOf(
-    CreateProfileUiState(profileName = "Trabalho", appCount = 4 ),
-    CreateProfileUiState(profileName = "Academia", appCount = 4 ),
-    CreateProfileUiState(profileName = "Estudo", appCount = 4 ),
-    CreateProfileUiState(profileName = "teste", appCount = 4 ),
-)
-
-
-
 
 // Eventos que a UI pode enviar para o ViewModel ex: clicar em salvar
 sealed interface CreateProfileEvent {
@@ -53,7 +33,7 @@ class CreateProfileViewModel(
         val profileName: String = "",
         val isImmediatelyActive: Boolean = false,
         val appCount: Int = 0,
-        val isEditing: Boolean = false
+        val isEditing: Boolean = false,
     )
 
     fun onEvent(event: CreateProfileEvent) {

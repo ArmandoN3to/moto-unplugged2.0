@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProfilesDao {
-
     @Query("SELECT * FROM Profiles")
     fun findAll(): Flow<List<ProfilesEntity>>
 
