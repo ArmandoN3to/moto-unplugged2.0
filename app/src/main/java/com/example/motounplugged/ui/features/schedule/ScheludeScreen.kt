@@ -144,7 +144,7 @@ fun ScheduleScreen(
                         endHour = endTime.toString(),
                         dayOfWeek = selectedDaysEnums, // agora é uma lista
                         isActive = true,
-                        id_profile = profile.idProfile
+                        idProfile = profile.idProfile
                     )
                     viewModel.save(session)
                 }

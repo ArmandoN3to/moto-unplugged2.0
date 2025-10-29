@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
+import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
@@ -54,22 +55,17 @@ fun AppNavHost(
         composable(AppScreens.Streak.route) {
             GenericScreen("Tela Streak")
         }
-        composable(AppScreens.CreateProfile.route) {
-            CreateProfileScreen(navController = navController)
-        }
         composable(
             route = "create_profile_screen?profileId={profileId}",
             arguments = listOf(
                 navArgument("profileId") {
                     type = NavType.IntType
-                    defaultValue = -1
+                    defaultValue = -1  // valor padrão se não passar
                 }
             )
-        ) {
-            CreateProfileScreen(
-                navController = navController,
-                profileId = it.arguments?.getInt("profileId") ?: -1
-            )
+        ) { backStackEntry ->
+            val profileId = backStackEntry.arguments?.getInt("profileId") ?: -1
+            CreateProfileScreen(navController, profileId)
         }
     }
 }
