@@ -1,6 +1,5 @@
 package com.example.motounplugged.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import com.example.motounplugged.ui.components.Icon_Edit_Profile
 
@@ -24,8 +23,7 @@ fun ProfileCard(
     count: Int,
     modifier: Modifier = Modifier,
     isActive: Boolean,
-    onToggle: (Boolean) -> Unit,
-    onClick: () -> Unit
+    onToggle: (Boolean) -> Unit
 ) {
     var checked by remember { mutableStateOf(true) }
     var showToast by remember { mutableStateOf(false) }
@@ -41,9 +39,7 @@ fun ProfileCard(
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
-                modifier = Modifier.
-                    fillMaxWidth().
-                    clickable { onClick() },
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

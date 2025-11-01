@@ -2,7 +2,6 @@ package com.example.motounplugged.di
 
 import androidx.room.Room
 import com.example.motounplugged.database.MotoUnpluggedDataBase
-import com.example.motounplugged.repositories.BlockedAppsRepository
 import com.example.motounplugged.repositories.ProfileRepository
 import com.example.motounplugged.repositories.SessionsRepository
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
@@ -25,15 +24,12 @@ val databaseModule = module {
     // DAOs
     single { get<MotoUnpluggedDataBase>().profilesDao() }
     single { get<MotoUnpluggedDataBase>().sessionsDao() }
-    single { get<MotoUnpluggedDataBase>().blockedAppsDao() }
-
 }
 
 // --- Repositórios ---
 val repositoryModule = module {
     single { ProfileRepository(get()) }
     single { SessionsRepository(get()) }
-    single { BlockedAppsRepository(get()) }
 }
 
 // --- ViewModels ---
