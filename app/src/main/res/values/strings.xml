@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Moto Unplugged</string>
+    <string name="hello">Hey there</string>
 </resources>
