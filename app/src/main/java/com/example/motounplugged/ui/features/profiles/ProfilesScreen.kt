@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.components.EditProfileDialog
 import com.example.motounplugged.ui.components.ProfileCard
@@ -21,7 +20,6 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 @Composable
 fun ProfilesScreen(
     viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
-    navController: NavHostController,
     modifier: Modifier = Modifier) {
 
        // profiles vai receber o meu stateflow e coletar esse estado
@@ -45,7 +43,7 @@ fun ProfilesScreen(
             ) {
                 items(
                     items = profiles,
-                    key = { it.idProfile}
+                    key = { it.id}
                 ) { profile ->
                     ProfileCard(
                         title = profile.ProfileName,
@@ -54,21 +52,19 @@ fun ProfilesScreen(
                         onToggle = { newValue ->
                             if (newValue){
                                 profiles.forEach { other ->
-                                    if (other.idProfile != profile.idProfile && other.isImmediatelyActive){
+                                    if (other.id != profile.id && other.isImmediatelyActive){
                                         viewModel.update(other.copy(isImmediatelyActive = false))
                                     }
                                 }
                             }
                             val updated = profile.copy(isImmediatelyActive = newValue)
                             viewModel.update(updated)
-                        },
-                        onClick = {
-                            navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
                         }
                     )
                 }
             }
         }
+
         // se um perfil foi selecionado para edição
         editingProfile?.let { profile ->
             EditProfileDialog(

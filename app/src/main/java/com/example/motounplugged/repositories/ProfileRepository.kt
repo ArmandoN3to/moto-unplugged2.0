@@ -10,9 +10,6 @@ class ProfileRepository (
 ){
     val profiles get() = dao.findAll() // puxa a nossa função do query
 
-    suspend fun getProfileById(id: Int): ProfilesEntity?{
-        return dao.getProfileById(id)
-    }
     //suspend fun pois usamos coroutines (atualizar dados com base em alterações - flow)
    suspend fun save(profiles: ProfilesEntity){
         dao.save(profiles)
