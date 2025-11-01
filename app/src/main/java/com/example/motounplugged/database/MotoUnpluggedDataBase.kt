@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
                     MotoUnpluggedDataBase::class.java,
                     "moto_unplugged.db"
                 )
-                    .addCallback(object : RoomDatabase.Callback() {
+                    .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             CoroutineScope(Dispatchers.IO).launch {
