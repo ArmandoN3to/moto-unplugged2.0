@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.MotoUnplugged" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logowhite</item>
+
+        <item name="windowSplashScreenBackground">@color/black</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.MotoUnplugged</item>
+    </style>
+
 </resources>
