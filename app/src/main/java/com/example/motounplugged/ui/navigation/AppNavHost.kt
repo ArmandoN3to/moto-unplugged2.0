@@ -20,6 +20,7 @@ import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.user.UserScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
+import com.example.motounplugged.ui.features.splashscreen.SplashScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -33,6 +34,10 @@ fun AppNavHost(
         startDestination = AppScreens.Home.route,
         modifier = modifier
     ) {
+
+        composable(AppScreens.SplashScreen.route) {
+            SplashScreen(navController = navController)
+        }
         composable(AppScreens.Home.route) {
             HomeScreen( navController = navController,onClick = {})
         }
