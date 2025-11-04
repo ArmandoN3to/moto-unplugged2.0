@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Moto Unplugged</string>
     <string name="hello">Hey there</string>
+    <string name="create_account">Create an Account</string>
+    <string name="welcome">Welcome Back</string>
+    <string name="first_name">First Name</string>
+
 </resources>
