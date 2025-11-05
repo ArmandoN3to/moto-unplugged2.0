@@ -1,9 +1,12 @@
 package com.example.motounplugged.ui.components
 
-import androidx.compose.foundation.layout.fillMaxSize
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -11,8 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,21 +63,23 @@ fun TitleTextComponents(value:String){
 }
 
 @Composable
-fun MyTextField(labelValue:String){
+fun MyTextField(labelValue: String, painterResource: Painter){
 
     val textValue = remember {
         mutableStateOf("")
     }
+    val smal : CornerBasedShape = RoundedCornerShape(13.dp)
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         label = {Text(text = labelValue)},
         value = textValue.value,
+        shape = smal,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Primary,
             unfocusedIndicatorColor = Gray20,
             focusedLabelColor = Primary,
             cursorColor = Primary,
-            unfocusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            unfocusedContainerColor = BgColor,
             focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
             disabledContainerColor = androidx.compose.ui.graphics.Color.Transparent,
             errorContainerColor = androidx.compose.ui.graphics.Color.Transparent
@@ -81,7 +87,14 @@ fun MyTextField(labelValue:String){
         keyboardOptions = KeyboardOptions.Default,
         onValueChange = {
             textValue.value = it
-        })
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource,
+                contentDescription = " ")
+        }
+
+        )
 
 
 }
