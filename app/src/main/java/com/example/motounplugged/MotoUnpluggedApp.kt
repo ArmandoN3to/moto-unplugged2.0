@@ -33,6 +33,7 @@ fun MotoUnpluggedApp() {
         selectedRoute in listOf(  //lista de rotas secundarias
             AppScreens.CreateProfile.route,
             "edit_profile/{profileTitle}",
+            AppScreens.SelectApps.route,
 
 
             )
