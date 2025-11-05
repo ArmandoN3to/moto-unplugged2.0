@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.components.EditProfileDialog
@@ -25,6 +26,7 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 @Composable
 fun ProfilesScreen(
     viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
+    navController: NavHostController,
     modifier: Modifier = Modifier) {
 
        // profiles vai receber o meu stateflow e coletar esse estado
@@ -59,33 +61,51 @@ fun ProfilesScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(
-                items = profiles,
-                key = { it.id }
-            ) { profile ->
-                ProfileCard(
-                    title = profile.ProfileName,
-                    count = profile.appCount,
-                    isActive = profile.isImmediatelyActive,
-                    onToggle = { newValue ->
-                        val updated = profile.copy(isImmediatelyActive = newValue)
-                        viewModel.update(updated)
-                    }
-                )
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(
+                    items = profiles,
+                    key = { it.idProfile}
+                ) { profile ->
+                    ProfileCard(
+                        title = profile.ProfileName,
+                        count = profile.appCount,
+                        isActive = profile.isImmediatelyActive,
+                        onToggle = { newValue ->
+                            if (newValue){
+                                profiles.forEach { other ->
+                                    if (other.idProfile != profile.idProfile && other.isImmediatelyActive){
+                                        viewModel.update(other.copy(isImmediatelyActive = false))
+                                    }
+                                }
+                            }
+                            val updated = profile.copy(isImmediatelyActive = newValue)
+                            viewModel.update(updated)
+                        },
+                        onClick = {
+                            navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
+                        }
+                    )
+                }
             }
         }
-    }
-
-    // se um perfil foi selecionado para edição
-    editingProfile?.let { profile ->
-        EditProfileDialog(
-            profile = profile,
-            onDismiss = { editingProfile = null },
-            onSave = { updated ->
-                viewModel.update(updated)
-                editingProfile = null
-            }
-        )
+        // se um perfil foi selecionado para edição
+        editingProfile?.let { profile ->
+            EditProfileDialog(
+                profile = profile,
+                onDismiss = { editingProfile = null },
+                onSave = { updated ->
+                    viewModel.update(updated)
+                    editingProfile = null
+                }
+            )
+        }
     }
 }
 

@@ -106,7 +106,7 @@ fun MotoUnpluggedApp() {
                 when (selectedRoute) {
                     AppScreens.Profiles.route-> {
                         FAB_new_profile {
-                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
+                            navController.navigate("create_profile_screen") // vai pra rota createprofile
                         }
                     }
                 }

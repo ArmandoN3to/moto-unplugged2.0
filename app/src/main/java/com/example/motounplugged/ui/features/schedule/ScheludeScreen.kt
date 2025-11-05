@@ -1,7 +1,6 @@
 package com.example.motounplugged.ui.screens
 
 import android.app.TimePickerDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -140,7 +139,7 @@ fun ScheduleScreen(
         // --- Seleção de perfil ---
         Text("Selecione o Perfil", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         profiles.forEach { profile ->
-            val isSelected = selectedProfile?.id == profile.id
+            val isSelected = selectedProfile?.idProfile == profile.idProfile
             Button(
                 onClick = { selectedProfile = profile },
                 modifier = Modifier
@@ -179,7 +178,7 @@ fun ScheduleScreen(
                         endHour = endTime.toString(),
                         dayOfWeek = selectedDaysEnums, // agora é uma lista
                         isActive = true,
-                        id_profile = profile.id
+                        idProfile = profile.idProfile
                     )
                     viewModel.save(session)
                 }
