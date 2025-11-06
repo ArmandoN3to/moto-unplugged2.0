@@ -54,14 +54,14 @@ dependencies {
     //dependencia para o photopicker
     implementation("io.coil-kt:coil-compose:2.6.0")
 
-
-
-
     //implementação do room
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    //implementação material extended
+    implementation("androidx.compose.material:material-icons-extended: 2.6.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.navigation.compose)
