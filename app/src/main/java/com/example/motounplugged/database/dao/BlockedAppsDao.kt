@@ -17,7 +17,7 @@ interface BlockedAppsDao {
     @Query("SELECT * FROM BlockedApps where packageName == :packageName LIMIT 1")
     fun findAppByPackageName(packageName: String): BlockedAppsEntity?
 
-    @Query("SELECT * FROM BlockedApps WHERE profileId = :profileId")
+    @Query("SELECT * FROM BlockedApps WHERE blockedProfileId = :profileId")
     suspend fun getBlockedAppsByProfile(profileId: Int): List<BlockedAppsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,6 +29,6 @@ interface BlockedAppsDao {
     @Delete
     suspend fun delete(blockedApps: BlockedAppsEntity)
 
-    @Query("DELETE FROM BlockedApps WHERE profileId = :profileId")
+    @Query("DELETE FROM BlockedApps WHERE blockedProfileId = :profileId")
     suspend fun deleteAllBlockedAppsFromProfile(profileId: Int)
 }

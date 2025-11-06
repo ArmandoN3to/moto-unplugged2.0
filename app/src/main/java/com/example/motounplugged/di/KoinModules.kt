@@ -31,7 +31,7 @@ val databaseModule = module {
 
 // --- Repositórios ---
 val repositoryModule = module {
-    single { ProfileRepository(get()) }
+    single { ProfileRepository(get(), blockedAppsDao = get()) }
     single { SessionsRepository(get()) }
     single { BlockedAppsRepository(get()) }
 }

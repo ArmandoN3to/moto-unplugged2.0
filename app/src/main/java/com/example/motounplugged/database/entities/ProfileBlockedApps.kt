@@ -8,9 +8,9 @@ data class ProfileBlockedApps(
 
     @Relation(
         parentColumn = "idProfile",
-        entityColumn = "profileId"
+        entityColumn = "blockedProfileId"
     )
 
-    val blockedApps: List<ProfileBlockedApps>
+    val blockedApps: List<BlockedAppsEntity>
 
 )

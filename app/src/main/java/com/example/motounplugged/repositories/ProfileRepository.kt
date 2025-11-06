@@ -40,7 +40,7 @@ class ProfileRepository (
             nameApp = appName,
             packageName = packageName,
             categoryApp = categoryApp,
-            profileId = profileId
+            blockedProfileId = profileId
         )
         blockedAppsDao.save(app)
     }
