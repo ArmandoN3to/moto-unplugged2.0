@@ -14,16 +14,21 @@ interface BlockedAppsDao {
     @Query("SELECT * FROM BlockedApps")
     fun findAll(): Flow<List<BlockedAppsEntity>>
 
-    @Query("SELECT * FROM BlockedApps where uniqueIdApp == :id LIMIT 1")
-    fun findAppbyId(id: Int): BlockedAppsEntity?
+    @Query("SELECT * FROM BlockedApps where packageName == :packageName LIMIT 1")
+    fun findAppByPackageName(packageName: String): BlockedAppsEntity?
+
+    @Query("SELECT * FROM BlockedApps WHERE blockedProfileId = :profileId")
+    suspend fun getBlockedAppsByProfile(profileId: Int): List<BlockedAppsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(profiles: BlockedAppsEntity)
+    suspend fun save(blockedApps: BlockedAppsEntity)
 
     @Update
-    suspend fun update(profiles: BlockedAppsEntity)
+    suspend fun update(blockedApps: BlockedAppsEntity)
 
     @Delete
-    suspend fun delete(profiles: BlockedAppsEntity)
+    suspend fun delete(blockedApps: BlockedAppsEntity)
 
+    @Query("DELETE FROM BlockedApps WHERE blockedProfileId = :profileId")
+    suspend fun deleteAllBlockedAppsFromProfile(profileId: Int)
 }

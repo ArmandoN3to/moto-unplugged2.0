@@ -47,10 +47,6 @@ import kotlinx.coroutines.launch
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                // Use o instance diretamente, não getDatabase()
-                                val repository = ProfileRepository(INSTANCE!!.profilesDao())
-                            }
                         }
                     })
                     .fallbackToDestructiveMigration(true)
@@ -60,7 +56,5 @@ import kotlinx.coroutines.launch
                 instance
             }
         }
-
-
     }
 }

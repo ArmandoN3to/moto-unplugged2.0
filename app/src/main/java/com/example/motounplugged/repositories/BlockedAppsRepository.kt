@@ -8,8 +8,8 @@ class BlockedAppsRepository(
 ) {
     val blockedApps get() = dao.findAll() // puxa a nossa função do query
 
-    suspend fun getBlockedAppById(id: Int): BlockedAppsEntity?{
-        return dao.findAppbyId(id)
+    suspend fun getBlockedAppByPackageName(packageName: String): BlockedAppsEntity?{
+        return dao.findAppByPackageName(packageName)
     }
     //suspend fun pois usamos coroutines (atualizar dados com base em alterações - flow)
     suspend fun save(blockedApp: BlockedAppsEntity){
