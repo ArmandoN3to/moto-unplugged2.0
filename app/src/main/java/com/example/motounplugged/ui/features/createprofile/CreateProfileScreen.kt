@@ -47,26 +47,16 @@ fun CreateProfileScreen(
     profileId: Int?,
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
 
-    // Passa o argumento recebido para o ViewModel
+    // Carrega o perfil apenas uma vez se estiver em modo edição
     LaunchedEffect(profileId) {
-        profileId?.let { id ->
-            if (id != -1) { // -1 significa novo perfil
-                viewModel.loadProfile(id)
-            }
+        if (profileId != null && profileId != -1) {
+            viewModel.loadProfile(profileId)
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
-
-    // Quando vier da navegação
-    val id = navController.currentBackStackEntry?.arguments?.getInt("profileId")
-
-    LaunchedEffect(id) {
-        id?.let { viewModel.loadProfile(it) }
-    }
-
-    // Navegar após salvar
+    // Navega após salvar
     LaunchedEffect(uiState.saveSuccess) {
         if (uiState.saveSuccess) {
             navController.navigate(AppScreens.Profiles.route) {
@@ -98,6 +88,7 @@ fun CreateProfileScreen(
     }
 }
 
+
 @Composable
 private fun CreateProfileContent(
     modifier: Modifier = Modifier,
@@ -125,7 +116,9 @@ private fun CreateProfileContent(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                //.clickable { navController.navigate(AppScreens.SelectApps.route) }
+                .clickable {
+                    navController.navigate("${AppScreens.SelectApps.route}/${uiState.profileId}")
+                }
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
@@ -155,72 +148,46 @@ private fun CreateProfileContent(
 
 
         Spacer(Modifier.height(16.dp))
+
         SettingsRow(
             icon = Icons.Default.Apps,
             title = "App layout",
             subtitle = "4x5",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
         )
-
-
 
         SettingsRow(
             icon = Icons.Default.Wallpaper,
             title = "Wallpaper",
             subtitle = "",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            onClick = { onEvent(CreateProfileEvent.OnSelectWallpaperClick) }
         )
 
-
-
-        // Item para Agendamento
         SettingsRow(
             icon = Icons.Default.Alarm,
-            title = "Duraçao",
-            subtitle = "duraçao do modo ",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            title = "Duração",
+            subtitle = "Definir tempo de uso do perfil",
+            onClick = { onEvent(CreateProfileEvent.OnSetDurationClick) }
         )
-
 
         SettingsRow(
             icon = Icons.Default.NotificationsNone,
-            title = "Interruptions",
-            subtitle = "Manage alerts and notifications",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            title = "Interrupções",
+            subtitle = "Gerenciar alertas e notificações",
+            onClick = { onEvent(CreateProfileEvent.OnInterruptionsClick) }
         )
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
 
-        // Item para o Switch
         SettingsSwitchRow(
             icon = Icons.Default.Password,
-            title = "Require Password",
-            subtitle = "Enter a password before ending a session",
+            title = "Requer senha",
+            subtitle = "Solicitar senha para sair do modo",
             checked = uiState.isImmediatelyActive,
-            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
+            onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
         )
 
         Spacer(Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                if (uiState.profileName.isNotBlank()) {
-                    onEvent(CreateProfileEvent.OnSaveProfileClick)
-                    navController.navigate(AppScreens.Profiles.route)
-                } else {
-                    println("Nome do perfil não pode ser vazio")
-                }
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = MaterialTheme.shapes.medium,
-            enabled = uiState.profileName.isNotBlank()
-
-        uiState.errorMessage?.let {
-            Text(text = it, color = MaterialTheme.colorScheme.error)
-        }
 
         Button(
             onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
@@ -234,13 +201,8 @@ private fun CreateProfileContent(
             )
         }
 
-
-
     }
 }
-
-
-
 
 
 @Composable

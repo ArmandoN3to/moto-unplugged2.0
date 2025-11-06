@@ -18,6 +18,7 @@ data class CreateProfileUiState(
     val profileId: Int? = null,          // id when editing, null when creating
     val profileName: String = "",        // controlled input value
     val appCount: Int = 0,               // number of selected apps (display-only)
+    val isImmediatelyActive: Boolean = false,
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
@@ -31,6 +32,11 @@ data class CreateProfileUiState(
 sealed interface CreateProfileEvent {
     data class OnProfileNameChange(val name: String) : CreateProfileEvent
     data object OnSaveProfileClick : CreateProfileEvent
+    data object OnSelectAppsClick : CreateProfileEvent
+    data object OnSelectWallpaperClick : CreateProfileEvent
+    data object OnSetDurationClick : CreateProfileEvent
+    data object OnInterruptionsClick : CreateProfileEvent
+    data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
 }
 
 class CreateProfileViewModel(
@@ -46,22 +52,33 @@ class CreateProfileViewModel(
      */
     fun onEvent(event: CreateProfileEvent) {
         when (event) {
-            is CreateProfileEvent.OnProfileNameChange -> {
-                // update the field, also reset transient UI flags
-                _uiState.update {
-                    it.copy(
-                        profileName = event.name,
-                        saveSuccess = false,    // reset previous success when user edits
-                        errorMessage = null     // clear previous error when user edits
-                    )
-                }
+            is CreateProfileEvent.OnProfileNameChange ->
+                _uiState.update { it.copy(profileName = event.name) }
+
+            CreateProfileEvent.OnSaveProfileClick -> saveProfile()
+
+            CreateProfileEvent.OnSelectAppsClick -> {
+                println("Usuário clicou em selecionar apps bloqueados")
+                // aqui você pode sinalizar navegação ou abrir uma tela
             }
 
-            CreateProfileEvent.OnSaveProfileClick -> {
-                saveProfile()
+            CreateProfileEvent.OnSelectWallpaperClick -> {
+                println("Usuário clicou em escolher wallpaper")
             }
+
+            CreateProfileEvent.OnSetDurationClick -> {
+                println("Usuário clicou em definir duração")
+            }
+
+            CreateProfileEvent.OnInterruptionsClick -> {
+                println("Usuário clicou em gerenciar interrupções")
+            }
+
+            is CreateProfileEvent.OnRequirePasswordChange ->
+                _uiState.update { it.copy(isImmediatelyActive = event.enabled) }
         }
     }
+
 
     /**
      * Save or update the profile.

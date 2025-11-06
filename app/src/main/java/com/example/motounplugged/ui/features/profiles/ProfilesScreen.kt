@@ -25,13 +25,12 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 
 @Composable
 fun ProfilesScreen(
-    viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
+    viewModel: ProfilesScreenViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier) {
-
-       // profiles vai receber o meu stateflow e coletar esse estado
-       val profiles by viewModel.profiles.collectAsState()
-       var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
+    modifier: Modifier = Modifier
+) {
+    val profiles by viewModel.profiles.collectAsState()
+    var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
     Column(
         modifier = modifier
@@ -41,15 +40,14 @@ fun ProfilesScreen(
     ) {
         Text(
             text = "Perfis de Foco",
-            fontStyle = FontStyle.Normal,
             fontSize = 25.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 16.dp)
         )
+
         Text(
             text = "Crie e personalize seus perfis",
-            fontStyle = FontStyle.Normal,
             fontSize = 20.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
@@ -57,45 +55,36 @@ fun ProfilesScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(
-                    items = profiles,
-                    key = { it.idProfile}
-                ) { profile ->
-                    ProfileCard(
-                        title = profile.ProfileName,
-                        count = profile.appCount,
-                        isActive = profile.isImmediatelyActive,
-                        onToggle = { newValue ->
-                            if (newValue){
-                                profiles.forEach { other ->
-                                    if (other.idProfile != profile.idProfile && other.isImmediatelyActive){
-                                        viewModel.update(other.copy(isImmediatelyActive = false))
-                                    }
+            items(
+                items = profiles,
+                key = { it.idProfile }
+            ) { profile ->
+                ProfileCard(
+                    title = profile.ProfileName,
+                    count = profile.appCount,
+                    isActive = profile.isImmediatelyActive,
+                    onToggle = { newValue ->
+                        if (newValue) {
+                            profiles.forEach { other ->
+                                if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
+                                    viewModel.update(other.copy(isImmediatelyActive = false))
                                 }
                             }
-                            val updated = profile.copy(isImmediatelyActive = newValue)
-                            viewModel.update(updated)
-                        },
-                        onClick = {
-                            navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
                         }
-                    )
-                }
+                        viewModel.update(profile.copy(isImmediatelyActive = newValue))
+                    },
+                    onClick = {
+                        navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
+                    }
+                )
             }
         }
-        // se um perfil foi selecionado para edição
+
+        // Diálogo de edição
         editingProfile?.let { profile ->
             EditProfileDialog(
                 profile = profile,
@@ -108,9 +97,6 @@ fun ProfilesScreen(
         }
     }
 }
-
-
-
 
 
 @Composable
