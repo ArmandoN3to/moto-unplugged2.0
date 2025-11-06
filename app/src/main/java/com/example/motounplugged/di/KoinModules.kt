@@ -59,7 +59,11 @@ val viewModelModule = module {
     viewModel {
         ProfilesScreenViewModel(get())
     }
-
-
+    viewModel{
+        ScheduleScreenViewModel(
+            repository = get() ,
+            profilesRepository = get()
+        )
+    }
 
 }
