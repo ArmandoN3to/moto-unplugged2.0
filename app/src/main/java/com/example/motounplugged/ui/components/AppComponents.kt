@@ -4,6 +4,7 @@ package com.example.motounplugged.ui.components
 
 import android.graphics.drawable.Icon
 import android.util.Log
+import android.widget.NumberPicker.OnValueChangeListener
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -93,16 +94,14 @@ fun TitleTextComponents(value:String){
 
 //componente de texto de inserir dados
 @Composable
-fun MyTextField(labelValue: String, painterResource: Painter){
+fun MyTextField(labelValue: String, painterResource: Painter,value: String, onValueChange: (String) -> Unit){
 
-    val textValue = remember {
-        mutableStateOf("")
-    }
     val smal : CornerBasedShape = RoundedCornerShape(13.dp)
+
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         label = {Text(text = labelValue)},
-        value = textValue.value,
+        value = value,
         shape = smal,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Primary,
@@ -110,14 +109,12 @@ fun MyTextField(labelValue: String, painterResource: Painter){
             focusedLabelColor = Primary,
             cursorColor = Primary,
             unfocusedContainerColor = BgColor,
-            focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
-            disabledContainerColor = androidx.compose.ui.graphics.Color.Transparent,
-            errorContainerColor = androidx.compose.ui.graphics.Color.Transparent
+            focusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent
         ),
         keyboardOptions = KeyboardOptions.Default,
-        onValueChange = {
-            textValue.value = it
-        },
+        onValueChange = onValueChange,
         leadingIcon = {
             Icon(
                 painter = painterResource,
@@ -131,19 +128,17 @@ fun MyTextField(labelValue: String, painterResource: Painter){
 
 //componente de senha
 @Composable
-fun PasswordTextField(labelValue: String, painterResource: Painter){
+fun PasswordTextField(labelValue: String, painterResource: Painter, value: String, onValueChange: (String) -> Unit ){
 
-    val password = remember {
-        mutableStateOf("")
-    }
     val passwordVisible = remember {
         mutableStateOf(false)
     }
     val smal : CornerBasedShape = RoundedCornerShape(13.dp)
+
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
         label = {Text(text = labelValue)},
-        value = password.value,
+        value = value,
         shape = smal,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Primary,
@@ -156,9 +151,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter){
             errorContainerColor = androidx.compose.ui.graphics.Color.Transparent
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        onValueChange = {
-            password.value = it
-        },
+        onValueChange = onValueChange,
         leadingIcon = {
             Icon(
                 painter = painterResource,
@@ -171,7 +164,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter){
             }else{
                 Icons.Filled.VisibilityOff
             }
-            var description = if(passwordVisible.value){
+            val description = if(passwordVisible.value){
                 stringResource(id = R.string.hide_password)
             }else{
                 stringResource(id = R.string.show_password)
@@ -249,6 +242,7 @@ fun ClickableTextComponent(value: String, onTextSelected : (String) -> Unit){
     }})
 }
 
+//botão de registro
 @Composable
 fun ButtonComponent(value: String,  onClick: () -> Unit){
     Button(

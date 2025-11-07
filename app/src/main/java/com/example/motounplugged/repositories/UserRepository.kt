@@ -1,0 +1,22 @@
+package com.example.motounplugged.repositories
+
+import com.example.motounplugged.database.dao.UserDao
+import com.example.motounplugged.database.entities.UserEntity
+import com.example.motounplugged.ui.navigation.AppScreensRouter
+
+class UserRepository(
+    private val userDao: UserDao
+) {
+    suspend fun registerUser(firstName: String, lastName: String, email: String, password: String){
+        val user = UserEntity(
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            password = password
+        )
+        //insere os dados por parametro
+        userDao.registerUser(user)
+    }
+    //busca o email por parametro
+    suspend fun getUser(email: String) = userDao.buscarPorEmail(email)
+}
