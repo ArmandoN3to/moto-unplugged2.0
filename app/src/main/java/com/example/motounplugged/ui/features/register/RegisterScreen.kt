@@ -51,13 +51,13 @@ fun RegisterScreen(
             .fillMaxSize()
             .background(color = Color.White)
             .padding(28.dp)
-            .padding(top = 20.dp)
+            .padding(top = 50.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
         ){
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
             NormalTextComponents(value = stringResource(id = hello))
             TitleTextComponents(value = stringResource(id = R.string.create_account))
@@ -97,7 +97,7 @@ fun RegisterScreen(
                     AppScreensRouter.TermsAndConditionsScreen.route
                 })
 
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
             ButtonComponent(value = stringResource(id = R.string.register),
                 onClick = {
