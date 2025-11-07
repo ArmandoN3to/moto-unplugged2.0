@@ -6,15 +6,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -26,15 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.example.motounplugged.ui.navigation.AppScreens
-import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.example.motounplugged.ui.navigation.AppScreensRouter
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +82,7 @@ private fun CreateProfileContent(
         // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clickable {navController.navigate(AppScreens.SelectApps.route)
+            modifier = Modifier.clickable {navController.navigate(AppScreensRouter.SelectApps.route)
             }
         ) {
             Row(
@@ -170,7 +162,7 @@ private fun CreateProfileContent(
             onClick = {
                 if (uiState.profileName.isNotBlank()) {
                     onEvent(CreateProfileEvent.OnSaveProfileClick)
-                    navController.navigate(AppScreens.Profiles.route)
+                    navController.navigate(AppScreensRouter.Profiles.route)
                 } else {
                     println("Nome do perfil não pode ser vazio")
                 }

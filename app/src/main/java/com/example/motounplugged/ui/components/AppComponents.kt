@@ -4,6 +4,9 @@ package com.example.motounplugged.ui.components
 
 import android.graphics.drawable.Icon
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -15,6 +18,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +32,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -65,6 +72,7 @@ fun NormalTextComponents(value:String){
         textAlign = TextAlign.Center
     )
 }
+
 //componente de titulo
 @Composable
 fun TitleTextComponents(value:String){
@@ -82,6 +90,7 @@ fun TitleTextComponents(value:String){
         textAlign = TextAlign.Center
     )
 }
+
 //componente de texto de inserir dados
 @Composable
 fun MyTextField(labelValue: String, painterResource: Painter){
@@ -183,12 +192,11 @@ fun PasswordTextField(labelValue: String, painterResource: Painter){
 
 //componente de checklist do termos e serviços
 @Composable
-fun CheckboxComponent(value: String){
+fun CheckboxComponent(value: String, onTextSelected : (String) -> Unit){
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(56.dp)
-            .padding(16.dp),
+            .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         val checkedState = remember {
@@ -198,17 +206,17 @@ fun CheckboxComponent(value: String){
             onCheckedChange = { it
                 checkedState.value = !checkedState.value
             })
-        NormalTextComponents(value)
+        ClickableTextComponent(value = value, onTextSelected)
 
     }
 }
 
 //componente da string os termos e serviços
 @Composable
-fun ClickableTextComponent(value: String){
-    val initialText = "By continuing you accept our"
-    val privacyPolicyText = "Privacy Policy"
-    val andText = "and"
+fun ClickableTextComponent(value: String, onTextSelected : (String) -> Unit){
+    val initialText = "By continuing you accept our "
+    val privacyPolicyText = "Privacy Policy "
+    val andText = " and "
     val termsAndConditionsText = "Terms of Use"
 
     //construtor para criar a string de trms e serviços
@@ -231,10 +239,43 @@ fun ClickableTextComponent(value: String){
         annotatedString.getStringAnnotations(offset,offset)
             //verifica se houver um clique valido span, also verifica se esta retornando uma string anotada
             .firstOrNull()?.also { span ->
-                Log.d("ClickableTextComponent", "{$span}")
+                Log.d("ClickableTextComponent", "{${span.item}")
+
+                //verifica se o item esta clicavel e na rota
+                if((span.item == termsAndConditionsText) || (span.item == privacyPolicyText)){
+                    onTextSelected(span.item)
 
             }
+    }})
+}
 
+@Composable
+fun ButtonComponent(value: String,  onClick: () -> Unit){
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(48.dp),
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(48.dp)
+                .background(
+                    brush = Brush.horizontalGradient(listOf(Gray20, Primary)),
+                    shape = RoundedCornerShape(50.dp)
+                ),
+                contentAlignment = Alignment.Center
+        ){
+            Text(
+                text = value,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-    })
+    }
+
 }

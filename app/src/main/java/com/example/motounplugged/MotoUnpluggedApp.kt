@@ -9,19 +9,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppDrawer
 import com.example.motounplugged.ui.navigation.AppNavHost
-import com.example.motounplugged.ui.navigation.AppScreens
+import com.example.motounplugged.ui.navigation.AppScreensRouter
 import kotlinx.coroutines.launch
 
 import com.example.motounplugged.ui.screens.FAB_new_profile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MotoUnpluggedApp() {
+fun MotoUnpluggedApp(
+    onLogout: () -> Unit) {
     Surface(
         modifier = Modifier .fillMaxSize(),
         color = Color.White
@@ -33,15 +34,15 @@ fun MotoUnpluggedApp() {
     val scope = rememberCoroutineScope()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val selectedRoute = navBackStackEntry?.destination?.route ?: AppScreens.Home.route
+    val selectedRoute = navBackStackEntry?.destination?.route ?: AppScreensRouter.Home.route
 
 
     // Verifica se rota atual é uma tela secundária
     val isSecondaryScreen = remember(selectedRoute) {
         selectedRoute in listOf(  //lista de rotas secundarias
-            AppScreens.CreateProfile.route,
+            AppScreensRouter.CreateProfile.route,
             "edit_profile/{profileTitle}",
-            AppScreens.SelectApps.route,
+            AppScreensRouter.SelectApps.route,
 
 
             )
@@ -54,7 +55,7 @@ fun MotoUnpluggedApp() {
                 onItemSelected = { item ->
                     scope.launch { drawerState.close() }
                     if (item.route == "logout_action") {
-
+                        onLogout()
                     } else {
                         navController.navigate(item.route) {
                             launchSingleTop = true
@@ -112,9 +113,9 @@ fun MotoUnpluggedApp() {
 
             floatingActionButton = {
                 when (selectedRoute) {
-                    AppScreens.Profiles.route-> {
+                    AppScreensRouter.Profiles.route-> {
                         FAB_new_profile {
-                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
+                            navController.navigate(AppScreensRouter.CreateProfile.route) // vai pra rota createprofile
                         }
                     }
                 }

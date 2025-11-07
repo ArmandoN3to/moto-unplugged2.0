@@ -7,15 +7,15 @@ import androidx.compose.runtime.Immutable
 @Immutable
 object DrawerItems {
     val Topitems = listOf(
-        NavigationItem("Início", Icons.Default.Home, AppScreens.Home.route),
-        NavigationItem("Agendar", Icons.Default.DateRange, AppScreens.Schedule.route),
-        NavigationItem("Estatísticas", Icons.Default.Face, AppScreens.Stats.route),
-        NavigationItem("Perfis", Icons.Default.Person, AppScreens.Profiles.route),
-        NavigationItem("Ofensiva", Icons.Default.Star, AppScreens.Streak.route),
+        NavigationItem("Início", Icons.Default.Home, AppScreensRouter.Home.route),
+        NavigationItem("Agendar", Icons.Default.DateRange, AppScreensRouter.Schedule.route),
+        NavigationItem("Estatísticas", Icons.Default.Face, AppScreensRouter.Stats.route),
+        NavigationItem("Perfis", Icons.Default.Person, AppScreensRouter.Profiles.route),
+        NavigationItem("Ofensiva", Icons.Default.Star, AppScreensRouter.Streak.route),
     )
     val BottomItems = listOf(
-        NavigationItem("Usuário", Icons.Default.AccountCircle, AppScreens.User.route),
-        NavigationItem("Configurações", Icons.Default.Settings, AppScreens.Settings.route),
+        NavigationItem("Usuário", Icons.Default.AccountCircle, AppScreensRouter.User.route),
+        NavigationItem("Configurações", Icons.Default.Settings, AppScreensRouter.Settings.route),
         NavigationItem("Sair", Icons.Default.ExitToApp, "logout_action")
     )
 }

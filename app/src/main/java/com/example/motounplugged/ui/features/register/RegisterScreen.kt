@@ -17,15 +17,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.motounplugged.R
 import com.example.motounplugged.R.string.hello
+import com.example.motounplugged.ui.components.ButtonComponent
 import com.example.motounplugged.ui.components.CheckboxComponent
 import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
+import com.example.motounplugged.ui.navigation.AppScreensRouter
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
 @Composable
-fun RegisterScreen(){
+fun RegisterScreen(onRegisterComplete: () -> Unit){
 
     Surface(
         color = Color.White,
@@ -63,7 +65,17 @@ fun RegisterScreen(){
                 painterResource = painterResource(id = R.drawable.password)
             )
 
-            CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions))
+            CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
+                onTextSelected = {
+                    AppScreensRouter.TermsAndConditionsScreen.route
+                })
+
+            Spacer(modifier = Modifier.height(80.dp))
+
+            ButtonComponent(value = stringResource(id = R.string.register),
+                onClick = {
+                    onRegisterComplete()
+                })
 
 
 
@@ -77,8 +89,8 @@ fun RegisterScreen(){
 
 @Preview(showBackground = true)
 @Composable
-private fun registerscreen(){
+fun registerscreen(){
     MotoUnpluggedTheme {
-        RegisterScreen()
+        RegisterScreen(onRegisterComplete = {})
     }
 }

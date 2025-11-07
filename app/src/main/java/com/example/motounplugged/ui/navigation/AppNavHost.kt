@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,12 +13,14 @@ import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.features.settings.SettingsScreen
 import com.example.motounplugged.ui.features.stats.StatsScreen
 import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.user.UserScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
+import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -30,38 +31,44 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Home.route,
+        startDestination = AppScreensRouter.Home.route,
         modifier = modifier
     ) {
-        composable(AppScreens.Home.route) {
+        composable(AppScreensRouter.Home.route) {
             HomeScreen( navController = navController,onClick = {})
         }
-        composable(AppScreens.Schedule.route) {
+        composable(AppScreensRouter.Schedule.route) {
             val ScheduleScreenViewModel: ScheduleScreenViewModel = koinViewModel()
             ScheduleScreen( viewModel = ScheduleScreenViewModel)
         }
-        composable(AppScreens.Stats.route) {
+        composable(AppScreensRouter.Stats.route) {
             StatsScreen()
         }
-        composable(AppScreens.Profiles.route) {
+        composable(AppScreensRouter.Profiles.route) {
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel)
         }
-        composable(AppScreens.User.route) {
+        composable(AppScreensRouter.User.route) {
             UserScreen()
         }
-        composable(AppScreens.Settings.route) {
+        composable(AppScreensRouter.Settings.route) {
             SettingsScreen()
         }
-        composable(AppScreens.Streak.route) {
+        composable(AppScreensRouter.Streak.route) {
             StreakScreen(
                 streakCount = 28
             )
         }
-        composable(AppScreens.CreateProfile.route) {
+        composable( AppScreensRouter.Register.route){
+            RegisterScreen(onRegisterComplete = {})
+        }
+        composable(AppScreensRouter.TermsAndConditionsScreen.route){
+            TermsAndConditionsScreen()
+        }
+        composable(AppScreensRouter.CreateProfile.route) {
             CreateProfileScreen(navController = navController)
         }
-        composable(AppScreens.SelectApps.route) {
+        composable(AppScreensRouter.SelectApps.route) {
             SelectAppsScreen(navController = navController)
         }
     }
