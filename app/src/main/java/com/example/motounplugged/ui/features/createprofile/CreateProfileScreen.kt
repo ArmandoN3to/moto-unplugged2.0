@@ -65,6 +65,19 @@ fun CreateProfileScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getStateFlow<List<String>?>("selected_apps", null)
+            ?.collect { selectedApps ->
+                selectedApps?.let {
+                    // Quando o usuário voltar com a seleção
+                    viewModel.onEvent(CreateProfileEvent.OnAppsSelected(it))
+                }
+            }
+    }
+
+
     Scaffold(
         topBar = {
             TopAppBar(

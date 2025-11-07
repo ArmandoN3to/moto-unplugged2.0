@@ -1,129 +1,127 @@
-// ui/features/selectapps/SelectAppsScreen.kt
 package com.example.motounplugged.ui.features.selectapps
 
-import android.content.res.Resources
+import android.content.pm.PackageManager
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import org.koin.androidx.compose.koinViewModel
-import com.example.motounplugged.ui.components.AppListItem
-import kotlin.math.round
+import androidx.navigation.NavHostController
+import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectAppsScreen(
-    navController: NavController,
-    viewModel: SelectAppsViewModel = koinViewModel()
+    navController: NavHostController,
+    viewModel: CreateProfileViewModel,
+    profileId: Int?,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val packageManager = context.packageManager
 
-    LaunchedEffect(Unit) {
-        viewModel.navigationEvent.collect { event ->
-            when (event) {
-                is SelectAppsNavigationEvent.NavigateBackWithResult -> {
-                    // Envia o resultado para a tela anterior
-                    navController.previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("selected_apps", event.selectedApps)
-                    navController.popBackStack()
-                }
-            }
-        }
+    // Lista todos os apps instalados (somente uma vez)
+    val installedApps by remember {
+        mutableStateOf(
+            packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+                .filter { app -> app.packageName != context.packageName } // ignora o próprio app
+                .sortedBy { it.loadLabel(packageManager).toString() }
+        )
     }
 
-        Column(modifier = Modifier.padding(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+    // Estado local dos apps selecionados
+    var selectedApps by remember {
+        mutableStateOf(viewModel.uiState.value.selectedAppPackages.toMutableSet())
+    }
 
-            Column (  modifier = Modifier.padding(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally)
-            {
-            // Textos de Título e Subtítulo
-            Text(
-                text = "Aplicativos Permitidos",
-                fontStyle = FontStyle.Normal,
-                fontSize = 25.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = "Selecione os apps permitidos ",
-                fontStyle = FontStyle.Normal,
-                fontSize = 20.sp,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
-            )
-            }
-            // Search Bar
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = { viewModel.onEvent(SelectAppsEvent.OnSearchQueryChange(it)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                placeholder = { Text("Search app") },
-                shape = RoundedCornerShape(30.dp),
-                leadingIcon = { Icon(Icons.Default.Search, null) },
-                singleLine = true ,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = com.example.motounplugged.ui.theme.Gray20, // Fill color when focused
-                    focusedBorderColor = com.example.motounplugged.ui.theme.Gray20,
-                    unfocusedContainerColor = com.example.motounplugged.ui.theme.Gray20,  // Fill color when not focused
-                    unfocusedBorderColor = com.example.motounplugged.ui.theme.Gray20
-
-                )
-            )
-
-            // Select All
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Select all", style = MaterialTheme.typography.bodyLarge)
-                Checkbox(
-                    checked = uiState.filteredApps.isNotEmpty() && uiState.selectedAppPackages.containsAll(uiState.filteredApps.map { it.packageName }),
-                    onCheckedChange = { viewModel.onEvent(SelectAppsEvent.OnSelectAllClick) }
-                )
-            }
-
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(
-                        items = uiState.filteredApps,
-                        key = { it.packageName }
-                    ) { app ->
-                        AppListItem(
-                            appInfo = app,
-                            isSelected = uiState.selectedAppPackages.contains(app.packageName),
-                            onCheckedChange = { isSelected ->
-                                viewModel.onEvent(SelectAppsEvent.OnAppSelectionChange(app.packageName, isSelected))
-                            }
-                        )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Selecionar Aplicativos") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
+            )
+        },
+        bottomBar = {
+            Button(
+                onClick = {
+                    // Envia os apps selecionados para o ViewModel
+                    viewModel.onEvent(
+                        com.example.motounplugged.ui.features.createprofile.CreateProfileEvent.OnAppsSelected(
+                            selectedApps.toList()
+                        )
+                    )
+                    navController.popBackStack() // volta à tela anterior
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text("Salvar Seleção (${selectedApps.size})")
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(installedApps, key = { it.packageName }) { appInfo ->
+                val label = appInfo.loadLabel(packageManager).toString()
+                val pkg = appInfo.packageName
+                val isSelected = pkg in selectedApps
+
+                AppItemRow(
+                    appName = label,
+                    packageName = pkg,
+                    isSelected = isSelected,
+                    onToggle = {
+                        if (isSelected) selectedApps.remove(pkg)
+                        else selectedApps.add(pkg)
+                    }
+                )
             }
         }
     }
+}
+
+@Composable
+fun AppItemRow(
+    appName: String,
+    packageName: String,
+    isSelected: Boolean,
+    onToggle: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onToggle() },
+        tonalElevation = 2.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(text = appName, fontWeight = FontWeight.Bold)
+                Text(text = packageName, style = MaterialTheme.typography.bodySmall)
+            }
+            Checkbox(checked = isSelected, onCheckedChange = { onToggle() })
+        }
+    }
+}

@@ -15,7 +15,7 @@ import com.example.motounplugged.ui.navigation.AppNavHost
 import com.example.motounplugged.ui.navigation.AppScreens
 import kotlinx.coroutines.launch
 
-import com.example.motounplugged.ui.screens.FAB_new_profile
+//import com.example.motounplugged.ui.screens.FAB_new_profile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +102,7 @@ fun MotoUnpluggedApp() {
                 )
             },
 
-            floatingActionButton = {
+            /*floatingActionButton = {
                 when (selectedRoute) {
                     AppScreens.Profiles.route-> {
                         FAB_new_profile {
@@ -110,7 +110,7 @@ fun MotoUnpluggedApp() {
                         }
                     }
                 }
-            }
+            }*/
 
         ) { paddingValues ->
             AppNavHost(

@@ -11,24 +11,25 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BlockedAppsDao {
+
     @Query("SELECT * FROM BlockedApps")
     fun findAll(): Flow<List<BlockedAppsEntity>>
 
-    @Query("SELECT * FROM BlockedApps where packageName == :packageName LIMIT 1")
-    fun findAppByPackageName(packageName: String): BlockedAppsEntity?
-
     @Query("SELECT * FROM BlockedApps WHERE blockedProfileId = :profileId")
-    suspend fun getBlockedAppsByProfile(profileId: Int): List<BlockedAppsEntity>
+    suspend fun getBlockedAppsByProfileId(profileId: Int): List<BlockedAppsEntity>
+
+    @Query("SELECT * FROM BlockedApps WHERE packageName = :packageName LIMIT 1")
+    suspend fun findAppByPackageName(packageName: String): BlockedAppsEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(blockedApps: BlockedAppsEntity)
+    suspend fun insert(app: BlockedAppsEntity)
 
     @Update
-    suspend fun update(blockedApps: BlockedAppsEntity)
+    suspend fun update(app: BlockedAppsEntity)
 
     @Delete
-    suspend fun delete(blockedApps: BlockedAppsEntity)
+    suspend fun delete(app: BlockedAppsEntity)
 
     @Query("DELETE FROM BlockedApps WHERE blockedProfileId = :profileId")
-    suspend fun deleteAllBlockedAppsFromProfile(profileId: Int)
+    suspend fun deleteByProfileId(profileId: Int)
 }

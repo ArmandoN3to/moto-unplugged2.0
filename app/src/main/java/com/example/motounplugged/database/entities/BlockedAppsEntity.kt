@@ -12,7 +12,9 @@ import androidx.room.PrimaryKey
                 childColumns = ["blockedProfileId"],  // Chave estrangeira na tabela filha
                 onDelete = ForeignKey.CASCADE  // Deleta os apps quando o perfil é removido
             )
-        ])
+        ],
+    indices = [androidx.room.Index(value = ["blockedProfileId"])]
+)
 data class BlockedAppsEntity(
     @PrimaryKey (autoGenerate = true) val idBlockedApp: Int = 0,
     val nameApp: String,

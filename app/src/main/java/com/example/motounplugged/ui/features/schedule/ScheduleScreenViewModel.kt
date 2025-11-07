@@ -25,7 +25,7 @@ class ScheduleScreenViewModel(
         )
 
     // Estado reativo com os perfis
-    val profiles: StateFlow<List<ProfilesEntity>> = profilesRepository.profiles
+    val profiles: StateFlow<List<ProfilesEntity>> = profilesRepository.getAllProfiles()
         // transforma o flow em stateflow para coletar o novo estado
         .stateIn(
             scope = viewModelScope,

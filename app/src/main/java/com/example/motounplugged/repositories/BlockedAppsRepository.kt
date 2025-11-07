@@ -6,22 +6,29 @@ import com.example.motounplugged.database.entities.BlockedAppsEntity
 class BlockedAppsRepository(
     private val dao: BlockedAppsDao
 ) {
-    val blockedApps get() = dao.findAll() // puxa a nossa função do query
+    val blockedApps get() = dao.findAll()
 
-    suspend fun getBlockedAppByPackageName(packageName: String): BlockedAppsEntity?{
+    suspend fun getBlockedAppByPackageName(packageName: String): BlockedAppsEntity? {
         return dao.findAppByPackageName(packageName)
     }
-    //suspend fun pois usamos coroutines (atualizar dados com base em alterações - flow)
-    suspend fun save(blockedApp: BlockedAppsEntity){
-        dao.save(blockedApp)
+
+    suspend fun save(blockedApp: BlockedAppsEntity) {
+        dao.insert(blockedApp)
     }
 
     suspend fun update(blockedApp: BlockedAppsEntity) {
         dao.update(blockedApp)
     }
 
-    suspend fun delete(blockedApp: BlockedAppsEntity){
+    suspend fun delete(blockedApp: BlockedAppsEntity) {
         dao.delete(blockedApp)
     }
 
+    suspend fun deleteByProfile(profileId: Int) {
+        dao.deleteByProfileId(profileId)
+    }
+
+    suspend fun saveAll(apps: List<BlockedAppsEntity>) {
+        apps.forEach { dao.insert(it) }
+    }
 }
