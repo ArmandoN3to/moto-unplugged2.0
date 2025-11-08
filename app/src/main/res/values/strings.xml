@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Moto Unplugged</string>
+    <string name="hello">Hey there</string>
+    <string name="create_account">Create an Account</string>
+    <string name="welcome">Welcome Back</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="hide_password">hide password</string>
+    <string name="show_password">show password</string>
+    <string name="terms_and_conditions">By continuing you accept our Privacy Policy and Term of Use</string>
+    <string name="terms_and_conditions_header">Terms of Use</string>
+    <string name="register">Register</string>
+
 </resources>

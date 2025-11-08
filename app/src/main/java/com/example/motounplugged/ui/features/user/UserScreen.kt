@@ -1,4 +1,4 @@
-package com.example.motounplugged.ui.features.user
+package com.example.motounplugged.ui.features.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +41,7 @@ fun UserScreen(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "Edite seu perfil de usuário",
+                text = "Gerencie sua conta e ajustes",
                 fontSize = 20.sp,
                 fontStyle = FontStyle.Normal,
                 color = Color.Gray,

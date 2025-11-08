@@ -1,5 +1,6 @@
 package com.example.motounplugged
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -7,7 +8,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppDrawer
@@ -19,7 +21,14 @@ import com.example.motounplugged.ui.screens.FAB_new_profile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MotoUnpluggedApp() {
+fun MotoUnpluggedApp(
+    onLogout: () -> Unit) {
+    Surface(
+        modifier = Modifier .fillMaxSize(),
+        color = Color.White
+    ) {
+
+    }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -106,7 +115,7 @@ fun MotoUnpluggedApp() {
                 when (selectedRoute) {
                     AppScreens.Profiles.route-> {
                         FAB_new_profile {
-                            navController.navigate("create_profile_screen") // vai pra rota createprofile
+                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
                         }
                     }
                 }

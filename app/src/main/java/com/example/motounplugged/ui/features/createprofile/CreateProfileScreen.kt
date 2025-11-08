@@ -11,10 +11,8 @@ import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -27,17 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppScreens
-import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,6 +106,10 @@ private fun CreateProfileContent(
             singleLine = true
         )
 
+
+        Spacer(Modifier.height(24.dp))
+
+        // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
@@ -156,6 +154,8 @@ private fun CreateProfileContent(
             onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
         )
 
+
+
         SettingsRow(
             icon = Icons.Default.Wallpaper,
             title = "Wallpaper",
@@ -163,12 +163,16 @@ private fun CreateProfileContent(
             onClick = { onEvent(CreateProfileEvent.OnSelectWallpaperClick) }
         )
 
+
+
+        // Item para Agendamento
         SettingsRow(
             icon = Icons.Default.Alarm,
             title = "Duração",
             subtitle = "Definir tempo de uso do perfil",
             onClick = { onEvent(CreateProfileEvent.OnSetDurationClick) }
         )
+
 
         SettingsRow(
             icon = Icons.Default.NotificationsNone,
@@ -179,6 +183,7 @@ private fun CreateProfileContent(
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
 
+        // Item para o Switch
         SettingsSwitchRow(
             icon = Icons.Default.Password,
             title = "Requer senha",
