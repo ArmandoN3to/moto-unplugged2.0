@@ -13,8 +13,11 @@ import androidx.navigation.navArgument
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.home.HomeScreen
+import com.example.motounplugged.ui.features.profiles.ProfilesScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
+import com.example.motounplugged.ui.screens.ScheduleScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -37,6 +40,10 @@ fun AppNavHost(
         composable(AppScreens.Profiles.route) {
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen(viewModel = profilesViewModel, navController = navController)
+        }
+        composable(route= AppScreens.Schedule.route){
+            val scheduleViewModel: ScheduleScreenViewModel = koinViewModel()
+            ScheduleScreen(viewModel = scheduleViewModel)
         }
 
         // Create/Edit Profile Screen (profileId opcional)
