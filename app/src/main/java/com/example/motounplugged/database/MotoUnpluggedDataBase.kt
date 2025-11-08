@@ -6,24 +6,23 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.TypeConverters
+import com.example.motounplugged.database.dao.BlockedAppsDao
 import com.example.motounplugged.database.dao.ProfilesDao
 import com.example.motounplugged.database.dao.SessionsDao
 import com.example.motounplugged.database.dao.UserDao
+import com.example.motounplugged.database.entities.BlockedAppsEntity
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
 import com.example.motounplugged.database.entities.UserEntity
-import com.example.motounplugged.repositories.ProfileRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [
         ProfilesEntity::class,
         SessionsEntity::class,
+        BlockedAppsEntity::class,
         UserEntity::class
     ],
-    version = 2, // Incrementado para refletir nova entidade
+    version = 4, //  Incrementado para refletir nova entidade
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -31,6 +30,7 @@ import kotlinx.coroutines.launch
 
     abstract fun profilesDao(): ProfilesDao
     abstract fun sessionsDao(): SessionsDao
+    abstract fun blockedAppsDao(): BlockedAppsDao
     abstract fun userDao(): UserDao
 
     companion object {
@@ -44,13 +44,9 @@ import kotlinx.coroutines.launch
                     MotoUnpluggedDataBase::class.java,
                     "moto_unplugged.db"
                 )
-                    .addCallback(object : RoomDatabase.Callback() {
+                    .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                // Use o instance diretamente, não getDatabase()
-                                val repository = ProfileRepository(INSTANCE!!.profilesDao())
-                            }
                         }
                     })
                     .fallbackToDestructiveMigration(true)
@@ -60,7 +56,5 @@ import kotlinx.coroutines.launch
                 instance
             }
         }
-
-
     }
 }

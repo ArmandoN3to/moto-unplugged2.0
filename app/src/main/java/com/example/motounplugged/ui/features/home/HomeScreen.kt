@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.R
-import com.example.motounplugged.ui.navigation.AppScreensRouter
+import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
 @Composable
@@ -360,7 +360,7 @@ fun HomeScreen(
             }
             ElevatedButton(
                 border = BorderStroke(2.dp,Color.LightGray),
-                onClick = { navController.navigate(AppScreensRouter.Profiles.route) },
+                onClick = { navController.navigate(AppScreens.Profiles.route) },
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .padding(start = 15.dp)
@@ -378,7 +378,7 @@ fun HomeScreen(
             }
             ElevatedButton(
                 border = BorderStroke(2.dp,Color.LightGray),
-                onClick = { navController.navigate(AppScreensRouter.Schedule.route) },
+                onClick = { navController.navigate(AppScreens.Schedule.route) },
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .padding(start = 15.dp)

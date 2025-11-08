@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.components.EditProfileDialog
@@ -24,12 +25,12 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 
 @Composable
 fun ProfilesScreen(
-    viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
-    modifier: Modifier = Modifier) {
-
-       // profiles vai receber o meu stateflow e coletar esse estado
-       val profiles by viewModel.profiles.collectAsState()
-       var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
+    viewModel: ProfilesScreenViewModel,
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    val profiles by viewModel.profiles.collectAsState()
+    var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
     Column(
         modifier = modifier
@@ -39,15 +40,14 @@ fun ProfilesScreen(
     ) {
         Text(
             text = "Perfis de Foco",
-            fontStyle = FontStyle.Normal,
             fontSize = 25.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 16.dp)
         )
+
         Text(
             text = "Crie e personalize seus perfis",
-            fontStyle = FontStyle.Normal,
             fontSize = 20.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
@@ -55,42 +55,48 @@ fun ProfilesScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(
                 items = profiles,
-                key = { it.id }
+                key = { it.idProfile }
             ) { profile ->
                 ProfileCard(
                     title = profile.ProfileName,
                     count = profile.appCount,
                     isActive = profile.isImmediatelyActive,
                     onToggle = { newValue ->
-                        val updated = profile.copy(isImmediatelyActive = newValue)
-                        viewModel.update(updated)
+                        if (newValue) {
+                            profiles.forEach { other ->
+                                if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
+                                    viewModel.update(other.copy(isImmediatelyActive = false))
+                                }
+                            }
+                        }
+                        viewModel.update(profile.copy(isImmediatelyActive = newValue))
+                    },
+                    onClick = {
+                        navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
                     }
                 )
             }
         }
-    }
 
-    // se um perfil foi selecionado para edição
-    editingProfile?.let { profile ->
-        EditProfileDialog(
-            profile = profile,
-            onDismiss = { editingProfile = null },
-            onSave = { updated ->
-                viewModel.update(updated)
-                editingProfile = null
-            }
-        )
+        // Diálogo de edição
+        editingProfile?.let { profile ->
+            EditProfileDialog(
+                profile = profile,
+                onDismiss = { editingProfile = null },
+                onSave = { updated ->
+                    viewModel.update(updated)
+                    editingProfile = null
+                }
+            )
+        }
     }
 }
-
-
-
 
 
 @Composable

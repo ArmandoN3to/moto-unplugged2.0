@@ -2,6 +2,7 @@ package com.example.motounplugged.di
 
 import androidx.room.Room
 import com.example.motounplugged.database.MotoUnpluggedDataBase
+import com.example.motounplugged.repositories.BlockedAppsRepository
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.domain.usecase.GetInstalledAppsUseCase
 import com.example.motounplugged.repositories.ProfileRepository
@@ -38,12 +39,15 @@ val databaseModule = module {
     single { get<MotoUnpluggedDataBase>().userDao() }
 
 
+    single { get<MotoUnpluggedDataBase>().blockedAppsDao() }
+
 }
 
 // --- Repositórios ---
 val repositoryModule = module {
-    single { ProfileRepository(get()) }
+    single { ProfileRepository(get(), blockedAppsDao = get()) }
     single { SessionsRepository(get()) }
+    single { BlockedAppsRepository(get()) }
     single { UserRepository(get()) }
 }
 
@@ -60,6 +64,12 @@ val viewModelModule = module {
     }
     viewModel {
         ProfilesScreenViewModel(get())
+    }
+    viewModel{
+        ScheduleScreenViewModel(
+            repository = get() ,
+            profilesRepository = get()
+        )
     }
     viewModel{
         RegisterScreenViewModel(get())

@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,23 +28,58 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.motounplugged.ui.navigation.AppScreensRouter
+import com.example.motounplugged.ui.navigation.AppScreens
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.material3.TopAppBar
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
+    profileId: Int?,
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    CreateProfileContent(
-        modifier = Modifier.padding(),
-        uiState = uiState,
-        onEvent = viewModel::onEvent, // Passa a referência da função de eventos
-        navController = navController
-    )
+    // Carrega o perfil apenas uma vez se estiver em modo edição
+    LaunchedEffect(profileId) {
+        if (profileId != null && profileId != -1) {
+            viewModel.loadProfile(profileId)
+        }
+    }
+
+    // Navega após salvar
+    LaunchedEffect(uiState.saveSuccess) {
+        if (uiState.saveSuccess) {
+            navController.navigate(AppScreens.Profiles.route) {
+                popUpTo(AppScreens.Profiles.route) { inclusive = true }
+            }
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(if (uiState.isEditing) "Editar Perfil" else "Criar Perfil")
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        CreateProfileContent(
+            modifier = Modifier.padding(innerPadding),
+            uiState = uiState,
+            onEvent = viewModel::onEvent,
+            navController = navController
+        )
+    }
 }
 
 
@@ -57,16 +94,9 @@ private fun CreateProfileContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Text(
-            text = "Criar Novo Perfil",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        // Seção para o nome do perfil
         OutlinedTextField(
             value = uiState.profileName,
             onValueChange = { onEvent(CreateProfileEvent.OnProfileNameChange(it)) },
@@ -82,13 +112,14 @@ private fun CreateProfileContent(
         // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clickable {navController.navigate(AppScreensRouter.SelectApps.route)
-            }
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    navController.navigate("${AppScreens.SelectApps.route}/${uiState.profileId}")
+                }
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(Icons.Default.Apps, contentDescription = null, modifier = Modifier.size(28.dp))
@@ -100,7 +131,7 @@ private fun CreateProfileContent(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        if (uiState.selectedApps.isEmpty()) "Nenhum aplicativo selecionado" else "${uiState.selectedApps.size} aplicativos selecionados",
+                        "${uiState.appCount} aplicativos selecionados",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -109,13 +140,18 @@ private fun CreateProfileContent(
             }
         }
 
+        if (uiState.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
+
 
         Spacer(Modifier.height(16.dp))
+
         SettingsRow(
             icon = Icons.Default.Apps,
             title = "App layout",
             subtitle = "4x5",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
         )
 
 
@@ -124,7 +160,7 @@ private fun CreateProfileContent(
             icon = Icons.Default.Wallpaper,
             title = "Wallpaper",
             subtitle = "",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            onClick = { onEvent(CreateProfileEvent.OnSelectWallpaperClick) }
         )
 
 
@@ -132,17 +168,17 @@ private fun CreateProfileContent(
         // Item para Agendamento
         SettingsRow(
             icon = Icons.Default.Alarm,
-            title = "Duraçao",
-            subtitle = "duraçao do modo ",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            title = "Duração",
+            subtitle = "Definir tempo de uso do perfil",
+            onClick = { onEvent(CreateProfileEvent.OnSetDurationClick) }
         )
 
 
         SettingsRow(
             icon = Icons.Default.NotificationsNone,
-            title = "Interruptions",
-            subtitle = "Manage alerts and notifications",
-            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+            title = "Interrupções",
+            subtitle = "Gerenciar alertas e notificações",
+            onClick = { onEvent(CreateProfileEvent.OnInterruptionsClick) }
         )
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
@@ -150,46 +186,28 @@ private fun CreateProfileContent(
         // Item para o Switch
         SettingsSwitchRow(
             icon = Icons.Default.Password,
-            title = "Require Password",
-            subtitle = "Enter a password before ending a session",
+            title = "Requer senha",
+            subtitle = "Solicitar senha para sair do modo",
             checked = uiState.isImmediatelyActive,
-            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
+            onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
         )
 
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                if (uiState.profileName.isNotBlank()) {
-                    onEvent(CreateProfileEvent.OnSaveProfileClick)
-                    navController.navigate(AppScreensRouter.Profiles.route)
-                } else {
-                    println("Nome do perfil não pode ser vazio")
-                }
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = MaterialTheme.shapes.medium,
-            enabled = uiState.profileName.isNotBlank()
-
-
+            onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = uiState.profileName.isNotBlank() && !uiState.isLoading
         ) {
             Text(
-                text = "Salvar",
+                text = if (uiState.isEditing) "Atualizar Perfil" else "Salvar",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
         }
 
-
-
     }
-        }
-
-
-
+}
 
 
 @Composable

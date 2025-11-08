@@ -14,7 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppDrawer
 import com.example.motounplugged.ui.navigation.AppNavHost
-import com.example.motounplugged.ui.navigation.AppScreensRouter
+import com.example.motounplugged.ui.navigation.AppScreens
 import kotlinx.coroutines.launch
 
 import com.example.motounplugged.ui.screens.FAB_new_profile
@@ -34,15 +34,15 @@ fun MotoUnpluggedApp(
     val scope = rememberCoroutineScope()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val selectedRoute = navBackStackEntry?.destination?.route ?: AppScreensRouter.Home.route
+    val selectedRoute = navBackStackEntry?.destination?.route ?: AppScreens.Home.route
 
 
     // Verifica se rota atual é uma tela secundária
     val isSecondaryScreen = remember(selectedRoute) {
         selectedRoute in listOf(  //lista de rotas secundarias
-            AppScreensRouter.CreateProfile.route,
+            AppScreens.CreateProfile.route,
             "edit_profile/{profileTitle}",
-            AppScreensRouter.SelectApps.route,
+            AppScreens.SelectApps.route,
 
 
             )
@@ -55,7 +55,7 @@ fun MotoUnpluggedApp(
                 onItemSelected = { item ->
                     scope.launch { drawerState.close() }
                     if (item.route == "logout_action") {
-                        onLogout()
+
                     } else {
                         navController.navigate(item.route) {
                             launchSingleTop = true
@@ -113,9 +113,9 @@ fun MotoUnpluggedApp(
 
             floatingActionButton = {
                 when (selectedRoute) {
-                    AppScreensRouter.Profiles.route-> {
+                    AppScreens.Profiles.route-> {
                         FAB_new_profile {
-                            navController.navigate(AppScreensRouter.CreateProfile.route) // vai pra rota createprofile
+                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
                         }
                     }
                 }

@@ -1,16 +1,21 @@
 package com.example.motounplugged.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
+import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreen
@@ -19,11 +24,13 @@ import com.example.motounplugged.ui.features.stats.StatsScreen
 import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
+import com.example.motounplugged.ui.features.splashscreen.SplashScreen
 import com.example.motounplugged.ui.features.settings.UserScreen
 import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
 import org.koin.androidx.compose.koinViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -31,44 +38,58 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreensRouter.Home.route,
+        startDestination = AppScreens.Home.route,
         modifier = modifier
     ) {
-        composable(AppScreensRouter.Home.route) {
+
+        composable(AppScreens.SplashScreen.route) {
+            SplashScreen(navController = navController)
+        }
+        composable(AppScreens.Home.route) {
             HomeScreen( navController = navController,onClick = {})
         }
-        composable(AppScreensRouter.Schedule.route) {
+        composable(AppScreens.Schedule.route) {
             val ScheduleScreenViewModel: ScheduleScreenViewModel = koinViewModel()
             ScheduleScreen( viewModel = ScheduleScreenViewModel)
         }
-        composable(AppScreensRouter.Stats.route) {
+        composable(AppScreens.Stats.route) {
             StatsScreen()
         }
-        composable(AppScreensRouter.Profiles.route) {
+        composable(AppScreens.Profiles.route) {
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
-            ProfilesScreen( viewModel =  profilesViewModel)
+            ProfilesScreen( viewModel =  profilesViewModel, navController)
         }
-        composable(AppScreensRouter.User.route) {
+        composable(AppScreens.User.route) {
             UserScreen()
         }
-        composable(AppScreensRouter.Settings.route) {
+        composable(AppScreens.Settings.route) {
             SettingsScreen()
         }
-        composable(AppScreensRouter.Streak.route) {
+        composable(AppScreens.Streak.route) {
             StreakScreen(
                 streakCount = 28
             )
         }
-        composable( AppScreensRouter.Register.route){
+        composable(
+            route = "create_profile_screen?profileId={profileId}", // Rota com argumento opcional
+            arguments = listOf(
+                navArgument("profileId") {
+                    type = NavType.IntType
+                    defaultValue = -1 // Valor padrão se não for fornecido
+                }
+            )
+        ) { backStackEntry ->
+            val profileId = backStackEntry.arguments?.getInt("profileId") ?: -1
+            CreateProfileScreen(navController, profileId)
+        }
+
+        composable( AppScreens.Register.route){
             RegisterScreen(onRegisterComplete = {})
         }
-        composable(AppScreensRouter.TermsAndConditionsScreen.route){
+        composable(AppScreens.TermsAndConditionsScreen.route){
             TermsAndConditionsScreen()
         }
-        composable(AppScreensRouter.CreateProfile.route) {
-            CreateProfileScreen(navController = navController)
-        }
-        composable(AppScreensRouter.SelectApps.route) {
+        composable(AppScreens.SelectApps.route) {
             SelectAppsScreen(navController = navController)
         }
     }

@@ -2,7 +2,6 @@ package com.example.motounplugged.repositories
 
 import com.example.motounplugged.database.dao.UserDao
 import com.example.motounplugged.database.entities.UserEntity
-import com.example.motounplugged.ui.navigation.AppScreensRouter
 
 class UserRepository(
     private val userDao: UserDao
