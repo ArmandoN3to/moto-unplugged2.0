@@ -113,6 +113,7 @@ fun RegisterScreen(
                             "Usuário cadastrado com sucesso!",
                             Toast.LENGTH_SHORT
                         ).show()
+                        //onregistercomplete esta na main e serve para verificar se a os campos não estão vazios
                         onRegisterComplete()
                     }
                 })

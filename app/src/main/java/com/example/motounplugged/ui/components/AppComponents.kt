@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -242,7 +243,29 @@ fun ClickableTextComponent(value: String, onTextSelected : (String) -> Unit){
     }})
 }
 
-//botão de registro
+//componente de texto sublinhado utilizado na tela de login
+@Composable
+fun UnderLinedTextComponents(value:String){
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 40.dp),
+        style = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        color = colorResource(id = R.color.colorGray),
+        textAlign = TextAlign.Center,
+        //adiciiona um sublinhado ao texto
+        textDecoration = TextDecoration.Underline
+    )
+}
+
+
+
+//botão de registro e login
 @Composable
 fun ButtonComponent(value: String,  onClick: () -> Unit){
     Button(
