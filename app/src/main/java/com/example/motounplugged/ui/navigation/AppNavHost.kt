@@ -26,6 +26,7 @@ import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.splashscreen.SplashScreen
 import com.example.motounplugged.ui.features.settings.UserScreen
+import com.example.motounplugged.ui.features.settings.general.GeneralSettingsScreen
 import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,8 +64,19 @@ fun AppNavHost(
             UserScreen()
         }
         composable(AppScreens.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                navController = navController
+            )
         }
+        composable(AppScreens.GeneralSettings.route) {
+            GeneralSettingsScreen()
+        }
+//        composable(AppScreens.AboutSettings.route) {
+//            GenericScreen("Sobre")
+//        }
+//        composable(AppScreens.AccountSettings.route) {
+//            GenericScreen("Conta")
+//        }
         composable(AppScreens.Streak.route) {
             StreakScreen(
                 streakCount = 28
