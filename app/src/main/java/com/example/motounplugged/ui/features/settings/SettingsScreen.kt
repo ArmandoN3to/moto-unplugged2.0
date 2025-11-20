@@ -79,7 +79,7 @@ fun SettingsScreen(
                 onClick = {
                     // navController.navigate("tela_geral")
                     println("Navegando para Geral")
-                }s
+                }
             )
         }
 
