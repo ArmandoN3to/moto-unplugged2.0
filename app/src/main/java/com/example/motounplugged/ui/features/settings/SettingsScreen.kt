@@ -16,11 +16,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.motounplugged.ui.components.NavigationSettingsCard
 
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ){
     Column (
         modifier = Modifier
@@ -61,24 +63,24 @@ fun SettingsScreen(
             NavigationSettingsCard (
                 title = "Geral",
                 onClick = {
-                    // navController.navigate("tela_geral")
-                    println("Navegando para Geral")
+                    navController.navigate("general_settings")
+//                    println("Navegando para Geral")
                 }
             )
 
             NavigationSettingsCard (
                 title = "Conta",
                 onClick = {
-                    // navController.navigate("tela_geral")
-                    println("Navegando para Geral")
+//                    navController.navigate("account_settings")
+//                    println("Navegando para Geral")
                 }
             )
 
             NavigationSettingsCard (
                 title = "Sobre",
                 onClick = {
-                    // navController.navigate("tela_geral")
-                    println("Navegando para Geral")
+//                    navController.navigate("about_settings")
+//                    println("Navegando para Geral")
                 }
             )
         }
