@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.motounplugged.ui.components.NavigationSettingsCard
 
 @Composable
 fun SettingsScreen(
@@ -54,16 +55,31 @@ fun SettingsScreen(
         Column (
             modifier = Modifier
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "*Tela em desenvolvimento*",
-                fontSize = 15.sp,
-                fontStyle =  FontStyle.Normal,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 250.dp)
+            NavigationSettingsCard (
+                title = "Geral",
+                onClick = {
+                    // navController.navigate("tela_geral")
+                    println("Navegando para Geral")
+                }
+            )
+
+            NavigationSettingsCard (
+                title = "Conta",
+                onClick = {
+                    // navController.navigate("tela_geral")
+                    println("Navegando para Geral")
+                }
+            )
+
+            NavigationSettingsCard (
+                title = "Sobre",
+                onClick = {
+                    // navController.navigate("tela_geral")
+                    println("Navegando para Geral")
+                }s
             )
         }
 

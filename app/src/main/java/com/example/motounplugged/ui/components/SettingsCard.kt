@@ -24,21 +24,20 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun NavigationSettingsCard(
     title: String,
-    onClick: () -> Unit // Parâmetro para a ação de clique/navegação
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() } // Torna a área clicável
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp), // Espaçamento interno igual ao da imagem
-            horizontalArrangement = Arrangement.SpaceBetween, // Texto na esquerda, ícone na direita
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // O Texto "Geral", "Perfil", etc.
             Text(
                 text = title,
                 fontSize = 16.sp,
@@ -46,7 +45,6 @@ fun NavigationSettingsCard(
                 color = Color.Black
             )
 
-            // O ícone da seta (>)
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Ir para $title",
@@ -55,7 +53,6 @@ fun NavigationSettingsCard(
             )
         }
 
-        // A linha divisória na parte inferior (como na imagem)
         HorizontalDivider(
             thickness = 0.5.dp,
             color = Color.LightGray.copy(alpha = 0.5f)
