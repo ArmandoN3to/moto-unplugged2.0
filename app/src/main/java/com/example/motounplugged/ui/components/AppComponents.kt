@@ -218,12 +218,12 @@ fun ClickableTextComponent(value: String, onTextSelected : (String) -> Unit){
     val annotatedString = buildAnnotatedString {
         append(initialText)
         //definir o estilo do meu privacy policy
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = Color.Gray)){
             pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
             append(privacyPolicyText)
         }
         append(andText)
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = Color.Gray)){
             pushStringAnnotation(tag = termsAndConditionsText, annotation = termsAndConditionsText)
             append(termsAndConditionsText)
         }
@@ -280,7 +280,7 @@ fun ButtonComponent(value: String,  onClick:() -> Unit){
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Gray20, Primary)),
+                    brush = Brush.horizontalGradient(listOf(Gray20, Color.Gray)),
                     shape = RoundedCornerShape(50.dp)
                 ),
                 contentAlignment = Alignment.Center
@@ -341,7 +341,7 @@ fun ClickableLoginTextComponent(tryingToLogin:Boolean = true,onTextSelected :  (
     val annotatedString = buildAnnotatedString {
         append(initialText)
         //definir o estilo do meu privacy policy
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = Color.Gray)){
             pushStringAnnotation(tag = LoginText, annotation = LoginText)
             append(LoginText)
         }

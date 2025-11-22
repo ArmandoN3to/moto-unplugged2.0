@@ -65,6 +65,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            Spacer(modifier = Modifier.height(50.dp))
             NormalTextComponents(value = stringResource(id = R.string.login))
             TitleTextComponents(value = stringResource(id = R.string.welcome))
             Spacer(modifier = Modifier.height(20.dp))
