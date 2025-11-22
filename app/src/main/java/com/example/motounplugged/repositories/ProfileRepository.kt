@@ -35,11 +35,10 @@ class ProfileRepository (
         return dao.getProfileWithBlockedApps(id)
     }
     // Adiciona app bloqueado ao profile selecionado
-    suspend fun addBlockedApp(profileId: Int, appName: String, categoryApp: String, packageName: String) {
+    suspend fun addBlockedApp(profileId: Int, appName: String, packageName: String) {
         val app = BlockedAppsEntity(
             nameApp = appName,
             packageName = packageName,
-            categoryApp = categoryApp,
             blockedProfileId = profileId
         )
         blockedAppsDao.save(app)

@@ -37,7 +37,7 @@ sealed interface SelectAppsEvent {
 }
 
 sealed interface SelectAppsNavigationEvent {
-    data class NavigateBackWithResult(val selectedApps: List<String>) : SelectAppsNavigationEvent
+    data class NavigateBackWithResult(val selectedApps: List<AppInfo>) : SelectAppsNavigationEvent
 }
 
 class SelectAppsViewModel(
@@ -82,9 +82,11 @@ class SelectAppsViewModel(
             }
             SelectAppsEvent.OnSaveClick -> {
                 viewModelScope.launch {
+                    val selectedAppsInfo = _uiState.value.allApps
+                        .filter { _uiState.value.selectedAppPackages.contains(it.packageName) }
                     _navigationEvent.send(
                         SelectAppsNavigationEvent.NavigateBackWithResult(
-                            _uiState.value.selectedAppPackages.toList()
+                            selectedAppsInfo
                         )
                     )
                 }

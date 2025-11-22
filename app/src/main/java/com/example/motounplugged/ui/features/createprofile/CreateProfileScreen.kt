@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppScreens
+import com.example.motounplugged.models.AppInfo
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
@@ -48,6 +49,14 @@ fun CreateProfileScreen(
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // Salva os aplicativos vindos da SelectAppsScreen
+    val selectedApps =
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getStateFlow("selectedApps", emptyList<AppInfo>())
+            ?.collectAsState()
+
 
     // Carrega o perfil apenas uma vez se estiver em modo edição
     LaunchedEffect(profileId) {
@@ -64,6 +73,16 @@ fun CreateProfileScreen(
             }
         }
     }
+
+    // Recebe os aplicativos vindos da SelectedApps
+    LaunchedEffect(selectedApps?.value) {
+        val apps = selectedApps?.value ?: emptyList()
+        if (apps.isNotEmpty()) {
+            viewModel.onEvent(CreateProfileEvent.OnAppsSelected(apps))
+            println("DEBUG → Apps recebidos da SelectAppsScreen: ${apps.size}")
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -117,7 +136,8 @@ private fun CreateProfileContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    navController.navigate("${AppScreens.SelectApps.route}/${uiState.profileId}")
+                    val id = uiState.profileId ?: -1
+                    navController.navigate("${AppScreens.SelectApps.route}/$id")
                 }
         ) {
             Row(

@@ -18,7 +18,6 @@ class GetInstalledAppsUseCase(private val context: Context) {
                 AppInfo(
                     name = it.loadLabel(packageManager).toString(),
                     packageName = it.packageName,
-                    icon = it.loadIcon(packageManager)
                 )
             }
             .sortedBy { it.name.lowercase() } // Ordena por nome

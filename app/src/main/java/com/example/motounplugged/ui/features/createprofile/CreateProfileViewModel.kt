@@ -3,6 +3,7 @@ package com.example.motounplugged.ui.features.createprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.models.AppInfo
 import com.example.motounplugged.repositories.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +38,8 @@ sealed interface CreateProfileEvent {
     data object OnSetDurationClick : CreateProfileEvent
     data object OnInterruptionsClick : CreateProfileEvent
     data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
+    data class OnAppsSelected(val apps: List<AppInfo>) : CreateProfileEvent
+
 }
 
 class CreateProfileViewModel(
@@ -76,7 +79,11 @@ class CreateProfileViewModel(
 
             is CreateProfileEvent.OnRequirePasswordChange ->
                 _uiState.update { it.copy(isImmediatelyActive = event.enabled) }
+
+            is CreateProfileEvent.OnAppsSelected ->
+                _uiState.update { it.copy(appCount = event.apps.size) }
         }
+
     }
 
 

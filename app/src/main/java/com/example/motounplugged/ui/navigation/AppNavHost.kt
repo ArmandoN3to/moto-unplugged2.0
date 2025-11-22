@@ -78,8 +78,18 @@ fun AppNavHost(
             val profileId = backStackEntry.arguments?.getInt("profileId") ?: -1
             CreateProfileScreen(navController, profileId)
         }
-        composable(AppScreens.SelectApps.route) {
-            SelectAppsScreen(navController = navController)
+
+        composable(
+            route = AppScreens.SelectApps.route + "/{profileId}",
+            arguments = listOf(
+                navArgument("profileId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
+        ) {
+            val id = it.arguments?.getInt("profileId") ?: -1
+            SelectAppsScreen(navController = navController, profileId = id)
         }
     }
 }
