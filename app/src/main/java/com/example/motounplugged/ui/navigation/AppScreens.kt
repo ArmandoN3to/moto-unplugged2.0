@@ -12,6 +12,7 @@ sealed class AppScreens(val route: String) {
     object CreateProfile : AppScreens("create_profile")
     object SelectApps : AppScreens("select_apps")
     object Register : AppScreens("register")
+    object Login : AppScreens("login")
     object TermsAndConditionsScreen : AppScreens("terms_and_conditions")
     object SplashScreen: AppScreens("splash")
 }

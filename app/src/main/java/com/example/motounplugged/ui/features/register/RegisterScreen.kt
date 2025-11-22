@@ -24,6 +24,8 @@ import com.example.motounplugged.R
 import com.example.motounplugged.R.string.hello
 import com.example.motounplugged.ui.components.ButtonComponent
 import com.example.motounplugged.ui.components.CheckboxComponent
+import com.example.motounplugged.ui.components.ClickableLoginTextComponent
+import com.example.motounplugged.ui.components.DividerTextComponent
 import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
@@ -36,6 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RegisterScreen(
     onRegisterComplete: () -> Unit,
+    onBackToLogin: () -> Unit,
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
@@ -117,6 +120,11 @@ fun RegisterScreen(
                         onRegisterComplete()
                     }
                 })
+            Spacer(modifier = Modifier.height(25.dp))
+            DividerTextComponent()
+            ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
+                onBackToLogin()
+            })
 
 
 
@@ -132,6 +140,6 @@ fun RegisterScreen(
 @Composable
 fun registerscreen(){
     MotoUnpluggedTheme {
-        RegisterScreen(onRegisterComplete = {})
+        RegisterScreen(onRegisterComplete = {}, onBackToLogin = {})
     }
 }

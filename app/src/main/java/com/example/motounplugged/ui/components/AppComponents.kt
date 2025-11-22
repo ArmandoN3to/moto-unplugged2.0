@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -263,8 +264,6 @@ fun UnderLinedTextComponents(value:String){
     )
 }
 
-
-
 //botão de registro e login
 @Composable
 fun ButtonComponent(value: String,  onClick: () -> Unit){
@@ -295,4 +294,71 @@ fun ButtonComponent(value: String,  onClick: () -> Unit){
 
     }
 
+}
+
+//divisor de componentes (-----or-----)
+@Composable
+fun DividerTextComponent(){
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            color = Color.Gray,
+            thickness = 1.dp
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(8.dp),
+            text = stringResource(id = R.string.or),
+            fontSize = 18.sp,
+            color = Color.DarkGray
+        )
+
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            color = Color.Gray,
+            thickness = 1.dp
+        )
+    }
+}
+
+//componente da string login e register para navegação
+//se for true pertence a tela de register se for false
+//pertence a tela de login
+@Composable
+fun ClickableLoginTextComponent(tryingToLogin:Boolean = true,onTextSelected :  (String) -> Unit){
+    val initialText = if (tryingToLogin) "Already have an account? " else "Don't have an account yet?"
+    val LoginText = if (tryingToLogin) "Login" else "Register"
+
+    //construtor para criar a string de trms e serviços
+    val annotatedString = buildAnnotatedString {
+        append(initialText)
+        //definir o estilo do meu privacy policy
+        withStyle(style = SpanStyle(color = Primary)){
+            pushStringAnnotation(tag = LoginText, annotation = LoginText)
+            append(LoginText)
+        }
+
+    }
+    //offset deslocamento ao clicar do text
+    ClickableText(text = annotatedString, onClick = { offset ->
+        //offset no inicio de fim para verificar se há deslocamento
+        annotatedString.getStringAnnotations(offset,offset)
+            //verifica se houver um clique valido span, also verifica se esta retornando uma string anotada
+            .firstOrNull()?.also { span ->
+                Log.d("ClickableTextComponent", "{${span.item}")
+
+                //verifica se o item esta clicavel e na rota
+                if(span.item == LoginText){
+                    onTextSelected(span.item)
+
+                }
+            }})
 }

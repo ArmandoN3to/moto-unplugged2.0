@@ -1,7 +1,8 @@
 package com.example.motounplugged.ui.features.login
 
+import android.os.Build
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.value
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,16 +24,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.motounplugged.R
 import com.example.motounplugged.ui.components.ButtonComponent
+import com.example.motounplugged.ui.components.ClickableLoginTextComponent
+import com.example.motounplugged.ui.components.DividerTextComponent
 import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
 import com.example.motounplugged.ui.components.UnderLinedTextComponents
+import com.example.motounplugged.ui.features.register.RegisterScreen
+import com.example.motounplugged.ui.navigation.AppNavHost
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
 //SHA criptografia
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit
+){
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -82,17 +90,15 @@ fun LoginScreen(){
                     } else {
                         //COLOCAR AS COFIGURAÇÕES DA VIEWMODEL DA LOGIN REGISTER QUE
                         //VAI RECEBER O BANCO DE DADOS DA TABELA DE REGISTRO
-
-                       // viewModel.registerUser(firstName, lastName, email, password)
-                        //Toast.makeText(
-                          //  context,
-                            //"Usuário cadastrado com sucesso!",
-                            //Toast.LENGTH_SHORT
-                       // ).show()
-                        //onregistercomplete esta na main e serve para verificar se a os campos não estão vazios
-                        //onRegisterComplete()
+                        onLoginSuccess()
                     }
-                })
+                }
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+            DividerTextComponent()
+            ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
+                onNavigateToRegister()
+            })
 
         }
 
@@ -100,10 +106,11 @@ fun LoginScreen(){
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun LoginScreenPreview(){
     MotoUnpluggedTheme {
-        LoginScreen()
+        LoginScreen(onLoginSuccess = {},onNavigateToRegister = {})
     }
 }

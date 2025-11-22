@@ -17,6 +17,7 @@ import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.home.HomeScreen
+import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.features.settings.SettingsScreen
@@ -33,6 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
+    onLogout: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -83,12 +85,6 @@ fun AppNavHost(
             CreateProfileScreen(navController, profileId)
         }
 
-        composable( AppScreens.Register.route){
-            RegisterScreen(onRegisterComplete = {})
-        }
-        composable(AppScreens.TermsAndConditionsScreen.route){
-            TermsAndConditionsScreen()
-        }
         composable(AppScreens.SelectApps.route) {
             SelectAppsScreen(navController = navController)
         }
