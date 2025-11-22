@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,14 +36,19 @@ import com.example.motounplugged.ui.components.UnderLinedTextComponents
 import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.navigation.AppNavHost
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 //SHA criptografia
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+
 ){
+    val viewModel: LoginScreenViewModel = koinViewModel()
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -90,7 +97,16 @@ fun LoginScreen(
                     } else {
                         //COLOCAR AS COFIGURAÇÕES DA VIEWMODEL DA LOGIN REGISTER QUE
                         //VAI RECEBER O BANCO DE DADOS DA TABELA DE REGISTRO
-                        onLoginSuccess()
+                        coroutineScope.launch {
+                            val isValid = viewModel.login(email,password)
+                            if (isValid){
+                                onLoginSuccess()
+                            } else{
+                                Toast.makeText(context, "Email ou senha incorretos", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+
                     }
                 }
             )

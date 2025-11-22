@@ -266,7 +266,7 @@ fun UnderLinedTextComponents(value:String){
 
 //botão de registro e login
 @Composable
-fun ButtonComponent(value: String,  onClick: () -> Unit){
+fun ButtonComponent(value: String,  onClick:() -> Unit){
     Button(
         onClick = onClick,
         modifier = Modifier
