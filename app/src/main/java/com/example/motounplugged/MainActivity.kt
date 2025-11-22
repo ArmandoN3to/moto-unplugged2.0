@@ -32,10 +32,10 @@ class MainActivity : ComponentActivity() {
                 if (!isLoggedIn) {
                     LRNavHost(
                         onLoginSuccess = { isLoggedIn = true },
-                        onRegisterComplete = { /* voltar pra login */ }
+                        onRegisterComplete = { /* voltar pra login pois aceita as verificações de não vazio*/ }
                     )
                 } else {
-                    MotoUnpluggedApp( // <-- CHAMA SUA APP COM SIDEBAR
+                    MotoUnpluggedApp( // chama nosso app interno com a sidebar
                         onLogout = { isLoggedIn = false }
                     )
                 }

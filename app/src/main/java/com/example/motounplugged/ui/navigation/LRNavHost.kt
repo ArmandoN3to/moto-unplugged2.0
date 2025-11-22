@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.register.RegisterScreen
+import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -39,6 +40,17 @@ fun LRNavHost(
                 },
                 onBackToLogin = {
                     navController.popBackStack()
+                },
+                onNavigateToTermsAndConditions = {
+                    navController.navigate(AppScreens.TermsAndConditionsScreen.route)
+                }
+            )
+        }
+
+        composable(AppScreens.TermsAndConditionsScreen.route){
+            TermsAndConditionsScreen(
+                onNavigateToTermsAndConditions = {
+                    navController.navigate(AppScreens.TermsAndConditionsScreen.route)
                 }
             )
         }

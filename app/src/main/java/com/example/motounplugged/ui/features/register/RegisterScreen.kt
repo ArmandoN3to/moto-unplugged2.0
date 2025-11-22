@@ -30,7 +30,6 @@ import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
-import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -39,6 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 fun RegisterScreen(
     onRegisterComplete: () -> Unit,
     onBackToLogin: () -> Unit,
+    onNavigateToTermsAndConditions: () -> Unit,
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
@@ -96,7 +96,7 @@ fun RegisterScreen(
 
             CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
                 onTextSelected = {
-                    AppScreens.TermsAndConditionsScreen.route
+                    onNavigateToTermsAndConditions()
                 })
 
             Spacer(modifier = Modifier.height(100.dp))
@@ -140,6 +140,6 @@ fun RegisterScreen(
 @Composable
 fun registerscreen(){
     MotoUnpluggedTheme {
-        RegisterScreen(onRegisterComplete = {}, onBackToLogin = {})
+        RegisterScreen(onRegisterComplete = {}, onBackToLogin = {},onNavigateToTermsAndConditions={})
     }
 }
