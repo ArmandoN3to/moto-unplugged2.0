@@ -334,8 +334,8 @@ fun DividerTextComponent(){
 //pertence a tela de login
 @Composable
 fun ClickableLoginTextComponent(tryingToLogin:Boolean = true,onTextSelected :  (String) -> Unit){
-    val initialText = if (tryingToLogin) "Already have an account? " else "Don't have an account yet?"
-    val LoginText = if (tryingToLogin) "Login" else "Register"
+    val initialText = if (tryingToLogin) "                      Already have an account? " else "                      Don't have an account yet?"
+    val LoginText = if (tryingToLogin) " Login" else " Register"
 
     //construtor para criar a string de trms e serviços
     val annotatedString = buildAnnotatedString {
