@@ -1,5 +1,6 @@
 package com.example.motounplugged.ui.features.createprofile
 
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motounplugged.database.entities.ProfilesEntity
@@ -19,8 +20,9 @@ data class CreateProfileUiState(
     val profileId: Int? = null,          // id when editing, null when creating
     val profileName: String = "",        // controlled input value
     val appCount: Int = 0,               // number of selected apps (display-only)
-    val isImmediatelyActive: Boolean = false,
-    val selectedApps: List<AppInfo> = emptyList(),
+    val isImmediatelyActive: Boolean = false, // if the profile is active
+    val selectedApps: List<AppInfo> = emptyList(), // selected apps of the profile
+    val wallpaperUri: String? = null,    // wallpaper selected by user
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
@@ -36,7 +38,7 @@ sealed interface CreateProfileEvent {
     data class OnProfileNameChange(val name: String) : CreateProfileEvent
     data object OnSaveProfileClick : CreateProfileEvent
     data object OnSelectAppsClick : CreateProfileEvent
-    data object OnSelectWallpaperClick : CreateProfileEvent
+    data class OnWallpaperSelected(val uri: String) : CreateProfileEvent
     data object OnSetDurationClick : CreateProfileEvent
     data object OnInterruptionsClick : CreateProfileEvent
     data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
@@ -66,9 +68,8 @@ class CreateProfileViewModel(
                 // aqui você pode sinalizar navegação ou abrir uma tela
             }
 
-            CreateProfileEvent.OnSelectWallpaperClick -> {
-                println("Usuário clicou em escolher wallpaper")
-            }
+            is CreateProfileEvent.OnWallpaperSelected ->
+                _uiState.update { it.copy(wallpaperUri = event.uri) }
 
             CreateProfileEvent.OnSetDurationClick -> {
                 println("Usuário clicou em definir duração")
@@ -110,7 +111,8 @@ class CreateProfileViewModel(
             val profile = ProfilesEntity(
                 idProfile = currentState.profileId ?: 0,
                 ProfileName = currentState.profileName,
-                appCount = currentState.appCount
+                appCount = currentState.appCount,
+                wallpaperUri = currentState.wallpaperUri
             )
 
             // set loading state before making repository call
@@ -154,6 +156,7 @@ class CreateProfileViewModel(
                         profileId = profile.idProfile,
                         profileName = profile.ProfileName,
                         appCount = profile.appCount,
+                        wallpaperUri = profile.wallpaperUri,
                         isEditing = true,
                         isLoading = false,
                         saveSuccess = false,

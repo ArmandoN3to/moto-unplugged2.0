@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
         SessionsEntity::class,
         BlockedAppsEntity::class
     ],
-    version = 4, // ⬅️ Incrementado para refletir nova entidade
+    version = 5, // Incrementado para refletir nova entidade
     exportSchema = false
 )
 @TypeConverters(Converters::class)

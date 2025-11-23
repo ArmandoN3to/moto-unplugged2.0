@@ -8,6 +8,7 @@ data class ProfilesEntity (
     @PrimaryKey (autoGenerate = true) val idProfile: Int = 0,
     val ProfileName: String,
     val appCount: Int = 0,
-    val isImmediatelyActive: Boolean = false
+    val isImmediatelyActive: Boolean = false,
+    val wallpaperUri: String? = null
 )
 

@@ -1,5 +1,7 @@
 package com.example.motounplugged.ui.features.createprofile
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -39,6 +41,7 @@ import com.example.motounplugged.models.AppInfo
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
+import coil.compose.AsyncImage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +60,7 @@ fun CreateProfileScreen(
         }
     }
 
-
+    // Aplicativos salvos
     val selectedApps = navController
         .currentBackStackEntry
         ?.savedStateHandle
@@ -65,7 +68,7 @@ fun CreateProfileScreen(
         ?.collectAsState()
         ?.value
 
-
+    // Retorna aplicativos salvos
     LaunchedEffect(selectedApps) {
         selectedApps?.let { viewModel.setSelectedApps(it) }
     }
@@ -78,6 +81,7 @@ fun CreateProfileScreen(
             }
         }
     }
+
 
     Scaffold(
         topBar = {
@@ -110,6 +114,15 @@ private fun CreateProfileContent(
     onEvent: (CreateProfileEvent) -> Unit,
     navController: NavController
 ) {
+    // Launcher para seleção de wallpaper
+    val wallpaperPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            onEvent(CreateProfileEvent.OnWallpaperSelected(uri.toString()))
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -175,12 +188,27 @@ private fun CreateProfileContent(
             onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
         )
 
-        SettingsRow(
-            icon = Icons.Default.Wallpaper,
-            title = "Wallpaper",
-            subtitle = "",
-            onClick = { onEvent(CreateProfileEvent.OnSelectWallpaperClick) }
-        )
+        Column {
+            SettingsRow(
+                icon = Icons.Default.Wallpaper,
+                title = "Wallpaper",
+                subtitle = if (uiState.wallpaperUri != null) "Selecionado" else "Nenhum selecionado",
+                onClick = { wallpaperPicker.launch("image/*") }
+            )
+
+            if (uiState.wallpaperUri != null) {
+                Spacer(Modifier.height(8.dp))
+
+                AsyncImage(
+                    model = uiState.wallpaperUri,
+                    contentDescription = "Preview wallpaper",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+            }
+        }
 
         SettingsRow(
             icon = Icons.Default.Alarm,
