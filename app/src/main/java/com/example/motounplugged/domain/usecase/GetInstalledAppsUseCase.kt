@@ -10,16 +10,20 @@ import kotlinx.coroutines.withContext
 
 class GetInstalledAppsUseCase(private val context: Context) {
 
-    suspend fun execute(): List<AppInfo> = withContext(Dispatchers.IO) {
-        val packageManager = context.packageManager
-        val apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-        apps.filter { it.flags and ApplicationInfo.FLAG_SYSTEM == 0 } // Filtra apps de sistema
-            .map {
+    fun execute(): List<AppInfo> {
+        val pm = context.packageManager
+
+        return pm.getInstalledApplications(0)
+            .filter { app ->
+                // NÃO PEGAR APPS DO SISTEMA
+                pm.getLaunchIntentForPackage(app.packageName) != null
+            }
+            .map { app ->
                 AppInfo(
-                    name = it.loadLabel(packageManager).toString(),
-                    packageName = it.packageName,
+                    name = pm.getApplicationLabel(app).toString(),
+                    packageName = app.packageName
                 )
             }
-            .sortedBy { it.name.lowercase() } // Ordena por nome
+            .sortedBy { it.name.lowercase() }
     }
 }

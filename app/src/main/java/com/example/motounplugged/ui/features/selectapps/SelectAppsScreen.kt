@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.motounplugged.models.AppInfo
 import org.koin.androidx.compose.koinViewModel
 import com.example.motounplugged.ui.components.AppListItem
 import kotlin.math.round
@@ -31,6 +32,16 @@ fun SelectAppsScreen(
     viewModel: SelectAppsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val previousSelected = navController.previousBackStackEntry
+        ?.savedStateHandle
+        ?.get<List<AppInfo>>("selectedApps")
+
+    LaunchedEffect(previousSelected) {
+        previousSelected?.let { selected ->
+            viewModel.preselectApps(selected)
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.navigationEvent.collect { event ->

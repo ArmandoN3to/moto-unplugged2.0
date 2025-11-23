@@ -50,19 +50,24 @@ fun CreateProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Salva os aplicativos vindos da SelectAppsScreen
-    val selectedApps =
-        navController.currentBackStackEntry
-            ?.savedStateHandle
-            ?.getStateFlow("selectedApps", emptyList<AppInfo>())
-            ?.collectAsState()
-
-
     // Carrega o perfil apenas uma vez se estiver em modo edição
     LaunchedEffect(profileId) {
         if (profileId != null && profileId != -1) {
-            viewModel.loadProfile(profileId)
+            viewModel.loadProfile(profileId)  // agora só roda se não tiver carregado antes
         }
+    }
+
+
+    val selectedApps = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getStateFlow<List<AppInfo>?>("selectedApps", null)
+        ?.collectAsState()
+        ?.value
+
+
+    LaunchedEffect(selectedApps) {
+        selectedApps?.let { viewModel.setSelectedApps(it) }
     }
 
     // Navega após salvar
@@ -73,16 +78,6 @@ fun CreateProfileScreen(
             }
         }
     }
-
-    // Recebe os aplicativos vindos da SelectedApps
-    LaunchedEffect(selectedApps?.value) {
-        val apps = selectedApps?.value ?: emptyList()
-        if (apps.isNotEmpty()) {
-            viewModel.onEvent(CreateProfileEvent.OnAppsSelected(apps))
-            println("DEBUG → Apps recebidos da SelectAppsScreen: ${apps.size}")
-        }
-    }
-
 
     Scaffold(
         topBar = {
@@ -136,6 +131,10 @@ private fun CreateProfileContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                        "selectedApps",
+                        uiState.selectedApps   // LIST<AppInfo>
+                    )
                     val id = uiState.profileId ?: -1
                     navController.navigate("${AppScreens.SelectApps.route}/$id")
                 }

@@ -80,4 +80,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.34.0")
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.34.0")
 }

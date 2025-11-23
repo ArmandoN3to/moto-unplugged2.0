@@ -14,7 +14,11 @@ import com.example.motounplugged.models.AppInfo
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import android.graphics.drawable.BitmapDrawable
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
+
 
 
 @Composable
@@ -25,22 +29,12 @@ fun AppListItem(
     modifier: Modifier = Modifier
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
-
-    val iconDrawable = remember(appInfo.packageName) {
+    val packageManager = context.packageManager
+    val icon = remember(appInfo.packageName) {
         try {
-            context.packageManager.getApplicationIcon(appInfo.packageName)
-        } catch (_: Exception) {
+            packageManager.getApplicationIcon(appInfo.packageName)
+        } catch (e: Exception) {
             null
-        }
-    }
-
-    val painter = remember(iconDrawable) {
-        when (iconDrawable) {
-            is android.graphics.drawable.BitmapDrawable ->
-                androidx.compose.ui.graphics.painter.BitmapPainter(
-                    iconDrawable.bitmap.asImageBitmap()
-                )
-            else -> null
         }
     }
 
@@ -51,15 +45,12 @@ fun AppListItem(
             .padding(vertical = 8.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        if (painter != null) {
-            androidx.compose.foundation.Image(
-                painter = painter,
+        icon?.let {
+            Image(
+                painter = rememberDrawablePainter(drawable = it),
                 contentDescription = "${appInfo.name} icon",
                 modifier = Modifier.size(40.dp)
             )
-        } else {
-            Box(modifier = Modifier.size(40.dp))
         }
 
         Spacer(Modifier.width(16.dp))
