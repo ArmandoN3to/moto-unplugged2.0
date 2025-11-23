@@ -14,7 +14,9 @@ import com.example.motounplugged.ui.components.TitleTextComponents
 import com.example.motounplugged.R
 
 @Composable
-fun TermsAndConditionsScreen(){
+fun TermsAndConditionsScreen(
+    onNavigateToTermsAndConditions: () -> Unit
+){
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -29,5 +31,5 @@ fun TermsAndConditionsScreen(){
 @Preview
 @Composable
 fun TermsAndConditionsScreenPreview(){
-    TermsAndConditionsScreen()
+    TermsAndConditionsScreen(onNavigateToTermsAndConditions={})
 }

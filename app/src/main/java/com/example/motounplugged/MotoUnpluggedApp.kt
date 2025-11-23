@@ -1,5 +1,7 @@
 package com.example.motounplugged
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,10 +21,12 @@ import kotlinx.coroutines.launch
 
 import com.example.motounplugged.ui.screens.FAB_new_profile
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MotoUnpluggedApp(
-    onLogout: () -> Unit) {
+    onLogout: () -> Unit
+    ) {
     Surface(
         modifier = Modifier .fillMaxSize(),
         color = Color.White
@@ -123,6 +127,11 @@ fun MotoUnpluggedApp(
 
         ) { paddingValues ->
             AppNavHost(
+                onLogout = {
+                    navController.navigate("login") {
+                        popUpTo(0)
+                    }
+                },
                 navController = navController,
                 modifier = Modifier.padding(paddingValues)
             )
