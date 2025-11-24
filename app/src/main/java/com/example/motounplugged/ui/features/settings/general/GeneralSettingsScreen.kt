@@ -43,15 +43,15 @@ fun GeneralSettingsScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
-//            Text(
-//                text = "Gerencie suas preferências e ajustes",
-//                fontSize = 20.sp,
-//                fontStyle = FontStyle.Normal,
-//                color = Color.Gray,
-//                modifier = Modifier
-//                    .padding(top = 5.dp)
-//                    .align(Alignment.CenterHorizontally)
-//            )
+            Text(
+                text = "Gerencie suas configurações",
+                fontSize = 20.sp,
+                fontStyle = FontStyle.Normal,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
         }
 
         Column (

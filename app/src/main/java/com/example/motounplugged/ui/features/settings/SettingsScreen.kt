@@ -69,14 +69,6 @@ fun SettingsScreen(
             )
 
             NavigationSettingsCard (
-                title = "Conta",
-                onClick = {
-//                    navController.navigate("account_settings")
-//                    println("Navegando para Geral")
-                }
-            )
-
-            NavigationSettingsCard (
                 title = "Sobre",
                 onClick = {
 //                    navController.navigate("about_settings")
