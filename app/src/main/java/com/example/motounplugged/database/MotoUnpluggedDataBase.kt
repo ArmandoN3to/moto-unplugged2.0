@@ -9,21 +9,20 @@ import androidx.room.TypeConverters
 import com.example.motounplugged.database.dao.BlockedAppsDao
 import com.example.motounplugged.database.dao.ProfilesDao
 import com.example.motounplugged.database.dao.SessionsDao
+import com.example.motounplugged.database.dao.UserDao
 import com.example.motounplugged.database.entities.BlockedAppsEntity
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
-import com.example.motounplugged.repositories.ProfileRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.motounplugged.database.entities.UserEntity
 
 @Database(
     entities = [
         ProfilesEntity::class,
         SessionsEntity::class,
-        BlockedAppsEntity::class
+        BlockedAppsEntity::class,
+        UserEntity::class
     ],
-    version = 4, // ⬅️ Incrementado para refletir nova entidade
+    version = 4, //  Incrementado para refletir nova entidade
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -32,6 +31,7 @@ import kotlinx.coroutines.launch
     abstract fun profilesDao(): ProfilesDao
     abstract fun sessionsDao(): SessionsDao
     abstract fun blockedAppsDao(): BlockedAppsDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

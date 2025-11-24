@@ -7,8 +7,11 @@ import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.domain.usecase.GetInstalledAppsUseCase
 import com.example.motounplugged.repositories.ProfileRepository
 import com.example.motounplugged.repositories.SessionsRepository
+import com.example.motounplugged.repositories.UserRepository
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
+import com.example.motounplugged.ui.features.login.LoginScreenViewModel
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.register.RegisterScreenViewModel
 import com.example.motounplugged.ui.features.selectapps.SelectAppsViewModel
 
 import org.koin.android.ext.koin.androidContext
@@ -34,6 +37,9 @@ val databaseModule = module {
     // DAOs
     single { get<MotoUnpluggedDataBase>().profilesDao() }
     single { get<MotoUnpluggedDataBase>().sessionsDao() }
+    single { get<MotoUnpluggedDataBase>().userDao() }
+
+
     single { get<MotoUnpluggedDataBase>().blockedAppsDao() }
 
 }
@@ -43,6 +49,7 @@ val repositoryModule = module {
     single { ProfileRepository(get(), blockedAppsDao = get()) }
     single { SessionsRepository(get()) }
     single { BlockedAppsRepository(get()) }
+    single { UserRepository(get()) }
 }
 
 val useCaseModule = module {
@@ -65,5 +72,14 @@ val viewModelModule = module {
             profilesRepository = get()
         )
     }
+    viewModel{
+        RegisterScreenViewModel(get())
+    }
+    viewModel{
+        LoginScreenViewModel(get())
+    }
+
+
+
 
 }
