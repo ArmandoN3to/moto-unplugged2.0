@@ -3,8 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-
-
+    id("kotlin-parcelize")
 }
 
 android {
@@ -86,4 +85,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.34.0")
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.34.0")
 }
