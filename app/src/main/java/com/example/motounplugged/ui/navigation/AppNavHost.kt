@@ -16,6 +16,7 @@ import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
+import com.example.motounplugged.ui.features.settings.about.AboutSettingsScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreen
@@ -71,12 +72,9 @@ fun AppNavHost(
         composable(AppScreens.GeneralSettings.route) {
             GeneralSettingsScreen()
         }
-//        composable(AppScreens.AboutSettings.route) {
-//            GenericScreen("Sobre")
-//        }
-//        composable(AppScreens.AccountSettings.route) {
-//            GenericScreen("Conta")
-//        }
+        composable(AppScreens.AboutSettings.route) {
+            AboutSettingsScreen()
+        }
         composable(AppScreens.Streak.route) {
             StreakScreen(
                 streakCount = 28
