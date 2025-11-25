@@ -117,13 +117,12 @@ fun MotoUnpluggedApp(
 
             floatingActionButton = {
                 when (selectedRoute) {
-                    AppScreens.Profiles.route-> {
-                        FAB_new_profile {
-                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
-                        }
+                    AppScreens.Profiles.route -> {
+                        FAB_new_profile(navController)
                     }
                 }
             }
+
 
         ) { paddingValues ->
             AppNavHost(

@@ -22,7 +22,7 @@ import com.example.motounplugged.database.entities.UserEntity
         BlockedAppsEntity::class,
         UserEntity::class
     ],
-    version = 5, //  Incrementado para refletir nova entidade
+    version = 6, //  Incrementado para refletir nova entidade
     exportSchema = false
 )
 @TypeConverters(Converters::class)
