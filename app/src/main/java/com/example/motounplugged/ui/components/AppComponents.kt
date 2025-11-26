@@ -362,3 +362,23 @@ fun ClickableLoginTextComponent(tryingToLogin:Boolean = true,onTextSelected :  (
                 }
             }})
 }
+
+//componente de texto
+@Composable
+fun TextComponent(value:String){
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 40.dp),
+        style = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        color = colorResource(id = R.color.colorGray),
+        textAlign = TextAlign.Justify,
+        //adiciiona um sublinhado ao texto
+        //textDecoration = TextDecoration.Underline
+    )
+}
