@@ -45,13 +45,14 @@ android {
 dependencies {
 
     implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.biometric.ktx)
     //implementação koin(injeção de dependência)
     val koinVersion = "4.1.1"
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
 
-
-
+    // Biometric
+    implementation ("androidx.biometric:biometric:1.1.0")
     //implementação do room
 
     implementation(libs.androidx.room.runtime)

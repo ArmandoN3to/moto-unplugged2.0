@@ -1,7 +1,9 @@
 package com.example.motounplugged.ui.features.createprofile
 
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.biometric.BiometricManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +27,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.biometric.BiometricPrompt
+
 
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,6 +45,9 @@ import com.example.motounplugged.models.AppInfo
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import coil.compose.AsyncImage
 
 
@@ -181,13 +188,6 @@ private fun CreateProfileContent(
 
         Spacer(Modifier.height(16.dp))
 
-        SettingsRow(
-            icon = Icons.Default.Apps,
-            title = "App layout",
-            subtitle = "4x5",
-            onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
-        )
-
         Column {
             SettingsRow(
                 icon = Icons.Default.Wallpaper,
@@ -230,14 +230,47 @@ private fun CreateProfileContent(
             icon = Icons.Default.Password,
             title = "Requer senha",
             subtitle = "Solicitar senha para sair do modo",
-            checked = uiState.isImmediatelyActive,
+            checked = uiState.passwordRequired,
             onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
         )
 
         Spacer(Modifier.height(16.dp))
 
+        val context = LocalContext.current
+        val activity = context as FragmentActivity
+
         Button(
-            onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
+            onClick = {
+                if(uiState.passwordRequired){
+                    val executor = ContextCompat.getMainExecutor(context)
+
+                    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                        .setTitle("Confirme sua Identidade")
+                        .setSubtitle("E necessario autenticar para salvar o perfil")
+                        .setAllowedAuthenticators(
+                            BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                        )
+                        .build()
+
+                    val biometricPrompt = BiometricPrompt(activity, executor,
+                        object : BiometricPrompt.AuthenticationCallback() {
+                            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                                super.onAuthenticationSucceeded(result)
+                                // Se autenticou → salva o perfil de verdade
+                                onEvent(CreateProfileEvent.OnSaveProfileClick)
+                            }
+                        }
+                    )
+
+                    biometricPrompt.authenticate(promptInfo)
+                }
+                else {
+
+                    onEvent(CreateProfileEvent.OnSaveProfileClick)
+
+                }
+                      },
             modifier = Modifier.fillMaxWidth(),
             enabled = uiState.profileName.isNotBlank() && !uiState.isLoading
         ) {

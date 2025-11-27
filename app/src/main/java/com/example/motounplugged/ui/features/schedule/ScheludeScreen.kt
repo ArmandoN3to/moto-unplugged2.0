@@ -14,9 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 //import java.time.LocalTime
 //import java.time.format.DateTimeFormatter
 //import android.app.TimePickerDialog
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -149,7 +146,7 @@ fun ScheduleScreen(
                     containerColor = if (isSelected) Color.Gray else Color.LightGray
                 )
             ) {
-                Text(profile.ProfileName)
+                Text(profile.profileName)
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -173,7 +170,7 @@ fun ScheduleScreen(
                 selectedProfile?.let { profile ->
                     val session = SessionsEntity(
                         id = 0, // autogerado pelo Room
-                        namePerfil = profile.ProfileName,
+                        namePerfil = profile.profileName,
                         startHour = startTime.toString(),
                         endHour = endTime.toString(),
                         dayOfWeek = selectedDaysEnums, // agora é uma lista

@@ -1,6 +1,5 @@
 package com.example.motounplugged.ui.features.createprofile
 
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motounplugged.database.entities.ProfilesEntity
@@ -23,6 +22,8 @@ data class CreateProfileUiState(
     val isImmediatelyActive: Boolean = false, // if the profile is active
     val selectedApps: List<AppInfo> = emptyList(), // selected apps of the profile
     val wallpaperUri: String? = null,    // wallpaper selected by user
+    val duration: Int = 0,               // duration of the profile
+    val passwordRequired: Boolean = false, // if password is required to deactivate the profile
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
@@ -72,7 +73,7 @@ class CreateProfileViewModel(
                 _uiState.update { it.copy(wallpaperUri = event.uri) }
 
             CreateProfileEvent.OnSetDurationClick -> {
-                println("Usuário clicou em definir duração")
+                _uiState.update { it.copy() } // Adicionar tela de duraç~ao
             }
 
             CreateProfileEvent.OnInterruptionsClick -> {
@@ -80,7 +81,7 @@ class CreateProfileViewModel(
             }
 
             is CreateProfileEvent.OnRequirePasswordChange ->
-                _uiState.update { it.copy(isImmediatelyActive = event.enabled) }
+                _uiState.update { it.copy(passwordRequired = event.enabled) }
 
             is CreateProfileEvent.OnAppsSelected -> {
                 _uiState.update {
@@ -110,9 +111,11 @@ class CreateProfileViewModel(
             // Build entity from current state. Use 0 or the provided id depending on edit/create.
             val profile = ProfilesEntity(
                 idProfile = currentState.profileId ?: 0,
-                ProfileName = currentState.profileName,
+                profileName = currentState.profileName,
                 appCount = currentState.appCount,
-                wallpaperUri = currentState.wallpaperUri
+                wallpaperUri = currentState.wallpaperUri,
+                passwordRequired = currentState.passwordRequired,
+                duration = currentState.duration
             )
 
             // set loading state before making repository call
@@ -154,14 +157,16 @@ class CreateProfileViewModel(
                 _uiState.update {
                     it.copy(
                         profileId = profile.idProfile,
-                        profileName = profile.ProfileName,
+                        profileName = profile.profileName,
                         appCount = profile.appCount,
                         wallpaperUri = profile.wallpaperUri,
+                        passwordRequired = profile.passwordRequired,
+                        duration = profile.duration,
                         isEditing = true,
                         isLoading = false,
                         saveSuccess = false,
                         errorMessage = null,
-                        hasLoadedProfile = true // 🔥 marca como carregado
+                        hasLoadedProfile = true // marca como carregado
                     )
                 }
 

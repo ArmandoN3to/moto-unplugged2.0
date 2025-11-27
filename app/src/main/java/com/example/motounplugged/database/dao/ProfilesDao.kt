@@ -36,4 +36,7 @@ interface ProfilesDao {
     @Query("SELECT last_insert_rowid()")
     suspend fun getLastId(): Int
 
+    @Query("SELECT duration from Profiles WHERE idProfile = :id")
+    suspend fun getDurationFromProfile(id:Int): Int
+
 }
