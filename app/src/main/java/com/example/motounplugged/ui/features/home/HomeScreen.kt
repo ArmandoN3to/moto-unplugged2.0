@@ -259,7 +259,7 @@ fun HomeScreen(
                         .weight(1f)
                 )
 
-                ElevatedButton(onClick = { onClick() },
+                ElevatedButton(onClick = {navController.navigate(AppScreens.Stats.route)},
                     modifier = Modifier
                         .size(width = 130.dp, height = 45.dp)
                         .padding(end = 15.dp, top = 10.dp)

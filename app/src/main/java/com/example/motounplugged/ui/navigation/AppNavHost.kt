@@ -61,9 +61,7 @@ fun AppNavHost(
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel, navController)
         }
-        composable(AppScreens.User.route) {
-            UserScreen()
-        }
+
         composable(AppScreens.Settings.route) {
             SettingsScreen()
         }
