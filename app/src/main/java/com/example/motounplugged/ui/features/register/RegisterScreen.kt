@@ -31,6 +31,8 @@ import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -42,6 +44,8 @@ fun RegisterScreen(
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Surface(
         color = Color.White,
@@ -79,15 +83,15 @@ fun RegisterScreen(
             MyTextField(
                 labelValue = stringResource(id = R.string.email),
                 painterResource = painterResource(id = R.drawable.email),
-                value = viewModel.email,
-                onValueChange = {viewModel.email = it}
+                value = email,
+                onValueChange = {email = it}
             )
 
             PasswordTextField(
                 labelValue = stringResource(id = R.string.password),
                 painterResource = painterResource(id = R.drawable.password),
-                value = viewModel.password,
-                onValueChange = {viewModel.password = it}
+                value = password,
+                onValueChange = {password = it}
             )
 
             CheckboxComponent(
@@ -100,9 +104,10 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(100.dp))
 
+            val context = LocalContext.current
             ButtonComponent(value = stringResource(id = R.string.register),
                 onClick = {
-                    if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || viewModel.email.isBlank() || viewModel.password.isBlank()) {
+                    if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || email.isBlank() || password.isBlank()) {
                         Toast.makeText(
                             context,
                             "Por favor, preencha todos os campos!",
@@ -115,7 +120,14 @@ fun RegisterScreen(
                                 Toast.LENGTH_SHORT
                                 ).show()
                     }else {
-                        viewModel.registerUser(viewModel.firstName, viewModel.lastName, viewModel.email, viewModel.password)
+                        viewModel.registerUser(viewModel.firstName, viewModel.lastName)
+                        Firebase.auth.createUserWithEmailAndPassword(email,password)
+                            .addOnCompleteListener{ task ->
+                                if (task.isSuccessful){
+                                    Toast.makeText(context,"Signup successful!",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         Toast.makeText(
                             context,
                             "Usuário cadastrado com sucesso!",

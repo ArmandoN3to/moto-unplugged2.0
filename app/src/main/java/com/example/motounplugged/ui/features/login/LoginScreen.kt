@@ -7,9 +7,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,10 +37,9 @@ import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
-import com.example.motounplugged.ui.components.UnderLinedTextComponents
-import com.example.motounplugged.ui.features.register.RegisterScreen
-import com.example.motounplugged.ui.navigation.AppNavHost
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,11 +51,12 @@ fun LoginScreen(
     onNavigateToRegister: () -> Unit,
 
 ){
-    val viewModel: LoginScreenViewModel = koinViewModel()
+    //val viewModel: LoginScreenViewModel = koinViewModel()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var forgotPasswordDialogBox by remember { mutableStateOf(false) }
 
     Surface(
         color = Color.White,
@@ -84,9 +89,73 @@ fun LoginScreen(
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-            UnderLinedTextComponents(value = stringResource(id = R.string.forgot_password))
+
+            if (forgotPasswordDialogBox) {
+                var resetEmail by remember { mutableStateOf("") }
+                val context = LocalContext.current
+
+                AlertDialog(
+                    title = { Text("Forgot Password") },
+                    text = {
+                        OutlinedTextField(
+                            value = resetEmail,
+                            onValueChange = { resetEmail = it },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                if (resetEmail.isNotBlank()) {
+                                    Firebase.auth.sendPasswordResetEmail(resetEmail)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Check your email to reset password",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                forgotPasswordDialogBox = false
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Registered email not found",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Please enter your registered email",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        ) {
+                            Text("Submit")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { forgotPasswordDialogBox = false }) {
+                            Text("Cancel")
+                        }
+                    },
+                    onDismissRequest = { forgotPasswordDialogBox = false }
+                )
+            }
+
+            TextButton(
+                onClick = { forgotPasswordDialogBox = true }
+            ) {
+                Text("Forgot Password?")
+            }
+
+
 
             Spacer(modifier = Modifier.height(100.dp))
+            val context = LocalContext.current
             ButtonComponent(value = stringResource(id = R.string.login),
                 onClick = {
                     if (email.isBlank() || password.isBlank()) {
@@ -96,17 +165,15 @@ fun LoginScreen(
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        //COLOCAR AS COFIGURAÇÕES DA VIEWMODEL DA LOGIN REGISTER QUE
-                        //VAI RECEBER O BANCO DE DADOS DA TABELA DE REGISTRO
-                        coroutineScope.launch {
-                            val isValid = viewModel.login(email,password)
-                            if (isValid){
-                                onLoginSuccess()
-                            } else{
-                                Toast.makeText(context, "Email ou senha incorretos", Toast.LENGTH_SHORT).show()
-                            }
+                        Firebase.auth.signInWithEmailAndPassword(email,password)
+                            .addOnCompleteListener{ task ->
+                                if (task.isSuccessful){
+                                    Toast.makeText(context,"Login successful!",
+                                        Toast.LENGTH_SHORT).show()
 
-                        }
+                                }
+                            }
+                        onLoginSuccess()
 
                     }
                 }

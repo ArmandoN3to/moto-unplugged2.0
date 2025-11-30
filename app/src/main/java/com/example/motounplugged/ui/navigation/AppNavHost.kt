@@ -26,8 +26,6 @@ import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.splashscreen.SplashScreen
-import com.example.motounplugged.ui.features.settings.UserScreen
-import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
 import org.koin.androidx.compose.koinViewModel
 
 

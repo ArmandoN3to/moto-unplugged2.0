@@ -18,6 +18,9 @@ import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.navigation.AppNavHost
 import com.example.motounplugged.ui.navigation.LRNavHost
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+
 //import androidx.core.splashscreen.installSplashScreen
 
 class MainActivity : ComponentActivity() {
@@ -25,6 +28,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         setContent {
             MotoUnpluggedTheme {
                 var isLoggedIn by remember { mutableStateOf(false) }
