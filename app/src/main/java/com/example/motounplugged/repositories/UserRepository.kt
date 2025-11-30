@@ -18,4 +18,10 @@ class UserRepository(
     }
     //busca o email por parametro
     suspend fun getUser(email: String) = userDao.buscarPorEmail(email)
+
+    //busca o id do usuário
+    suspend fun getUser(id: Int) = userDao.getUser(id)
+
+    //faz o update do usuario
+    suspend fun updateUser(user: UserEntity) = userDao.updateUser(user)
 }
