@@ -50,7 +50,8 @@ fun LRNavHost(
         composable(AppScreens.TermsAndConditionsScreen.route){
             TermsAndConditionsScreen(
                 onBack = {navController.popBackStack()},
-                onNavigateToTermsAndConditions = {navController.navigate(AppScreens.TermsAndConditionsScreen.route)}
+                onNavigateToTermsAndConditions = {navController.navigate(AppScreens.TermsAndConditionsScreen.route)},
+                onClick = {}
             )
         }
     }
