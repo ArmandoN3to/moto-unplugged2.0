@@ -187,7 +187,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter, value: Strin
 
 //componente de checklist do termos e serviços
 @Composable
-fun CheckboxComponent(value: String, onTextSelected : (String) -> Unit){
+fun CheckboxComponent(value: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, onTextSelected : (String) -> Unit){
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -197,10 +197,10 @@ fun CheckboxComponent(value: String, onTextSelected : (String) -> Unit){
         val checkedState = remember {
             mutableStateOf<Boolean>(false)
         }
-        Checkbox(checked = checkedState.value,
-            onCheckedChange = { it
-                checkedState.value = !checkedState.value
-            })
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { onCheckedChange(it)}
+        )
         ClickableTextComponent(value = value, onTextSelected)
 
     }
