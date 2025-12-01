@@ -209,10 +209,10 @@ fun CheckboxComponent(value: String, checked: Boolean, onCheckedChange: (Boolean
 //componente da string os termos e serviços
 @Composable
 fun ClickableTextComponent(value: String, onTextSelected : (String) -> Unit){
-    val initialText = "By continuing you accept our "
-    val privacyPolicyText = "Privacy Policy "
-    val andText = " and "
-    val termsAndConditionsText = "Terms of Use"
+    val initialText = "Ao continuar, você deve aceitar nossos termos "
+    val privacyPolicyText = "Política de Privacidade "
+    val andText = " e "
+    val termsAndConditionsText = "Termos de Uso"
 
     //construtor para criar a string de trms e serviços
     val annotatedString = buildAnnotatedString {
@@ -334,10 +334,10 @@ fun DividerTextComponent(){
 //pertence a tela de login
 @Composable
 fun ClickableLoginTextComponent(tryingToLogin:Boolean = true,onTextSelected :  (String) -> Unit){
-    val initialText = if (tryingToLogin) "                      Already have an account? " else "                      Don't have an account yet?"
-    val LoginText = if (tryingToLogin) " Login" else " Register"
+    val initialText = if (tryingToLogin) "                                Já tem uma conta?" else "                     Ainda não tem uma conta?"
+    val LoginText = if (tryingToLogin) " Login" else " Cadastre-se"
 
-    //construtor para criar a string de trms e serviços
+    //mesmo construtor para criar a string de trms e serviços
     val annotatedString = buildAnnotatedString {
         append(initialText)
         //definir o estilo do meu privacy policy

@@ -9,7 +9,7 @@ import com.example.motounplugged.repositories.ProfileRepository
 import com.example.motounplugged.repositories.SessionsRepository
 import com.example.motounplugged.repositories.UserRepository
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
-import com.example.motounplugged.ui.features.login.LoginScreenViewModel
+//import com.example.motounplugged.ui.features.login.LoginScreenViewModel
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreenViewModel
 import com.example.motounplugged.ui.features.selectapps.SelectAppsViewModel
@@ -75,9 +75,9 @@ val viewModelModule = module {
     viewModel{
         RegisterScreenViewModel(get())
     }
-    viewModel{
+    /*viewModel{
         LoginScreenViewModel(get())
-    }
+    }*/
 
 
 

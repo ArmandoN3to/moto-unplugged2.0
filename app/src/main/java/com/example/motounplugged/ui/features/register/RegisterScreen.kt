@@ -31,6 +31,8 @@ import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -42,6 +44,7 @@ fun RegisterScreen(
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
+
 
     Surface(
         color = Color.White,
@@ -100,6 +103,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(100.dp))
 
+            val context = LocalContext.current
             ButtonComponent(value = stringResource(id = R.string.register),
                 onClick = {
                     if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || viewModel.email.isBlank() || viewModel.password.isBlank()) {
@@ -115,7 +119,14 @@ fun RegisterScreen(
                                 Toast.LENGTH_SHORT
                                 ).show()
                     }else {
-                        viewModel.registerUser(viewModel.firstName, viewModel.lastName, viewModel.email, viewModel.password)
+                        viewModel.registerUser(viewModel.firstName, viewModel.lastName)
+                        Firebase.auth.createUserWithEmailAndPassword(viewModel.email,viewModel.password)
+                            .addOnCompleteListener{ task ->
+                                if (task.isSuccessful){
+                                    Toast.makeText(context,"Cadastro bem-sucedido!",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         Toast.makeText(
                             context,
                             "Usuário cadastrado com sucesso!",

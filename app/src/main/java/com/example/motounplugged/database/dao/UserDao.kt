@@ -15,8 +15,8 @@ interface UserDao{
     suspend fun registerUser(user: UserEntity)
 
     //consulta por email apenas se não estiver vazia
-    @Query("SELECT * FROM usuarios WHERE email = :email LIMIT 1")
-    suspend fun buscarPorEmail(email: String): UserEntity?
+    //@Query("SELECT * FROM usuarios WHERE email = :email LIMIT 1")
+    //suspend fun buscarPorEmail(email: String): UserEntity?
 
     //consulta de dados por id de usuário
     @Query("SELECT * FROM usuarios WHERE id = :id")

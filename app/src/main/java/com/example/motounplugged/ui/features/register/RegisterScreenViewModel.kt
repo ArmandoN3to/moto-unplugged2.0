@@ -25,10 +25,10 @@ class RegisterScreenViewModel(
     private val _state = MutableStateFlow("")
     val state = _state.asStateFlow()
 
-    fun registerUser(firstname: String, lastname: String, email: String, password: String) {
+    fun registerUser(firstname: String, lastname: String) {
         viewModelScope.launch {
             try {
-                userRepository.registerUser(firstname,lastname, email, password)
+                userRepository.registerUser(firstname,lastname)
                 _state.value = "success"
             } catch (e: Exception) {
                 _state.value = "error: ${e.message}"

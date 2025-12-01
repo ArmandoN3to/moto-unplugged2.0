@@ -1,4 +1,4 @@
-package com.example.motounplugged.ui.features.login
+/*package com.example.motounplugged.ui.features.login
 
 import androidx.lifecycle.ViewModel
 import com.example.motounplugged.repositories.UserRepository
@@ -12,4 +12,4 @@ class LoginScreenViewModel(
         return user != null && user.password == password
     }
 
-}
+}*/

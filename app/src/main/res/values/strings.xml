@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">Moto Unplugged</string>
-    <string name="hello">Hey there</string>
-    <string name="create_account">Create an Account</string>
-    <string name="welcome">Welcome Back</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="hello">Olá</string>
+    <string name="create_account">Crie uma conta</string>
+    <string name="welcome">Bem-vindo de volta</string>
+    <string name="first_name">Nome</string>
+    <string name="last_name">Sobrenome</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="hide_password">hide password</string>
-    <string name="show_password">show password</string>
-    <string name="terms_and_conditions">By continuing you accept our Privacy Policy and Term of Use</string>
+    <string name="password">Senha</string>
+    <string name="hide_password">ocultar senha</string>
+    <string name="show_password">mostrar senha</string>
+    <string name="terms_and_conditions">Ao continuar, você deve aceitar nossa Política de Privacidade e Termos de Uso.</string>
     <string name="terms_and_conditions_header">Termos &amp; Condições</string>
-    <string name="register">Register</string>
+    <string name="register">Registrar</string>
     <string name="login">Login</string>
-    <string name="go_to_login">Already have an account? Login</string>
+    <string name="go_to_login">Já tem uma conta? Login</string>
     <string name="forgot_password">Forgot your password?</string>
-    <string name="or">or</string>
+    <string name="or">ou</string>
     <string name="Privacy_Policy">Política de Privacidade</string>
     <string name="Privacy_Policy_Text">
         A sua privacidade é importante para nós. É política do Moto Unplugged 2.0 respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no Aplicativo Moto Unplugged 2.0, e outros sites que possuímos e operamos. Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço. Fazemo-lo por meios justos e legais, com o seu conhecimento e consentimento. Também informamos por que estamos coletando e como será usado. Apenas retemos as informações coletadas pelo tempo necessário para fornecer o serviço solicitado. Quando armazenamos dados, os protegemos dentro de meios comercialmente aceitáveis ​​para evitar perdas e roubos, bem como acesso, divulgação, cópia, uso ou modificação não autorizados. Não compartilhamos informações de identificação pessoal publicamente ou com terceiros, exceto quando exigido por lei.O nosso aplicativo pode ter links para sites externos que não são operados por nós. Esteja ciente de que não temos controle sobre o conteúdo e práticas desses sites e não podemos aceitar responsabilidade por suas respectivas políticas de privacidade.Você é livre para recusar a nossa solicitação de informações pessoais, entendendo que talvez não possamos fornecer alguns dos serviços desejados. O uso continuado de nosso aplicativo será considerado como aceitação de nossas práticas em torno de privacidade e informações pessoais. Se você tiver alguma dúvida sobre como lidamos com dados do usuário e informações pessoais, entre em contacto conosco. Compromisso do Usuário: O usuário se compromete a fazer uso adequado dos conteúdos e da informação que o Moto Unplugged 2.0 oferece no site e com caráter enunciativo, mas não limitativo:
@@ -25,7 +25,7 @@ C) Não causar danos aos sistemas físicos (hardwares) e lógicos (softwares) do
 Mais informações: Esperemos que esteja esclarecido e, como mencionado anteriormente, se houver algo que você não tem certeza se precisa ou não, geralmente é mais seguro deixar os cookies ativados, caso interaja com um dos recursos que você usa em nosso site.
 Esta política é efetiva a partir de 26 November 2025 00:12
     </string>
-    <string name="Terms_of_use">Termos de Serviço</string>
+    <string name="Terms_of_use">Termos de Uso</string>
     <string name="Terms_of_use_text">
         1. Termos
 
