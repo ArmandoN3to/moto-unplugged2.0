@@ -33,6 +33,7 @@ fun MotoUnpluggedApp(
     ) {
 
     }
+    var showLogoutDialog by remember { mutableStateOf(false) }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -57,14 +58,10 @@ fun MotoUnpluggedApp(
             AppDrawer(
                 selectedItem = selectedRoute,
                 onItemSelected = { item ->
-                    scope.launch { drawerState.close() }
                     if (item.route == "logout_action") {
-
+                        showLogoutDialog = true
                     } else {
-                        navController.navigate(item.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigate(item.route)
                     }
                 }
             )
@@ -133,6 +130,24 @@ fun MotoUnpluggedApp(
                 },
                 navController = navController,
                 modifier = Modifier.padding(paddingValues)
+            )
+        }
+        if (showLogoutDialog) {
+            AlertDialog(
+                onDismissRequest = { showLogoutDialog = false },
+                title = { Text("Sair da Conta") },
+                text = { Text("Tem certeza que deseja sair?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                        onLogout()
+                    }) { Text("Sim") }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                    }) { Text("Cancelar") }
+                }
             )
         }
     }
