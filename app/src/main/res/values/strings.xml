@@ -1,16 +1,56 @@
 <resources>
     <string name="app_name">Moto Unplugged</string>
-    <string name="hello">Hey there</string>
-    <string name="create_account">Create an Account</string>
-    <string name="welcome">Welcome Back</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="hello">Olá</string>
+    <string name="create_account">Crie uma conta</string>
+    <string name="welcome">Bem-vindo de volta</string>
+    <string name="first_name">Nome</string>
+    <string name="last_name">Sobrenome</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="hide_password">hide password</string>
-    <string name="show_password">show password</string>
-    <string name="terms_and_conditions">By continuing you accept our Privacy Policy and Term of Use</string>
-    <string name="terms_and_conditions_header">Terms of Use</string>
-    <string name="register">Register</string>
+    <string name="password">Senha</string>
+    <string name="hide_password">ocultar senha</string>
+    <string name="show_password">mostrar senha</string>
+    <string name="terms_and_conditions">Ao continuar, você deve aceitar nossa Política de Privacidade e Termos de Uso.</string>
+    <string name="terms_and_conditions_header">Termos &amp; Condições</string>
+    <string name="register">Registrar</string>
+    <string name="login">Login</string>
+    <string name="go_to_login">Já tem uma conta? Login</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="or">ou</string>
+    <string name="Privacy_Policy">Política de Privacidade</string>
+    <string name="Privacy_Policy_Text">
+        A sua privacidade é importante para nós. É política do Moto Unplugged 2.0 respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no Aplicativo Moto Unplugged 2.0, e outros sites que possuímos e operamos. Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço. Fazemo-lo por meios justos e legais, com o seu conhecimento e consentimento. Também informamos por que estamos coletando e como será usado. Apenas retemos as informações coletadas pelo tempo necessário para fornecer o serviço solicitado. Quando armazenamos dados, os protegemos dentro de meios comercialmente aceitáveis ​​para evitar perdas e roubos, bem como acesso, divulgação, cópia, uso ou modificação não autorizados. Não compartilhamos informações de identificação pessoal publicamente ou com terceiros, exceto quando exigido por lei.O nosso aplicativo pode ter links para sites externos que não são operados por nós. Esteja ciente de que não temos controle sobre o conteúdo e práticas desses sites e não podemos aceitar responsabilidade por suas respectivas políticas de privacidade.Você é livre para recusar a nossa solicitação de informações pessoais, entendendo que talvez não possamos fornecer alguns dos serviços desejados. O uso continuado de nosso aplicativo será considerado como aceitação de nossas práticas em torno de privacidade e informações pessoais. Se você tiver alguma dúvida sobre como lidamos com dados do usuário e informações pessoais, entre em contacto conosco. Compromisso do Usuário: O usuário se compromete a fazer uso adequado dos conteúdos e da informação que o Moto Unplugged 2.0 oferece no site e com caráter enunciativo, mas não limitativo:
+A) Não se envolver em atividades que sejam ilegais ou contrárias à boa fé a à ordem pública;
+B) Não difundir propaganda ou conteúdo de natureza racista, xenofóbica, jogos de sorte ou azar, qualquer tipo de pornografia ilegal, de apologia ao terrorismo ou contra os direitos humanos;
+C) Não causar danos aos sistemas físicos (hardwares) e lógicos (softwares) do Moto Unplugged 2.0, de seus fornecedores ou terceiros, para introduzir ou disseminar vírus informáticos ou quaisquer outros sistemas de hardware ou software que sejam capazes de causar danos anteriormente mencionados.
+Mais informações: Esperemos que esteja esclarecido e, como mencionado anteriormente, se houver algo que você não tem certeza se precisa ou não, geralmente é mais seguro deixar os cookies ativados, caso interaja com um dos recursos que você usa em nosso site.
+Esta política é efetiva a partir de 26 November 2025 00:12
+    </string>
+    <string name="Terms_of_use">Termos de Uso</string>
+    <string name="Terms_of_use_text">
+        1. Termos
+
+Ao acessar o aplicativo Moto Unplugged 2.0, concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis ​​e concorda que é responsável pelo cumprimento de todas as leis locais aplicáveis. Se você não concordar com algum desses termos, está proibido de usar ou acessar este aplicativo. Os materiais contidos neste site são protegidos pelas leis de direitos autorais e marcas comerciais aplicáveis.
+
+2. Uso de Licença
+
+É concedida permissão para baixar temporariamente uma cópia dos materiais (informações ou software) do aplicativo Moto Unplugged 2.0 , apenas para visualização transitória pessoal e não comercial. Esta é a concessão de uma licença, não uma transferência de título e, sob esta licença, você não pode: modificar ou copiar os materiais; usar os materiais para qualquer finalidade comercial ou para exibição pública (comercial ou não comercial); tentar descompilar ou fazer engenharia reversa de qualquer software contido no site Moto Unplugged 2.0; remover quaisquer direitos autorais ou outras notações de propriedade dos materiais; ou transferir os materiais para outra pessoa ou \'espelhe\' os materiais em qualquer outro servidor.Esta licença será automaticamente rescindida se você violar alguma dessas restrições e poderá ser rescindida por Moto Unplugged 2.0 a qualquer momento. Ao encerrar a visualização desses materiais ou após o término desta licença, você deve apagar todos os materiais baixados em sua posse, seja em formato eletrónico ou impresso.
+
+3. Isenção de responsabilidade
+
+Os materiais no site da Moto Unplugged 2.0 são fornecidos \'como estão\'. Moto Unplugged 2.0 não oferece garantias, expressas ou implícitas, e, por este meio, isenta e nega todas as outras garantias, incluindo, sem limitação, garantias implícitas ou condições de comercialização, adequação a um fim específico ou não violação de propriedade intelectual ou outra violação de direitos. Além disso, o Moto Unplugged 2.0 não garante ou faz qualquer representação relativa à precisão, aos resultados prováveis ​​ou à confiabilidade do uso dos materiais em seu site ou de outra forma relacionado a esses materiais ou em sites vinculados a este site.
+
+4. Limitações
+
+Em nenhum caso o Moto Unplugged 2.0 ou seus fornecedores serão responsáveis por quaisquer danos (incluindo, sem limitação, danos por perda de dados ou lucro ou devido a interrupção dos negócios) decorrentes do uso ou da incapacidade de usar os materiais em Moto Unplugged 2.0, mesmo que Moto Unplugged 2.0 ou um representante autorizado da Moto Unplugged 2.0 tenha sido notificado oralmente ou por escrito da possibilidade de tais danos. Como algumas jurisdições não permitem limitações em garantias implícitas, ou limitações de responsabilidade por danos consequentes ou incidentes, essas limitações podem não se aplicar a você.
+
+5. Precisão dos materiais
+
+Os materiais exibidos no aplicativo do Moto Unplugged 2.0 podem incluir erros técnicos, tipográficos ou fotográficos. O Moto Unplugged 2.0 não garante que qualquer material em seu aplicativo seja preciso, completo ou atual. O Moto Unplugged 2.0 pode fazer alterações nos materiais contidos em seu aplicativo a qualquer momento, sem aviso prévio. No entanto, o Moto Unplugged 2.0 não se compromete a atualizar os materiais.
+
+6. Links
+
+O Moto Unplugged 2.0 não analisou todos os sites vinculados ao seu site e não é responsável pelo conteúdo de nenhum site vinculado. A inclusão de qualquer link não implica endosso por Moto Unplugged 2.0 do aplicativo. O uso de qualquer site vinculado é por conta e risco do usuário.Modificações o Moto Unplugged 2.0 pode revisar estes termos de serviço do site a qualquer momento, sem aviso prévio. Ao usar este aplicativo, você concorda em ficar vinculado à versão atual destes termos de serviço. Lei aplicável Estes termos e condições são regidos e interpretados de acordo com as leis do Moto Unplugged 2.0 e você se submete irrevogavelmente à jurisdição exclusiva dos tribunais naquele estado ou localidade.
+
+    </string>
 
 </resources>

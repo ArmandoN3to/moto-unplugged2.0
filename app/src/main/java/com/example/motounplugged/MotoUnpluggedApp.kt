@@ -1,5 +1,7 @@
 package com.example.motounplugged
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,16 +21,19 @@ import kotlinx.coroutines.launch
 
 import com.example.motounplugged.ui.screens.FAB_new_profile
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MotoUnpluggedApp(
-    onLogout: () -> Unit) {
+    onLogout: () -> Unit
+    ) {
     Surface(
         modifier = Modifier .fillMaxSize(),
         color = Color.White
     ) {
 
     }
+    var showLogoutDialog by remember { mutableStateOf(false) }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -53,14 +58,10 @@ fun MotoUnpluggedApp(
             AppDrawer(
                 selectedItem = selectedRoute,
                 onItemSelected = { item ->
-                    scope.launch { drawerState.close() }
                     if (item.route == "logout_action") {
-
+                        showLogoutDialog = true
                     } else {
-                        navController.navigate(item.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigate(item.route)
                     }
                 }
             )
@@ -113,18 +114,40 @@ fun MotoUnpluggedApp(
 
             floatingActionButton = {
                 when (selectedRoute) {
-                    AppScreens.Profiles.route-> {
-                        FAB_new_profile {
-                            navController.navigate(AppScreens.CreateProfile.route) // vai pra rota createprofile
-                        }
+                    AppScreens.Profiles.route -> {
+                        FAB_new_profile(navController)
                     }
                 }
             }
 
+
         ) { paddingValues ->
             AppNavHost(
+                onLogout = {
+                    navController.navigate("login") {
+                        popUpTo(0)
+                    }
+                },
                 navController = navController,
                 modifier = Modifier.padding(paddingValues)
+            )
+        }
+        if (showLogoutDialog) {
+            AlertDialog(
+                onDismissRequest = { showLogoutDialog = false },
+                title = { Text("Sair da Conta") },
+                text = { Text("Tem certeza que deseja sair?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                        onLogout()
+                    }) { Text("Sim") }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                    }) { Text("Cancelar") }
+                }
             )
         }
     }

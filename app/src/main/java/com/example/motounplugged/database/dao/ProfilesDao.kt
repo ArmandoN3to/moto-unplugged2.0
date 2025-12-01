@@ -25,12 +25,15 @@ interface ProfilesDao {
     suspend fun getProfileWithBlockedApps(id: Int): ProfileBlockedApps?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(profiles: ProfilesEntity)
+    suspend fun save(profiles: ProfilesEntity): Long
 
     @Update
     suspend fun update(profiles: ProfilesEntity)
 
     @Delete
     suspend fun delete(profiles: ProfilesEntity)
+
+    @Query("SELECT last_insert_rowid()")
+    suspend fun getLastId(): Int
 
 }

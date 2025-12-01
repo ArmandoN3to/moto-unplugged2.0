@@ -5,6 +5,7 @@ import com.example.motounplugged.database.dao.ProfilesDao
 import com.example.motounplugged.database.entities.BlockedAppsEntity
 import com.example.motounplugged.database.entities.ProfileBlockedApps
 import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.models.AppInfo
 import kotlinx.coroutines.flow.Flow
 
 //repository vai salvar meus dados da DAO
@@ -19,9 +20,10 @@ class ProfileRepository (
         return dao.getProfileById(id)
     }
     //suspend fun pois usamos coroutines (atualizar dados com base em alterações - flow)
-   suspend fun save(profiles: ProfilesEntity){
-        dao.save(profiles)
+    suspend fun save(profile: ProfilesEntity): Int {
+        return dao.save(profile).toInt()
     }
+
 
     suspend fun update(profile: ProfilesEntity) {
         dao.update(profile)
@@ -30,19 +32,37 @@ class ProfileRepository (
     suspend fun delete(profiles:ProfilesEntity){
         dao.delete(profiles)
     }
+
     // Retorna Profile com os apps bloqueados
     suspend fun getProfileWithApps(id: Int): ProfileBlockedApps? {
         return dao.getProfileWithBlockedApps(id)
     }
-    // Adiciona app bloqueado ao profile selecionado
-    suspend fun addBlockedApp(profileId: Int, appName: String, categoryApp: String, packageName: String) {
-        val app = BlockedAppsEntity(
-            nameApp = appName,
-            packageName = packageName,
-            categoryApp = categoryApp,
-            blockedProfileId = profileId
-        )
-        blockedAppsDao.save(app)
+
+    suspend fun replaceBlockedApps(profileId: Int, apps: List<AppInfo>) {
+        // Remove todos os apps atuais do perfil
+        blockedAppsDao.deleteAllBlockedAppsFromProfile(profileId)
+
+        // Cria entidades para cada app
+        val entities = apps.map {
+            BlockedAppsEntity(
+                nameApp = it.name,
+                packageName = it.packageName,
+                blockedProfileId = profileId
+            )
+        }
+
+        // Salva tudo de uma vez
+        blockedAppsDao.saveBlockedApps(entities)
+
     }
+
+    suspend fun getBlockedAppsForProfile(profileId: Int): List<BlockedAppsEntity> {
+        return blockedAppsDao.getBlockedAppsByProfile(profileId)
+    }
+
+    suspend fun getLastInsertedProfileId(): Int = dao.getLastId()
+
+
+
 
 }
