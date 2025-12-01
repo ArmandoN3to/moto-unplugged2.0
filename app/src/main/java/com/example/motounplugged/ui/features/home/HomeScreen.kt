@@ -134,7 +134,7 @@ fun HomeScreen(
                         .padding(horizontal = 10.dp)
                         .padding(top = 2.dp)) {
                     Text(
-                        text = "Ativo",
+                        text = "Ativar",
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         fontStyle = FontStyle.Normal,
