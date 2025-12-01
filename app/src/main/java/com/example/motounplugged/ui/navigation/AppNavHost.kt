@@ -97,6 +97,7 @@ fun AppNavHost(
             val id = it.arguments?.getInt("profileId") ?: -1
             SelectAppsScreen(navController = navController, profileId = id)
         }
+
     }
 }
 
