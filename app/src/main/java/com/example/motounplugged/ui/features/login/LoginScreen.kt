@@ -193,10 +193,15 @@ fun LoginScreen(
                                 if (task.isSuccessful){
                                     Toast.makeText(context,"Login successful!",
                                         Toast.LENGTH_SHORT).show()
+                                    onLoginSuccess()
 
+                                } else{
+                                    Toast.makeText(context,
+                                        task.exception?.message?: "Login failed",
+                                        Toast.LENGTH_SHORT).show()
                                 }
                             }
-                        onLoginSuccess()
+
 
                     }
                 }
