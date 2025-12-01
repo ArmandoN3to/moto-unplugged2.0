@@ -108,7 +108,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = resetEmail,
                             onValueChange = { resetEmail = it },
-                            label = {Text(text = "Registered email", color = Color.Gray)},
+                            label = {Text(text = "Email registrado", color = Color.Gray)},
                             shape = smal,
                             colors = TextFieldDefaults.colors(
                                 focusedIndicatorColor = Color.Gray,
@@ -133,14 +133,14 @@ fun LoginScreen(
                                             if (task.isSuccessful) {
                                                 Toast.makeText(
                                                     context,
-                                                    "Check your email to reset password",
+                                                    "Verifique seu e-mail para redefinir a senha",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                                 forgotPasswordDialogBox = false
                                             } else {
                                                 Toast.makeText(
                                                     context,
-                                                    "Registered email not found",
+                                                    "E-mail cadastrado não encontrado",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
@@ -148,18 +148,18 @@ fun LoginScreen(
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Please enter your registered email",
+                                        "Por favor, insira seu e-mail cadastrado.",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             }
                         ) {
-                            Text("Submit", color = Color.DarkGray)
+                            Text("Enviar", color = Color.DarkGray)
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { forgotPasswordDialogBox = false }) {
-                            Text("Cancel", color = Color.DarkGray)
+                            Text("Cancelar", color = Color.DarkGray)
                         }
                     },
                     onDismissRequest = { forgotPasswordDialogBox = false }
@@ -172,7 +172,7 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally)
             ) {
 
-                Text("Forgot Password?", color = Color.Gray)
+                Text("Esqueceu sua senha?", color = Color.Gray)
             }
 
 
@@ -191,13 +191,13 @@ fun LoginScreen(
                         Firebase.auth.signInWithEmailAndPassword(email,password)
                             .addOnCompleteListener{ task ->
                                 if (task.isSuccessful){
-                                    Toast.makeText(context,"Login successful!",
+                                    Toast.makeText(context,"Login bem-sucedido!",
                                         Toast.LENGTH_SHORT).show()
                                     onLoginSuccess()
 
                                 } else{
                                     Toast.makeText(context,
-                                        task.exception?.message?: "Login failed",
+                                        task.exception?.message?: "Falha no login",
                                         Toast.LENGTH_SHORT).show()
                                 }
                             }
