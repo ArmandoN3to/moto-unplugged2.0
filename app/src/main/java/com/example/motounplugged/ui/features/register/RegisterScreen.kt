@@ -44,8 +44,7 @@ fun RegisterScreen(
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+
 
     Surface(
         color = Color.White,
@@ -83,15 +82,15 @@ fun RegisterScreen(
             MyTextField(
                 labelValue = stringResource(id = R.string.email),
                 painterResource = painterResource(id = R.drawable.email),
-                value = email,
-                onValueChange = {email = it}
+                value = viewModel.email,
+                onValueChange = {viewModel.email = it}
             )
 
             PasswordTextField(
                 labelValue = stringResource(id = R.string.password),
                 painterResource = painterResource(id = R.drawable.password),
-                value = password,
-                onValueChange = {password = it}
+                value = viewModel.password,
+                onValueChange = {viewModel.password = it}
             )
 
             CheckboxComponent(
@@ -107,7 +106,7 @@ fun RegisterScreen(
             val context = LocalContext.current
             ButtonComponent(value = stringResource(id = R.string.register),
                 onClick = {
-                    if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || email.isBlank() || password.isBlank()) {
+                    if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || viewModel.email.isBlank() || viewModel.password.isBlank()) {
                         Toast.makeText(
                             context,
                             "Por favor, preencha todos os campos!",
@@ -121,10 +120,10 @@ fun RegisterScreen(
                                 ).show()
                     }else {
                         viewModel.registerUser(viewModel.firstName, viewModel.lastName)
-                        Firebase.auth.createUserWithEmailAndPassword(email,password)
+                        Firebase.auth.createUserWithEmailAndPassword(viewModel.email,viewModel.password)
                             .addOnCompleteListener{ task ->
                                 if (task.isSuccessful){
-                                    Toast.makeText(context,"Signup successful!",
+                                    Toast.makeText(context,"Cadastro bem-sucedido!",
                                         Toast.LENGTH_SHORT).show()
                                 }
                             }
