@@ -16,6 +16,7 @@ import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
+import com.example.motounplugged.ui.features.settings.about.AboutSettingsScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
 import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
@@ -26,6 +27,9 @@ import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.splashscreen.SplashScreen
+
+import com.example.motounplugged.ui.features.settings.general.GeneralSettingsScreen
+
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -61,7 +65,15 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                navController = navController
+            )
+        }
+        composable(AppScreens.GeneralSettings.route) {
+            GeneralSettingsScreen()
+        }
+        composable(AppScreens.AboutSettings.route) {
+            AboutSettingsScreen()
         }
         composable(AppScreens.Streak.route) {
             StreakScreen(

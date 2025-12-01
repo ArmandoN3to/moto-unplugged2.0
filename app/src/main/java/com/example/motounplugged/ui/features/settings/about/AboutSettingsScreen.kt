@@ -1,4 +1,4 @@
-package com.example.motounplugged.ui.features.settings
+package com.example.motounplugged.ui.features.settings.about
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,13 +16,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.motounplugged.ui.components.NavigationSettingsCard
+import com.example.motounplugged.ui.components.GeneralSettingsCard
+import com.example.motounplugged.ui.components.AboutApp
+
 
 @Composable
-fun SettingsScreen(
-    modifier: Modifier = Modifier,
-    navController: NavController
+fun AboutSettingsScreen(
+    modifier: Modifier = Modifier
 ){
     Column (
         modifier = Modifier
@@ -35,7 +36,7 @@ fun SettingsScreen(
                 .fillMaxWidth()
         ){
             Text(
-                text = "Configurações",
+                text = "Sobre",
                 fontSize = 25.sp,
                 fontStyle = FontStyle.Normal,
                 fontWeight = FontWeight.Bold,
@@ -44,7 +45,7 @@ fun SettingsScreen(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "Gerencie suas preferências e ajustes",
+                text = "Gerencie suas configurações",
                 fontSize = 20.sp,
                 fontStyle = FontStyle.Normal,
                 color = Color.Gray,
@@ -53,28 +54,9 @@ fun SettingsScreen(
                     .align(Alignment.CenterHorizontally)
             )
         }
+        AboutApp {
+            println("Clicou no AboutApp")
 
-        Column (
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
-        ) {
-            NavigationSettingsCard (
-                title = "Geral",
-                onClick = {
-                    navController.navigate("general_settings")
-//                    println("Navegando para Geral")
-                }
-            )
-
-            NavigationSettingsCard (
-                title = "Sobre",
-                onClick = {
-                    navController.navigate("about_settings")
-//                    println("Navegando para Geral")
-                }
-            )
         }
 
     }
