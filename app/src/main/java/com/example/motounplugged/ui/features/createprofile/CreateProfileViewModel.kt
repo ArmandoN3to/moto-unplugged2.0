@@ -3,6 +3,7 @@ package com.example.motounplugged.ui.features.createprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.models.AppInfo
 import com.example.motounplugged.repositories.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,11 +20,13 @@ data class CreateProfileUiState(
     val profileName: String = "",        // controlled input value
     val appCount: Int = 0,               // number of selected apps (display-only)
     val isImmediatelyActive: Boolean = false,
+    val selectedApps: List<AppInfo> = emptyList(),
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
-    val errorMessage: String? = null     // last error message to display
-)
+    val errorMessage: String? = null,    // last error message to display
+    val hasLoadedProfile: Boolean = false // Indica se o perfil foi carregado para edições
+    )
 
 /**
  * Events that the UI can send to the ViewModel.
@@ -37,13 +40,14 @@ sealed interface CreateProfileEvent {
     data object OnSetDurationClick : CreateProfileEvent
     data object OnInterruptionsClick : CreateProfileEvent
     data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
+    data class OnAppsSelected(val apps: List<AppInfo>) : CreateProfileEvent
+
 }
 
 class CreateProfileViewModel(
     private val repository: ProfileRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CreateProfileUiState())
-
     val uiState: StateFlow<CreateProfileUiState> = _uiState.asStateFlow()
 
     /**
@@ -76,7 +80,17 @@ class CreateProfileViewModel(
 
             is CreateProfileEvent.OnRequirePasswordChange ->
                 _uiState.update { it.copy(isImmediatelyActive = event.enabled) }
+
+            is CreateProfileEvent.OnAppsSelected -> {
+                _uiState.update {
+                    it.copy(
+                        selectedApps = event.apps,
+                        appCount = event.apps.size
+                    )
+                }
+            }
         }
+
     }
 
 
@@ -90,6 +104,8 @@ class CreateProfileViewModel(
         viewModelScope.launch {
             val currentState = _uiState.value
 
+            _uiState.update { it.copy(isLoading = true) }
+
             // Build entity from current state. Use 0 or the provided id depending on edit/create.
             val profile = ProfilesEntity(
                 idProfile = currentState.profileId ?: 0,
@@ -102,11 +118,15 @@ class CreateProfileViewModel(
 
             try {
                 // decide whether to insert or update based on isEditing flag
-                if (currentState.isEditing) {
-                    repository.update(profile)
-                } else {
-                    repository.save(profile)
-                }
+                val profileId =
+                    if (currentState.isEditing) {
+                        repository.update(profile)
+                        currentState.profileId!!
+                    } else {
+                        repository.save(profile)
+                    }
+
+                repository.replaceBlockedApps(profileId, currentState.selectedApps)
 
                 // success: stop loading and mark success (UI can navigate/respond to this)
                 _uiState.update { it.copy(isLoading = false, saveSuccess = true) }
@@ -124,8 +144,10 @@ class CreateProfileViewModel(
      * Called when screen opens in edit mode (profileId provided).
      */
     fun loadProfile(id: Int) {
+        val current = _uiState.value
+        if (current.hasLoadedProfile) return  // NÃO sobrescreve após edição
+
         viewModelScope.launch {
-            // repository.getProfileById should be a suspend function returning ProfilesEntity?
             repository.getProfileById(id)?.let { profile ->
                 _uiState.update {
                     it.copy(
@@ -133,13 +155,39 @@ class CreateProfileViewModel(
                         profileName = profile.ProfileName,
                         appCount = profile.appCount,
                         isEditing = true,
-                        // reset transient flags when loading existing data
                         isLoading = false,
                         saveSuccess = false,
-                        errorMessage = null
+                        errorMessage = null,
+                        hasLoadedProfile = true // 🔥 marca como carregado
+                    )
+                }
+
+                // Carregar apps bloqueados do banco
+                val apps = repository.getProfileWithApps(id)?.blockedApps?.map { blocked ->
+                    AppInfo(
+                        name = blocked.nameApp,
+                        packageName = blocked.packageName
+                    )
+                } ?: emptyList()
+
+                _uiState.update {
+                    it.copy(
+                        selectedApps = apps,
+                        appCount = apps.size
                     )
                 }
             }
         }
     }
+
+
+    fun setSelectedApps(apps: List<AppInfo>) {
+        _uiState.update {
+            it.copy(
+                selectedApps = apps,
+                appCount = apps.size
+            )
+        }
+    }
+
 }

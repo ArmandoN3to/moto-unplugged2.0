@@ -6,7 +6,6 @@ sealed class AppScreens(val route: String) {
     object Schedule : AppScreens("schedule")
     object Stats : AppScreens("stats")
     object Profiles : AppScreens("profiles")
-    object User : AppScreens("user")
     object Settings : AppScreens("settings")
     object GeneralSettings : AppScreens("general_settings")
     object AboutSettings : AppScreens("about_settings")
@@ -14,6 +13,7 @@ sealed class AppScreens(val route: String) {
     object CreateProfile : AppScreens("create_profile")
     object SelectApps : AppScreens("select_apps")
     object Register : AppScreens("register")
+    object Login : AppScreens("login")
     object TermsAndConditionsScreen : AppScreens("terms_and_conditions")
     object SplashScreen: AppScreens("splash")
 }

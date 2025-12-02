@@ -18,6 +18,7 @@ import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.settings.about.AboutSettingsScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
+import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.features.settings.SettingsScreen
@@ -26,15 +27,16 @@ import com.example.motounplugged.ui.features.streak.StreakScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.splashscreen.SplashScreen
-import com.example.motounplugged.ui.features.settings.UserScreen
+
 import com.example.motounplugged.ui.features.settings.general.GeneralSettingsScreen
-import com.example.motounplugged.ui.features.terms_and_conditions.TermsAndConditionsScreen
+
 import org.koin.androidx.compose.koinViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
+    onLogout: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -61,9 +63,7 @@ fun AppNavHost(
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel, navController)
         }
-        composable(AppScreens.User.route) {
-            UserScreen()
-        }
+
         composable(AppScreens.Settings.route) {
             SettingsScreen(
                 navController = navController
@@ -93,15 +93,19 @@ fun AppNavHost(
             CreateProfileScreen(navController, profileId)
         }
 
-        composable( AppScreens.Register.route){
-            RegisterScreen(onRegisterComplete = {})
+        composable(
+            route = AppScreens.SelectApps.route + "/{profileId}",
+            arguments = listOf(
+                navArgument("profileId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
+        ) {
+            val id = it.arguments?.getInt("profileId") ?: -1
+            SelectAppsScreen(navController = navController, profileId = id)
         }
-        composable(AppScreens.TermsAndConditionsScreen.route){
-            TermsAndConditionsScreen()
-        }
-        composable(AppScreens.SelectApps.route) {
-            SelectAppsScreen(navController = navController)
-        }
+
     }
 }
 

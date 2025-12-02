@@ -26,18 +26,49 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 @Composable
 fun ProfilesScreen(
     viewModel: ProfilesScreenViewModel,
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
     val profiles by viewModel.profiles.collectAsState()
-    var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
+    Scaffold { padding ->
+
+        ProfilesScreenContent(
+            profiles = profiles,
+            onProfileClick = { profileId ->
+                navController.navigate("create_profile_screen?profileId=$profileId")
+            },
+            onToggleProfile = { profile, newValue ->
+                // Desativa outro perfil ativo
+                if (newValue) {
+                    profiles.forEach { other ->
+                        if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
+                            viewModel.update(other.copy(isImmediatelyActive = false))
+                        }
+                    }
+                }
+
+                viewModel.update(profile.copy(isImmediatelyActive = newValue))
+            },
+            modifier = Modifier.padding(padding)
+        )
+    }
+}
+
+
+@Composable
+fun ProfilesScreenContent(
+    profiles: List<ProfilesEntity>,
+    onProfileClick: (Int) -> Unit,
+    onToggleProfile: (ProfilesEntity, Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Perfis de Foco",
             fontSize = 25.sp,
@@ -68,45 +99,29 @@ fun ProfilesScreen(
                     count = profile.appCount,
                     isActive = profile.isImmediatelyActive,
                     onToggle = { newValue ->
-                        if (newValue) {
-                            profiles.forEach { other ->
-                                if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
-                                    viewModel.update(other.copy(isImmediatelyActive = false))
-                                }
-                            }
-                        }
-                        viewModel.update(profile.copy(isImmediatelyActive = newValue))
+                        onToggleProfile(profile, newValue)
                     },
                     onClick = {
-                        navController.navigate("create_profile_screen?profileId=${profile.idProfile}")
+                        onProfileClick(profile.idProfile)
                     }
                 )
             }
-        }
-
-        // Diálogo de edição
-        editingProfile?.let { profile ->
-            EditProfileDialog(
-                profile = profile,
-                onDismiss = { editingProfile = null },
-                onSave = { updated ->
-                    viewModel.update(updated)
-                    editingProfile = null
-                }
-            )
         }
     }
 }
 
 
 @Composable
-fun FAB_new_profile(onClick: () -> Unit) {
+fun FAB_new_profile(navController: NavHostController) {
     FloatingActionButton(
-        onClick = { onClick() },
+        onClick = {
+            navController.navigate("create_profile_screen?profileId=-1")
+        },
         containerColor = Color.LightGray,
         contentColor = Color.Black
     ) {
         Icon(Icons.Filled.Add, contentDescription = "Adicionar perfil")
     }
 }
+
 

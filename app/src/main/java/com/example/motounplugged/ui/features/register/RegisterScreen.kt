@@ -24,25 +24,27 @@ import com.example.motounplugged.R
 import com.example.motounplugged.R.string.hello
 import com.example.motounplugged.ui.components.ButtonComponent
 import com.example.motounplugged.ui.components.CheckboxComponent
+import com.example.motounplugged.ui.components.ClickableLoginTextComponent
+import com.example.motounplugged.ui.components.DividerTextComponent
 import com.example.motounplugged.ui.components.MyTextField
 import com.example.motounplugged.ui.components.NormalTextComponents
 import com.example.motounplugged.ui.components.PasswordTextField
 import com.example.motounplugged.ui.components.TitleTextComponents
-import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun RegisterScreen(
     onRegisterComplete: () -> Unit,
+    onBackToLogin: () -> Unit,
+    onNavigateToTermsAndConditions: () -> Unit,
     viewModel: RegisterScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+
 
     Surface(
         color = Color.White,
@@ -66,56 +68,79 @@ fun RegisterScreen(
             MyTextField(
                 labelValue = stringResource(id = R.string.first_name),
                 painterResource(id = R.drawable.person_register),
-                value = firstName,
-                onValueChange = {firstName = it}
+                value = viewModel.firstName,
+                onValueChange = {viewModel.firstName = it}
             )
 
             MyTextField(
                 labelValue = stringResource(id = R.string.last_name),
                 painterResource = painterResource(id = R.drawable.person_register),
-                value = lastName,
-                onValueChange = {lastName = it}
+                value = viewModel.lastName,
+                onValueChange = {viewModel.lastName = it}
             )
 
             MyTextField(
                 labelValue = stringResource(id = R.string.email),
                 painterResource = painterResource(id = R.drawable.email),
-                value = email,
-                onValueChange = {email = it}
+                value = viewModel.email,
+                onValueChange = {viewModel.email = it}
             )
 
             PasswordTextField(
                 labelValue = stringResource(id = R.string.password),
                 painterResource = painterResource(id = R.drawable.password),
-                value = password,
-                onValueChange = {password = it}
+                value = viewModel.password,
+                onValueChange = {viewModel.password = it}
             )
 
-            CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
+            CheckboxComponent(
+                value = stringResource(id = R.string.terms_and_conditions),
+                checked = viewModel.checkedState,
+                onCheckedChange = {viewModel.checkedState = it},
                 onTextSelected = {
-                    AppScreens.TermsAndConditionsScreen.route
+                    onNavigateToTermsAndConditions()
                 })
 
             Spacer(modifier = Modifier.height(100.dp))
 
+            val context = LocalContext.current
             ButtonComponent(value = stringResource(id = R.string.register),
                 onClick = {
-                    if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
+                    if (viewModel.firstName.isBlank() || viewModel.lastName.isBlank() || viewModel.email.isBlank() || viewModel.password.isBlank()) {
                         Toast.makeText(
                             context,
                             "Por favor, preencha todos os campos!",
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else {
-                        viewModel.registerUser(firstName, lastName, email, password)
+                    } else if (!viewModel.checkedState){
+                        Toast.makeText(
+                                context,
+                                "Vocẽ deve aceitar os Termos de Serviços e Políticas de Privacidade",
+                                Toast.LENGTH_SHORT
+                                ).show()
+                    }else {
+                        viewModel.registerUser(viewModel.firstName, viewModel.lastName)
+                        Firebase.auth.createUserWithEmailAndPassword(viewModel.email,viewModel.password)
+                            .addOnCompleteListener{ task ->
+                                if (task.isSuccessful){
+                                    Toast.makeText(context,"Cadastro bem-sucedido!",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         Toast.makeText(
                             context,
                             "Usuário cadastrado com sucesso!",
                             Toast.LENGTH_SHORT
                         ).show()
+                        //onregistercomplete esta na main e serve para verificar se a os campos não estão vazios
                         onRegisterComplete()
                     }
                 })
+            Spacer(modifier = Modifier.height(25.dp))
+            DividerTextComponent()
+            ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
+                onBackToLogin()
+            })
 
 
 
@@ -131,6 +156,6 @@ fun RegisterScreen(
 @Composable
 fun registerscreen(){
     MotoUnpluggedTheme {
-        RegisterScreen(onRegisterComplete = {})
+        RegisterScreen(onRegisterComplete = {}, onBackToLogin = {},onNavigateToTermsAndConditions={})
     }
 }
