@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.example.motounplugged.ui.components.NavigationSettingsCard
 import com.example.motounplugged.ui.components.GeneralSettingsCard
 import com.example.motounplugged.ui.components.AboutApp
+import com.example.motounplugged.ui.components.AppHeaderInfo
 
 
 @Composable
@@ -31,33 +33,11 @@ fun AboutSettingsScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ){
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-            Text(
-                text = "Sobre",
-                fontSize = 25.sp,
-                fontStyle = FontStyle.Normal,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Gerencie suas configurações",
-                fontSize = 20.sp,
-                fontStyle = FontStyle.Normal,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 5.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
-        AboutApp {
-            println("Clicou no AboutApp")
-
-        }
+        AppHeaderInfo(
+            icon = painterResource(id = (com.example.motounplugged.R.drawable.logoblack)),
+            title = "Sobre o Moto Unplugged",
+            version = "1.0.0"
+        )
 
     }
 }
