@@ -34,10 +34,11 @@ sealed interface SelectAppsEvent {
 
     // Evento para o clique no botão Salvar
     data object OnSaveClick : SelectAppsEvent
+
 }
 
 sealed interface SelectAppsNavigationEvent {
-    data class NavigateBackWithResult(val selectedApps: List<String>) : SelectAppsNavigationEvent
+    data class NavigateBackWithResult(val selectedApps: List<AppInfo>) : SelectAppsNavigationEvent
 }
 
 class SelectAppsViewModel(
@@ -82,13 +83,22 @@ class SelectAppsViewModel(
             }
             SelectAppsEvent.OnSaveClick -> {
                 viewModelScope.launch {
+                    val selected = _uiState.value.allApps
+                        .filter { _uiState.value.selectedAppPackages.contains(it.packageName) }
+
                     _navigationEvent.send(
-                        SelectAppsNavigationEvent.NavigateBackWithResult(
-                            _uiState.value.selectedAppPackages.toList()
-                        )
+                        SelectAppsNavigationEvent.NavigateBackWithResult(selected)
                     )
                 }
             }
         }
     }
+
+    fun preselectApps(apps: List<AppInfo>) {
+        val pkgs = apps.map { it.packageName }.toSet()
+        _uiState.update { it.copy(selectedAppPackages = pkgs) }
+    }
+
+
+
 }

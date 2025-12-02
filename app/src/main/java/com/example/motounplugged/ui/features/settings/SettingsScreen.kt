@@ -71,7 +71,7 @@ fun SettingsScreen(
             NavigationSettingsCard (
                 title = "Sobre",
                 onClick = {
-//                    navController.navigate("about_settings")
+                    navController.navigate("about_settings")
 //                    println("Navegando para Geral")
                 }
             )

@@ -31,4 +31,8 @@ interface BlockedAppsDao {
 
     @Query("DELETE FROM BlockedApps WHERE blockedProfileId = :profileId")
     suspend fun deleteAllBlockedAppsFromProfile(profileId: Int)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveBlockedApps(apps: List<BlockedAppsEntity>)
+
 }

@@ -16,7 +16,6 @@ import androidx.room.PrimaryKey
 data class BlockedAppsEntity(
     @PrimaryKey (autoGenerate = true) val idBlockedApp: Int = 0,
     val nameApp: String,
-    val categoryApp: String,
     val packageName: String, // Alterar para selecionar o package name correto
     val blockedProfileId: Int
     ){
