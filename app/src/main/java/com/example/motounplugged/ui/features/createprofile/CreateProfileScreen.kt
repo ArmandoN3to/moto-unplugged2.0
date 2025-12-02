@@ -1,13 +1,12 @@
 package com.example.motounplugged.ui.features.createprofile
 
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.biometric.BiometricManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -15,10 +14,8 @@ import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -27,27 +24,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.biometric.BiometricPrompt
+import androidx.compose.material.icons.filled.BatterySaver
 
 
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.models.AppInfo
-import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.AsyncImage
 
 
@@ -89,7 +83,6 @@ fun CreateProfileScreen(
         }
     }
 
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -129,6 +122,7 @@ private fun CreateProfileContent(
             onEvent(CreateProfileEvent.OnWallpaperSelected(uri.toString()))
         }
     }
+
 
     Column(
         modifier = modifier
@@ -211,17 +205,28 @@ private fun CreateProfileContent(
         }
 
         SettingsRow(
-            icon = Icons.Default.Alarm,
-            title = "Duração",
-            subtitle = "Definir tempo de uso do perfil",
-            onClick = { onEvent(CreateProfileEvent.OnSetDurationClick) }
-        )
-
-        SettingsRow(
             icon = Icons.Default.NotificationsNone,
             title = "Interrupções",
             subtitle = "Gerenciar alertas e notificações",
             onClick = { onEvent(CreateProfileEvent.OnInterruptionsClick) }
+        )
+
+
+        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+
+        OutlinedTextField(
+            value = uiState.duration.toString(),
+            onValueChange = { value ->
+                val minutes = value.toIntOrNull() ?: 0
+                onEvent(CreateProfileEvent.OnDurationChanged(minutes))
+            },
+            label = { Text("Duração (minutos)") },
+            leadingIcon = { Icon(Icons.Default.Alarm, contentDescription = null) },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number
+            ),
+            singleLine = true
         )
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
@@ -236,41 +241,8 @@ private fun CreateProfileContent(
 
         Spacer(Modifier.height(16.dp))
 
-        val context = LocalContext.current
-        val activity = context as FragmentActivity
-
         Button(
-            onClick = {
-                if(uiState.passwordRequired){
-                    val executor = ContextCompat.getMainExecutor(context)
-
-                    val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("Confirme sua Identidade")
-                        .setSubtitle("E necessario autenticar para salvar o perfil")
-                        .setAllowedAuthenticators(
-                            BiometricManager.Authenticators.BIOMETRIC_STRONG or
-                                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
-                        )
-                        .build()
-
-                    val biometricPrompt = BiometricPrompt(activity, executor,
-                        object : BiometricPrompt.AuthenticationCallback() {
-                            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                                super.onAuthenticationSucceeded(result)
-                                // Se autenticou → salva o perfil de verdade
-                                onEvent(CreateProfileEvent.OnSaveProfileClick)
-                            }
-                        }
-                    )
-
-                    biometricPrompt.authenticate(promptInfo)
-                }
-                else {
-
-                    onEvent(CreateProfileEvent.OnSaveProfileClick)
-
-                }
-                      },
+            onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
             modifier = Modifier.fillMaxWidth(),
             enabled = uiState.profileName.isNotBlank() && !uiState.isLoading
         ) {
@@ -333,6 +305,7 @@ private fun SettingsSwitchRow(
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
+
 
 
 /*@Preview(showBackground = true)

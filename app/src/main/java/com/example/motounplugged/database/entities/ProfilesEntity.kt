@@ -11,6 +11,7 @@ data class ProfilesEntity (
     val isImmediatelyActive: Boolean = false,
     val wallpaperUri: String? = null,
     val duration: Int = 0,
-    val passwordRequired: Boolean = false
+    val passwordRequired: Boolean = false,
+    val batterySave: Boolean = false
 )
 
