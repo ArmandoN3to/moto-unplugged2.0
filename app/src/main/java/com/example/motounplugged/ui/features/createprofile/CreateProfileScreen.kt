@@ -41,8 +41,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import coil.compose.AsyncImage
+import androidx.biometric.BiometricPrompt
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,6 +126,33 @@ private fun CreateProfileContent(
         uri?.let {
             onEvent(CreateProfileEvent.OnWallpaperSelected(uri.toString()))
         }
+    }
+
+    val context = LocalContext.current
+    val activity = context as FragmentActivity
+
+    // Launcher Biométrico
+    fun requestAuthentication(onSuccess: () -> Unit) {
+        val executor = ContextCompat.getMainExecutor(context)
+
+        val biometricPrompt = BiometricPrompt(
+            activity,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    onSuccess()
+                }
+            }
+        )
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Confirmação necessária")
+            .setSubtitle("Use sua digital ou senha do aparelho para confirmar")
+            .setNegativeButtonText("Cancelar")
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
     }
 
 
@@ -242,7 +274,16 @@ private fun CreateProfileContent(
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
+            onClick = {
+                if (uiState.passwordRequired) {
+                    // Pedir autorização biométrica antes de salvar
+                    requestAuthentication {
+                        onEvent(CreateProfileEvent.OnSaveProfileClick)
+                    }
+                } else {
+                    onEvent(CreateProfileEvent.OnSaveProfileClick)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = uiState.profileName.isNotBlank() && !uiState.isLoading
         ) {
