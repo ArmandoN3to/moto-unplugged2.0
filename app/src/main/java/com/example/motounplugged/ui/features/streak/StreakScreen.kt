@@ -55,23 +55,6 @@ fun StreakScreen(
             .verticalScroll(rememberScrollState())
     ){
 
-        Row {
-            Spacer(modifier = Modifier .weight(1f))
-            IconButton(
-                onClick = {},
-                modifier = Modifier
-                    .size(50.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = "Share button",
-                    modifier = Modifier
-                        .size(width = 50.dp, height = 90.dp)
-                        .padding(start = 16.dp)
-                        .padding(top = 7.dp)
-                )
-            }
-        }
         Column (
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,6 +115,7 @@ fun StreakScreen(
                         color = Color.Black,
                         modifier =  Modifier
                             .padding(start = 80.dp)
+                            .padding(top = 5.dp)
                     )
                     Text(
                         text = "Dias de Ofensivas",
@@ -139,7 +123,7 @@ fun StreakScreen(
                         fontSize = 20.sp,
                         color = Color.Black,
                         modifier = Modifier
-                            .padding(start = 10.dp, end = 10.dp)
+                            .padding(start = 10.dp, end = 10.dp, bottom = 5.dp)
                     )
                 }
 
@@ -169,10 +153,10 @@ fun StreakScreen(
                 items(daysInMonth) {dayIndex ->
                     val day = dayIndex + 1
                     val color = when {
-                        day <= 9 && day <= streakCount -> Color(0xFFF7F0BE)
-                        day in 10..16 && day <= streakCount -> Color(0xFFB20027)
-                        day in 17..24 && day <= streakCount -> Color(0xFFC3D48B)
-                        day >= 25 && day <= streakCount -> Color(0xFFBB86FC)
+                        day <= 7 && day <= streakCount -> Color(0xFFF7F0BE)
+                        day in 8..14 && day <= streakCount -> Color(0xFFB20027)
+                        day in 14..21 && day <= streakCount -> Color(0xFFC3D48B)
+                        day >= 22 && day <= streakCount -> Color(0xFFBB86FC)
                         else -> Color.LightGray
                     }
                     //cria a box para fazer a sobreposição com o dia
@@ -205,8 +189,8 @@ fun StreakScreen(
         ){
             Row(
                 modifier = Modifier
-                    .width(300.dp)
-                    .padding(start = 25.dp)
+                    .height(40.dp)
+                    .padding(start = 20.dp)
             ){
                 Icon(
                     imageVector = Icons.Default.Star,
@@ -217,6 +201,7 @@ fun StreakScreen(
                         .padding(start = 10.dp)
                         .padding(top = 5.dp)
                 )
+
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = "Star icon",
@@ -264,45 +249,12 @@ fun StreakScreen(
 
             ){
                 Text(
-                    text = "1 dia",
+                    text = "3 dias - 7 dias - 10 dias - 21 dias - 30 dias",
                     fontSize = 15.sp,
                     fontStyle = FontStyle.Italic,
                     modifier = Modifier
-                        .padding(start = 13.dp)
+                        .padding(start = 5.dp)
                 )
-
-                Text(
-                    text = "10 dias",
-                    fontSize = 15.sp,
-                    fontStyle = FontStyle.Italic,
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                )
-
-                Text(
-                    text = "20 dias",
-                    fontSize = 15.sp,
-                    fontStyle = FontStyle.Italic,
-                    modifier = Modifier
-                        .padding(start = 7.dp)
-                )
-
-                Text(
-                    text = "50 dias",
-                    fontSize = 15.sp,
-                    fontStyle = FontStyle.Italic,
-                    modifier = Modifier
-                        .padding(start = 7.dp)
-                )
-
-                Text(
-                    text = "100 dias",
-                    fontSize = 15.sp,
-                    fontStyle = FontStyle.Italic,
-                    modifier = Modifier
-                        .padding(start = 10.dp,end = 7.dp)
-                )
-
 
             }
         }
