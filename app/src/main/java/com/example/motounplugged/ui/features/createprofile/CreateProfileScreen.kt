@@ -41,6 +41,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.AsyncImage
 
@@ -123,6 +125,8 @@ private fun CreateProfileContent(
         }
     }
 
+    // Salva o valor do duration
+    var durationText by remember { mutableStateOf(uiState.duration.toString()) }
 
     Column(
         modifier = modifier
@@ -211,18 +215,29 @@ private fun CreateProfileContent(
             onClick = { onEvent(CreateProfileEvent.OnInterruptionsClick) }
         )
 
-
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
 
         OutlinedTextField(
-            value = uiState.duration.toString(),
+            value = durationText,
             onValueChange = { value ->
-                val minutes = value.toIntOrNull() ?: 0
-                onEvent(CreateProfileEvent.OnDurationChanged(minutes))
+
+                durationText = value
+
+                val number = value.toIntOrNull()
+                if(number != null)  onEvent(CreateProfileEvent.OnDurationChanged(number))
             },
             label = { Text("Duração (minutos)") },
             leadingIcon = { Icon(Icons.Default.Alarm, contentDescription = null) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged{ focusState ->
+                    if (!focusState.isFocused){
+                        // Se saiu do campo duration e está vazio -> volta para o valor do viewmodel (ou zer)
+                        if(durationText.isBlank()){
+                            durationText = uiState.duration.toString()
+                        }
+                    }
+                },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
