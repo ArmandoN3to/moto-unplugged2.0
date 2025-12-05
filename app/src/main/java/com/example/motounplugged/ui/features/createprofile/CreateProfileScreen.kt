@@ -125,8 +125,14 @@ private fun CreateProfileContent(
         }
     }
 
-    // Salva o valor do duration
-    var durationText by remember { mutableStateOf(uiState.duration.toString()) }
+    var durationText by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.duration) {
+        if (uiState.isEditing || uiState.duration != 0) {
+            durationText = uiState.duration.toString()
+        }
+    }
+
 
     Column(
         modifier = modifier
@@ -220,22 +226,21 @@ private fun CreateProfileContent(
         OutlinedTextField(
             value = durationText,
             onValueChange = { value ->
-
                 durationText = value
 
                 val number = value.toIntOrNull()
-                if(number != null)  onEvent(CreateProfileEvent.OnDurationChanged(number))
+                if (number != null) {
+                    onEvent(CreateProfileEvent.OnDurationChanged(number))
+                }
             },
             label = { Text("Duração (minutos)") },
             leadingIcon = { Icon(Icons.Default.Alarm, contentDescription = null) },
             modifier = Modifier
                 .fillMaxWidth()
-                .onFocusChanged{ focusState ->
-                    if (!focusState.isFocused){
-                        // Se saiu do campo duration e está vazio -> volta para o valor do viewmodel (ou zer)
-                        if(durationText.isBlank()){
-                            durationText = uiState.duration.toString()
-                        }
+                .onFocusChanged { focusState ->
+                    if (!focusState.isFocused && durationText.isBlank()) {
+                        // volta ao valor real salvo no viewmodel
+                        durationText = "0"
                     }
                 },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -243,6 +248,7 @@ private fun CreateProfileContent(
             ),
             singleLine = true
         )
+
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
 
