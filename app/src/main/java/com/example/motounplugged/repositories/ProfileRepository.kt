@@ -24,7 +24,6 @@ class ProfileRepository (
         return dao.save(profile).toInt()
     }
 
-
     suspend fun update(profile: ProfilesEntity) {
         dao.update(profile)
     }
@@ -56,13 +55,9 @@ class ProfileRepository (
 
     }
 
-    suspend fun getBlockedAppsForProfile(profileId: Int): List<BlockedAppsEntity> {
-        return blockedAppsDao.getBlockedAppsByProfile(profileId)
+    suspend fun getDurationFromProfile(profileId: Int): Int{
+        return dao.getDurationFromProfile(profileId)
+
     }
-
-    suspend fun getLastInsertedProfileId(): Int = dao.getLastId()
-
-
-
 
 }

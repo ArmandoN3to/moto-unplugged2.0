@@ -14,7 +14,7 @@ fun EditProfileDialog(
     onDismiss: () -> Unit,
     onSave: (ProfilesEntity) -> Unit
 ) {
-    var name by remember { mutableStateOf(profile.ProfileName) }
+    var name by remember { mutableStateOf(profile.profileName) }
     var count by remember { mutableStateOf(profile.appCount.toString()) }
 
     AlertDialog(
@@ -38,7 +38,7 @@ fun EditProfileDialog(
         confirmButton = {
             TextButton(onClick = {
                 val updatedProfile = profile.copy(
-                    ProfileName = name,
+                    profileName = name,
                     appCount = count.toIntOrNull() ?: profile.appCount
                 )
                 onSave(updatedProfile)

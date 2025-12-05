@@ -1,9 +1,12 @@
 package com.example.motounplugged.ui.features.createprofile
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -21,6 +24,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material.icons.filled.BatterySaver
+
 
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,9 +35,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.motounplugged.ui.navigation.AppScreens
 import com.example.motounplugged.models.AppInfo
-import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.text.input.KeyboardType
+import coil.compose.AsyncImage
 
 
 
@@ -52,7 +64,7 @@ fun CreateProfileScreen(
         }
     }
 
-
+    // Aplicativos salvos
     val selectedApps = navController
         .currentBackStackEntry
         ?.savedStateHandle
@@ -60,7 +72,7 @@ fun CreateProfileScreen(
         ?.collectAsState()
         ?.value
 
-
+    // Retorna aplicativos salvos
     LaunchedEffect(selectedApps) {
         selectedApps?.let { viewModel.setSelectedApps(it) }
     }
@@ -105,6 +117,24 @@ private fun CreateProfileContent(
     onEvent: (CreateProfileEvent) -> Unit,
     navController: NavController
 ) {
+    // Launcher para seleção de wallpaper
+    val wallpaperPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            onEvent(CreateProfileEvent.OnWallpaperSelected(uri.toString()))
+        }
+    }
+
+    var durationText by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.duration) {
+        if (uiState.isEditing || uiState.duration != 0) {
+            durationText = uiState.duration.toString()
+        }
+    }
+
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -167,31 +197,27 @@ private fun CreateProfileContent(
 
         Spacer(Modifier.height(16.dp))
 
-        SettingsRow(
-            icon = Icons.Default.Apps,
-            title = "App layout",
-            subtitle = "4x5",
-            onClick = { onEvent(CreateProfileEvent.OnSelectAppsClick) }
-        )
+        Column {
+            SettingsRow(
+                icon = Icons.Default.Wallpaper,
+                title = "Wallpaper",
+                subtitle = if (uiState.wallpaperUri != null) "Selecionado" else "Nenhum selecionado",
+                onClick = { wallpaperPicker.launch("image/*") }
+            )
 
+            if (uiState.wallpaperUri != null) {
+                Spacer(Modifier.height(8.dp))
 
-
-        SettingsRow(
-            icon = Icons.Default.Wallpaper,
-            title = "Wallpaper",
-            subtitle = "",
-            onClick = { onEvent(CreateProfileEvent.OnSelectWallpaperClick) }
-        )
-
-
-
-        // Item para Agendamento
-        SettingsRow(
-            icon = Icons.Default.Alarm,
-            title = "Duração",
-            subtitle = "Definir tempo de uso do perfil",
-            onClick = { onEvent(CreateProfileEvent.OnSetDurationClick) }
-        )
+                AsyncImage(
+                    model = uiState.wallpaperUri,
+                    contentDescription = "Preview wallpaper",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+            }
+        }
 
 
         SettingsRow(
@@ -203,12 +229,40 @@ private fun CreateProfileContent(
 
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
 
-        // Item para o Switch
+        OutlinedTextField(
+            value = durationText,
+            onValueChange = { value ->
+                durationText = value
+
+                val number = value.toIntOrNull()
+                if (number != null) {
+                    onEvent(CreateProfileEvent.OnDurationChanged(number))
+                }
+            },
+            label = { Text("Duração (minutos)") },
+            leadingIcon = { Icon(Icons.Default.Alarm, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    if (!focusState.isFocused && durationText.isBlank()) {
+                        // volta ao valor real salvo no viewmodel
+                        durationText = "0"
+                    }
+                },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number
+            ),
+            singleLine = true
+        )
+
+
+        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+
         SettingsSwitchRow(
             icon = Icons.Default.Password,
             title = "Requer senha",
             subtitle = "Solicitar senha para sair do modo",
-            checked = uiState.isImmediatelyActive,
+            checked = uiState.passwordRequired,
             onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
         )
 
@@ -278,6 +332,7 @@ private fun SettingsSwitchRow(
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
+
 
 
 /*@Preview(showBackground = true)

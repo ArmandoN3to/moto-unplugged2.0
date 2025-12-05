@@ -19,14 +19,19 @@ data class CreateProfileUiState(
     val profileId: Int? = null,          // id when editing, null when creating
     val profileName: String = "",        // controlled input value
     val appCount: Int = 0,               // number of selected apps (display-only)
-    val isImmediatelyActive: Boolean = false,
-    val selectedApps: List<AppInfo> = emptyList(),
+    val isImmediatelyActive: Boolean = false, // if the profile is active
+    val selectedApps: List<AppInfo> = emptyList(), // selected apps of the profile
+    val wallpaperUri: String? = null,    // wallpaper selected by user
+    val duration: Int = 0,               // duration of the profile
+    val batterySave: Boolean = false,       // Battery Saving switch
+    val passwordRequired: Boolean = false, // if password is required to deactivate the profile
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
     val errorMessage: String? = null,    // last error message to display
     val hasLoadedProfile: Boolean = false // Indica se o perfil foi carregado para edições
-    )
+
+)
 
 /**
  * Events that the UI can send to the ViewModel.
@@ -36,9 +41,10 @@ sealed interface CreateProfileEvent {
     data class OnProfileNameChange(val name: String) : CreateProfileEvent
     data object OnSaveProfileClick : CreateProfileEvent
     data object OnSelectAppsClick : CreateProfileEvent
-    data object OnSelectWallpaperClick : CreateProfileEvent
-    data object OnSetDurationClick : CreateProfileEvent
+    data class OnWallpaperSelected(val uri: String) : CreateProfileEvent
+    data class OnDurationChanged(val minutes: Int) : CreateProfileEvent
     data object OnInterruptionsClick : CreateProfileEvent
+    data class OnBatterySaveClick(val enabled: Boolean): CreateProfileEvent
     data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
     data class OnAppsSelected(val apps: List<AppInfo>) : CreateProfileEvent
 
@@ -66,20 +72,18 @@ class CreateProfileViewModel(
                 // aqui você pode sinalizar navegação ou abrir uma tela
             }
 
-            CreateProfileEvent.OnSelectWallpaperClick -> {
-                println("Usuário clicou em escolher wallpaper")
-            }
+            is CreateProfileEvent.OnWallpaperSelected ->
+                _uiState.update { it.copy(wallpaperUri = event.uri) }
 
-            CreateProfileEvent.OnSetDurationClick -> {
-                println("Usuário clicou em definir duração")
-            }
+            is CreateProfileEvent.OnDurationChanged ->
+                _uiState.update { it.copy(duration = event.minutes) }
 
             CreateProfileEvent.OnInterruptionsClick -> {
                 println("Usuário clicou em gerenciar interrupções")
             }
 
             is CreateProfileEvent.OnRequirePasswordChange ->
-                _uiState.update { it.copy(isImmediatelyActive = event.enabled) }
+                _uiState.update { it.copy(passwordRequired = event.enabled) }
 
             is CreateProfileEvent.OnAppsSelected -> {
                 _uiState.update {
@@ -89,6 +93,10 @@ class CreateProfileViewModel(
                     )
                 }
             }
+
+            is CreateProfileEvent.OnBatterySaveClick ->
+            _uiState.update { it.copy(batterySave = event.enabled) }
+
         }
 
     }
@@ -109,8 +117,12 @@ class CreateProfileViewModel(
             // Build entity from current state. Use 0 or the provided id depending on edit/create.
             val profile = ProfilesEntity(
                 idProfile = currentState.profileId ?: 0,
-                ProfileName = currentState.profileName,
-                appCount = currentState.appCount
+                profileName = currentState.profileName,
+                appCount = currentState.appCount,
+                wallpaperUri = currentState.wallpaperUri,
+                passwordRequired = currentState.passwordRequired,
+                duration = currentState.duration,
+                batterySave = currentState.batterySave
             )
 
             // set loading state before making repository call
@@ -152,13 +164,14 @@ class CreateProfileViewModel(
                 _uiState.update {
                     it.copy(
                         profileId = profile.idProfile,
-                        profileName = profile.ProfileName,
+                        profileName = profile.profileName,
                         appCount = profile.appCount,
+                        wallpaperUri = profile.wallpaperUri,
+                        passwordRequired = profile.passwordRequired,
+                        duration = profile.duration,
+                        batterySave = profile.batterySave,
                         isEditing = true,
-                        isLoading = false,
-                        saveSuccess = false,
-                        errorMessage = null,
-                        hasLoadedProfile = true // 🔥 marca como carregado
+                        hasLoadedProfile = true
                     )
                 }
 
@@ -189,5 +202,7 @@ class CreateProfileViewModel(
             )
         }
     }
+
+
 
 }

@@ -8,12 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,9 +62,9 @@ fun SelectOptions(
         ) {
             profiles.forEach { profile ->
                 DropdownMenuItem(
-                    text = { Text(profile.ProfileName) }, // usa o nome real do perfil
+                    text = { Text(profile.profileName) }, // usa o nome real do perfil
                     onClick = {
-                        selectedOption = profile.ProfileName
+                        selectedOption = profile.profileName
                         expanded = false
                         onProfileSelected(profile) // notifica a seleção para o pai
                     }

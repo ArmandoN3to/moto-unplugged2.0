@@ -147,7 +147,7 @@ fun ScheduleScreen(
                     containerColor = if (isSelected) Color.Gray else Color.LightGray
                 )
             ) {
-                Text(profile.ProfileName)
+                Text(profile.profileName)
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -171,7 +171,7 @@ fun ScheduleScreen(
                 selectedProfile?.let { profile ->
                     val session = SessionsEntity(
                         id = 0, // autogerado pelo Room
-                        namePerfil = profile.ProfileName,
+                        namePerfil = profile.profileName,
                         startHour = startTime.toString(),
                         endHour = endTime.toString(),
                         dayOfWeek = selectedDaysEnums, // agora é uma lista
