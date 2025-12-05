@@ -146,12 +146,12 @@ fun MotoUnpluggedApp(
                     TextButton(onClick = {
                         showLogoutDialog = false
                         onLogout()
-                    }) { Text("Sim") }
+                    }) { Text("Sim", color = Color.Gray) }
                 },
                 dismissButton = {
                     TextButton(onClick = {
                         showLogoutDialog = false
-                    }) { Text("Cancelar") }
+                    }) { Text("Cancelar", color = Color.Gray) }
                 }
             )
         }
