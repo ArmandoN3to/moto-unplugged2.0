@@ -1,6 +1,8 @@
 package com.example.motounplugged.ui.screens
 
 import android.app.TimePickerDialog
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,9 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-//import java.time.LocalTime
-//import java.time.format.DateTimeFormatter
-//import android.app.TimePickerDialog
+import java.time.LocalTime
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,9 +22,10 @@ import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
 import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribute
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ofPattern
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleScreen(
     viewModel: ScheduleScreenViewModel
@@ -110,7 +111,7 @@ fun ScheduleScreen(
         // --- Hora de início ---
         Text("Hora de Início", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
-            text = startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+            text = startTime.format(ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
             fontSize = 36.sp
         )
@@ -123,7 +124,7 @@ fun ScheduleScreen(
         // --- Hora de fim ---
         Text("Hora de Fim", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Text(
-            text = endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+            text = endTime.format(ofPattern("HH:mm")),
             fontWeight = FontWeight.Bold,
             fontSize = 36.sp
         )

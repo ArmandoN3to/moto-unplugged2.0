@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "52594416040",
+    "project_id": "motounplugged2-0",
+    "storage_bucket": "motounplugged2-0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52594416040:android:2032df188b0a8d0fc7a59d",
+        "android_client_info": {
+          "package_name": "com.example.motounplugged"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpnppraiSqMTlIfnl-nkoWOYoD5OL4yOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

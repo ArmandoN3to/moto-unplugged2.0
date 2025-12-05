@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name = "green_lite">#C3D48B</color>
     <color name = "red">#B20027</color>
+    <color name="colorText">#1D1617</color>
+    <color name="colorGray">#7B6F72</color>
 </resources>

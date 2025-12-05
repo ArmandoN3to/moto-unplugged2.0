@@ -47,6 +47,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.AsyncImage
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateProfileScreen(
@@ -150,6 +151,10 @@ private fun CreateProfileContent(
             singleLine = true
         )
 
+
+        Spacer(Modifier.height(24.dp))
+
+        // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
@@ -213,6 +218,7 @@ private fun CreateProfileContent(
                 )
             }
         }
+
 
         SettingsRow(
             icon = Icons.Default.NotificationsNone,

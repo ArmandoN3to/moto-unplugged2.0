@@ -1,11 +1,12 @@
 package com.example.motounplugged.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,20 +16,27 @@ import com.example.motounplugged.ui.screens.ProfilesScreen
 import com.example.motounplugged.ui.screens.ScheduleScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
+import com.example.motounplugged.ui.features.settings.about.AboutSettingsScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
+import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
+import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.features.settings.SettingsScreen
 import com.example.motounplugged.ui.features.stats.StatsScreen
 import com.example.motounplugged.ui.features.streak.StreakScreen
-import com.example.motounplugged.ui.features.user.UserScreen
 import com.example.motounplugged.ui.features.selectapps.SelectAppsScreen
 import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
 import com.example.motounplugged.ui.features.splashscreen.SplashScreen
+
+import com.example.motounplugged.ui.features.settings.general.GeneralSettingsScreen
+
 import org.koin.androidx.compose.koinViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
+    onLogout: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -55,11 +63,17 @@ fun AppNavHost(
             val profilesViewModel: ProfilesScreenViewModel = koinViewModel()
             ProfilesScreen( viewModel =  profilesViewModel, navController)
         }
-        composable(AppScreens.User.route) {
-            UserScreen()
-        }
+
         composable(AppScreens.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                navController = navController
+            )
+        }
+        composable(AppScreens.GeneralSettings.route) {
+            GeneralSettingsScreen()
+        }
+        composable(AppScreens.AboutSettings.route) {
+            AboutSettingsScreen()
         }
         composable(AppScreens.Streak.route) {
             StreakScreen(
@@ -67,11 +81,11 @@ fun AppNavHost(
             )
         }
         composable(
-            route = "create_profile_screen?profileId={profileId}",
+            route = "create_profile_screen?profileId={profileId}", // Rota com argumento opcional
             arguments = listOf(
                 navArgument("profileId") {
                     type = NavType.IntType
-                    defaultValue = -1  // valor padrão se não passar
+                    defaultValue = -1 // Valor padrão se não for fornecido
                 }
             )
         ) { backStackEntry ->
@@ -91,6 +105,7 @@ fun AppNavHost(
             val id = it.arguments?.getInt("profileId") ?: -1
             SelectAppsScreen(navController = navController, profileId = id)
         }
+
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.motounplugged.ui.features.user
+package com.example.motounplugged.ui.features.settings.general
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,9 +16,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.motounplugged.ui.components.NavigationSettingsCard
+import com.example.motounplugged.ui.components.GeneralSettingsCard
+
 
 @Composable
-fun UserScreen(
+fun GeneralSettingsScreen(
     modifier: Modifier = Modifier
 ){
     Column (
@@ -32,7 +35,7 @@ fun UserScreen(
                 .fillMaxWidth()
         ){
             Text(
-                text = "Usuário",
+                text = "Geral",
                 fontSize = 25.sp,
                 fontStyle = FontStyle.Normal,
                 fontWeight = FontWeight.Bold,
@@ -41,7 +44,7 @@ fun UserScreen(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "Edite seu perfil de usuário",
+                text = "Gerencie suas configurações",
                 fontSize = 20.sp,
                 fontStyle = FontStyle.Normal,
                 color = Color.Gray,
@@ -54,16 +57,31 @@ fun UserScreen(
         Column (
             modifier = Modifier
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "*Tela em desenvolvimento*",
-                fontSize = 15.sp,
-                fontStyle =  FontStyle.Normal,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 250.dp)
+            GeneralSettingsCard(
+                title = "Idioma",
+                information = "Portugues(Sistema Padrao)",
+                onClick = {}
+            )
+            GeneralSettingsCard(
+                title = "Regiao",
+                information = "Brasil",
+                onClick = {}
+            )
+            GeneralSettingsCard(
+                title = "Formato",
+                information = "Portugues(Brasil)",
+                onClick = {}
+            )
+            NavigationSettingsCard(
+                title = "Preferencias",
+                onClick = {}
+            )
+            NavigationSettingsCard(
+                title = "Notificações",
+                onClick = {}
             )
         }
 
