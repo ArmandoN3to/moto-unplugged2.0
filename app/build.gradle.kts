@@ -51,6 +51,8 @@ dependencies {
 
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.runtime)
     //implementação koin(injeção de dependência)
     val koinVersion = "4.1.1"
     implementation("io.insert-koin:koin-android:$koinVersion")
