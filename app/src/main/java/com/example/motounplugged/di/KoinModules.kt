@@ -68,8 +68,8 @@ val viewModelModule = module {
     }
     viewModel{
         ScheduleScreenViewModel(
-            repository = get() ,
-            profilesRepository = get()
+            profileRepository = get(),
+            sessionRepository = get()
         )
     }
     viewModel{

@@ -1,26 +1,18 @@
 package com.example.motounplugged.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.motounplugged.database.entities.SessionsEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SessionsDao {
 
-    @Query("SELECT * FROM Sessions")
-    fun findAll(): Flow<List<SessionsEntity>>
+    @Query("SELECT * FROM Sessions WHERE idProfile = :profileId")
+    suspend fun getSessionsByProfile(profileId: Int): List<SessionsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(session: SessionsEntity)
-
-    @Update
-    suspend fun update(session: SessionsEntity)
+    suspend fun insertSession(session: SessionsEntity)
 
     @Delete
-    suspend fun delete(session: SessionsEntity)
+    suspend fun deleteSession(session: SessionsEntity)
 }
+

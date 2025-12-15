@@ -17,4 +17,16 @@ class Converters {
         if (data.isEmpty()) return emptyList()
         return data.split(",").mapNotNull { WeekDaysAtribute.fromName(it) }
     }
+
+    // Estes conversores não serão mais necessários se você parar de usar List<Int> para dias
+    @TypeConverter
+    fun fromListInt(list: List<Int>): String {
+        return list.joinToString(",")
+    }
+
+    @TypeConverter
+    fun toListInt(data: String): List<Int> {
+        if (data.isBlank()) return emptyList()
+        return data.split(",").map { it.toInt() }
+    }
 }
