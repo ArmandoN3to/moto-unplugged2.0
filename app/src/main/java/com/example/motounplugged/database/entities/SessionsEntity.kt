@@ -20,7 +20,7 @@ data class SessionsEntity(
     @PrimaryKey(autoGenerate = true)
     val idSession: Int = 0,
     val idProfile: Int,
-    val daysOfWeek: List<Int>,
+    val daysOfWeek: List<WeekDaysAtribute>,
     val startHour: Int,
     val startMinute: Int
 )

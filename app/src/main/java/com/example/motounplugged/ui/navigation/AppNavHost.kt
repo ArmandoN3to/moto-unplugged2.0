@@ -122,25 +122,25 @@ fun AppNavHost(
 
         // ---- SCHEDULE SCREEN ----
         composable(
-            route = "schedule_screen",
+            route = AppScreens.Schedule.route, // "schedule"
         ) {
 
-            // se não houver perfil ativo → envia para Profiles
-            if (activeProfileId == null) {
-                LaunchedEffect(Unit) {
-                    navController.navigate(AppScreens.Profiles.route)
-                }
-            } else {
-                ScheduleScreen(
-                    profileId = activeProfileId,
-                    viewModel = koinViewModel()
-                )
-            }
+            // Removida a lógica de redirecionamento agressivo (LaunchedEffect).
+            // A tela Schedule é sempre exibida. O ViewModel (koinViewModel) se encarrega
+            // de buscar o perfil ativo no 'init' e selecionar o ID correto.
+
+            // Usamos o ID ativo se existir, ou -1 como um placeholder.
+            val idToUse = activeProfileId ?: -1
+
+            ScheduleScreen(
+                profileId = idToUse, // Passa o ID (ativo ou -1)
+                viewModel = koinViewModel()
+            )
         }
 
         // ---- SCHEDULE WITH PROFILE ID (edição manual) ----
         composable(
-            route = "schedule_screen/{profileId}",
+            route = "schedule/{profileId}",
             arguments = listOf(navArgument("profileId") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("profileId") ?: -1
