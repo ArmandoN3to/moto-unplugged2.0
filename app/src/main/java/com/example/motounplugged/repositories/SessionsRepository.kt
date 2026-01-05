@@ -2,6 +2,7 @@ package com.example.motounplugged.repositories
 
 import com.example.motounplugged.database.dao.SessionsDao
 import com.example.motounplugged.database.entities.SessionsEntity
+import java.time.LocalDateTime
 
 class SessionsRepository(
     private val dao: SessionsDao
@@ -18,4 +19,5 @@ class SessionsRepository(
     suspend fun deleteSession(session: SessionsEntity) {
         dao.deleteSession(session)
     }
+
 }

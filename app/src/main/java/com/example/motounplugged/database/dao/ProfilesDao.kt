@@ -24,6 +24,9 @@ interface ProfilesDao {
     @Query("SELECT * FROM Profiles WHERE idProfile = :id")
     suspend fun getProfileWithBlockedApps(id: Int): ProfileBlockedApps?
 
+    @Query("SELECT * FROM Profiles WHERE isImmediatelyActive==1")
+    suspend fun getActiveProfile():ProfilesEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(profiles: ProfilesEntity): Long
 

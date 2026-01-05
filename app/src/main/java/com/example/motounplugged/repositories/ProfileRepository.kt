@@ -24,6 +24,10 @@ class ProfileRepository (
         return dao.save(profile).toInt()
     }
 
+    suspend fun getActiveProfile(): ProfilesEntity{
+        return dao.getActiveProfile()
+    }
+
     suspend fun update(profile: ProfilesEntity) {
         dao.update(profile)
     }
