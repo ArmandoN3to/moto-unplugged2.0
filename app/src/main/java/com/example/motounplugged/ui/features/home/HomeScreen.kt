@@ -14,39 +14,34 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.AppShortcut
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.R
 import com.example.motounplugged.ui.navigation.AppScreens
-import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: HomeScreenViewModel
 ){
+
+    val uiState by viewModel.uiState.collectAsState()
+
     Column (
         modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -101,133 +96,84 @@ fun HomeScreen(
 
 
         //card de perfis
-        OutlinedCard (
-
-            modifier = Modifier
-                .size(width = 350.dp, height = 180.dp)
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp)
-                .border(
-                    width = 3.dp,
-                    color = Color.LightGray,
-                    shape = RoundedCornerShape(5.dp)
-                )
-        ){
-            Row {
-                Text(
-                    text = "Trabalho",
-                    fontStyle = FontStyle.Italic,
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(16.dp)
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
-                )
-
-                ElevatedButton(onClick = { onClick() },
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .padding(top = 2.dp)) {
-                    Text(
-                        text = "Ativar",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        fontStyle = FontStyle.Normal,
-                        color = Color.Black,
-                        modifier = Modifier
-                            .padding(1.dp)
-                    )
-                }
-            }
-            // linha de descrição de modo
-            Row (
-            ){
-                Text(
-                    text = "Bloqueie redes sociais",
-                    fontStyle = FontStyle.Italic,
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .padding(top = 0.dp)
-                        .padding(start = 16.dp)
-                )
-            }
-
-            Row {
-                Icon(
-                    imageVector = Icons.Default.AccessTime,
-                    contentDescription = "Hash symbol",
-                    modifier = Modifier
-                        .size(width = 30.dp, height = 18.dp)
-                        .padding(start = 16.dp)
-                        .padding(top = 7.dp)
-                )
-                Text(
-                    text = "2h",
-                    fontSize = 10.sp,
-                    fontStyle = FontStyle.Italic,
-                    color = Color.Black
-                )
-
-
-                Icon(
-                    imageVector = Icons.Default.AppShortcut,
-                    contentDescription = "Hash symbol",
-                    modifier = Modifier
-                        .size(width = 30.dp, height = 18.dp)
-                        .padding(start = 16.dp)
-                        .padding(top = 7.dp)
-                )
-                Text(
-                    text = "12 apps ",
-                    fontSize = 10.sp,
-                    fontStyle = FontStyle.Italic,
-                    color = Color.Black
-                )
-            }
-            ElevatedCard(
-                shape = RoundedCornerShape(5.dp),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
+        if (uiState.activeProfile == null) {
+            Text(
+                text = "Nenhum perfil ativo",
+                fontStyle = FontStyle.Italic,
+                fontSize = 20.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .size(width = 270.dp, height = 50.dp)
-                    .padding(start = 15.dp, top = 5.dp)
+                    .padding(16.dp)
+            )
+        } else {
+            val profile = uiState.activeProfile
 
+            OutlinedCard(
+                modifier = Modifier
+                    .size(width = 350.dp, height = 200.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 20.dp)
+                    .border(
+                        width = 3.dp,
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(5.dp)
+                    )
             ) {
-                Row {
+                Column(Modifier.padding(16.dp)) {
+
                     Text(
-                        text = "Horário da sessão",
-                        fontSize = 10.sp,
+                        text = profile!!.profileName,
                         fontStyle = FontStyle.Italic,
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .padding(start = 5.dp),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                Row {
-                    Text(
-                        text = "14:00 - 16:00",
-                        fontSize = 10.sp,
-                        fontStyle = FontStyle.Italic,
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .padding(start = 6.dp, end = 10.dp),
-                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
                     )
 
+                    Spacer(Modifier.height(8.dp))
+
+                    Text(
+                        text = "Duração: ${profile!!.duration} min",
+                        fontSize = 14.sp,
+                        fontStyle = FontStyle.Normal,
+                        color = Color.Black
+                    )
+
+                    Text(
+                        text = "Apps bloqueados: ${uiState.blockedAppsCount}",
+                        fontSize = 14.sp,
+                        fontStyle = FontStyle.Normal,
+                        color = Color.Black
+                    )
+
+                    Spacer(Modifier.height(12.dp))
+
+                    //Adicionar próxima sessão
+                    uiState.nextSession?.let { session ->
+                        Text(
+                            text = "Próxima sessão: ${session.startHour
+                                .toString()
+                                .padStart(2, '0')}:${session.startMinute
+                                .toString()
+                                .padStart(2, '0')}",
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    ElevatedButton(
+                        onClick = { viewModel.onActivateProfile() },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Ativar")
+                    }
+
                 }
-
-
             }
-
         }
+
         Spacer( modifier = Modifier.height(10.dp))
         Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 30.dp))
 
@@ -378,7 +324,7 @@ fun HomeScreen(
             }
             ElevatedButton(
                 border = BorderStroke(2.dp,Color.LightGray),
-                onClick = { navController.navigate(AppScreens.Schedule.route) },
+                onClick = {navController.navigate(AppScreens.Schedule.route)},
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .padding(start = 15.dp)
@@ -403,15 +349,4 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenPreview() {
-    MotoUnpluggedTheme {
-        val navController = rememberNavController()
-        HomeScreen(
-            navController = navController,
-            onClick = {}
-        )
-    }
-}
 

@@ -20,6 +20,7 @@ import com.example.motounplugged.ui.features.createprofile.CreateProfileScreen
 import com.example.motounplugged.ui.features.createprofile.CreateProfileViewModel
 import com.example.motounplugged.ui.features.settings.about.AboutSettingsScreen
 import com.example.motounplugged.ui.features.home.HomeScreen
+import com.example.motounplugged.ui.features.home.HomeScreenViewModel
 import com.example.motounplugged.ui.features.login.LoginScreen
 import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 import com.example.motounplugged.ui.features.register.RegisterScreen
@@ -62,7 +63,7 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Home.route) {
-            HomeScreen(navController = navController, onClick = {})
+            HomeScreen(navController = navController,  viewModel = koinViewModel())
         }
 
         composable(AppScreens.Stats.route) {
