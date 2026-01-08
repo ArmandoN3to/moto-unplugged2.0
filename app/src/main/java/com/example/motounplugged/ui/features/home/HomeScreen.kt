@@ -45,7 +45,7 @@ fun HomeScreen(
     Column (
         modifier = modifier
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 10.dp)
             .fillMaxSize()
 
     ){
@@ -58,7 +58,7 @@ fun HomeScreen(
                 contentDescription = "Logo Motounplugged",
                 modifier = Modifier
                     .size(width = 50.dp, height = 50.dp)
-                    .padding(top = 15.dp)
+                    .padding(top = 10.dp)
 
             )
 
@@ -105,6 +105,8 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(16.dp)
+                    .padding(start = 85.dp)
+
             )
         } else {
             val profile = uiState.activeProfile
@@ -167,7 +169,7 @@ fun HomeScreen(
                         onClick = { viewModel.onActivateProfile() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Ativar")
+                        Text("Ativar",color = Color.DarkGray)
                     }
 
                 }
@@ -215,7 +217,7 @@ fun HomeScreen(
                         fontWeight = FontWeight.Bold,
                         fontSize = 10.sp,
                         fontStyle = FontStyle.Normal,
-                        color = Color.Black,
+                        color = Color.DarkGray,
                         modifier = Modifier
                             .padding(1.dp)
                     )
@@ -223,7 +225,10 @@ fun HomeScreen(
             }
 
 
-            Row {
+            Row(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+            ) {
 
                 Text(
                     text = "3h 42min",
@@ -258,7 +263,7 @@ fun HomeScreen(
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = Color.DarkGray,
                     modifier = Modifier
                         .padding(start = 110.dp)
                 )
@@ -273,7 +278,7 @@ fun HomeScreen(
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = Color.DarkGray,
                     modifier = Modifier
                         .padding(end = 115.dp)
                 )
@@ -317,7 +322,7 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Normal,
-                    color = Color.Black,
+                    color = Color.DarkGray,
                     modifier = Modifier
                         .padding(1.dp)
                 )
@@ -335,7 +340,7 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Normal,
-                    color = Color.Black,
+                    color = Color.DarkGray,
                     modifier = Modifier
                         .padding(1.dp)
                 )
