@@ -1,5 +1,6 @@
 package com.example.motounplugged.ui.features.schedule
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -141,12 +142,16 @@ fun ScheduleScreen(
                 onClick = { viewModel.onEvent(ScheduleEvent.OnSaveSession) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Gray, contentColor = Color.DarkGray
+            )
             ) {
                 Text(
                     text = "Salvar Agendamento",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
         }
@@ -211,7 +216,14 @@ fun ProfileSelector(
                             contentDescription = null,
                             tint = Color.Gray // Ícone em preto
                         )
-                    }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.DarkGray,
+                    unfocusedBorderColor = Color.LightGray,
+                    focusedLabelColor = Color.DarkGray,
+                    unfocusedLabelColor = Color.Gray,
+                    cursorColor = Color.DarkGray
+                )
                 )
 
                 ExposedDropdownMenu(
@@ -294,6 +306,12 @@ fun DaysOfWeekSelector(
         ) {
             orderedDays.forEach { day ->
                 FilterChip(
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = Color.Gray,
+                        selectedLabelColor = Color.White,
+                        containerColor = Color.LightGray,
+                        labelColor = Color.Black
+                    ),
                     selected = selectedDays.contains(day),
                     onClick = { onDayToggle(day) },
                     label = {
@@ -416,7 +434,7 @@ fun SessionsListComponent(
                                 Icon(
                                     Icons.Default.Delete,
                                     contentDescription = "Apagar Sessão",
-                                    tint = Color.Red // Ícone de deletar agora é preto
+                                    tint = Color.DarkGray //
                                 )
                             }
                         }
