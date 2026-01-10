@@ -17,5 +17,4 @@ class MotoUnpluggedApplication : Application() {
             modules(listOf(databaseModule,repositoryModule, viewModelModule,useCaseModule))
         }
     }
-
 }
