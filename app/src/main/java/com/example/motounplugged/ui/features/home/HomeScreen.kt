@@ -231,7 +231,7 @@ fun HomeScreen(
             ) {
 
                 Text(
-                    text = "3h 42min",
+                    text = "3h 15min",
                     fontSize = 15.sp,
                     fontStyle = FontStyle.Italic,
                     color = Color.Black,
@@ -245,7 +245,7 @@ fun HomeScreen(
                 )
 
                 Text(
-                    text = "45 min ",
+                    text = "12 dias ",
                     fontSize = 15.sp,
                     fontStyle = FontStyle.Italic,
                     color = Color.Black,
@@ -274,13 +274,13 @@ fun HomeScreen(
                 )
 
                 Text(
-                    text = "Média",
+                    text = "Melhor sequência",
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Bold,
                     color = Color.DarkGray,
                     modifier = Modifier
-                        .padding(end = 115.dp)
+                        .padding(end = 90.dp)
                 )
             }
         }
