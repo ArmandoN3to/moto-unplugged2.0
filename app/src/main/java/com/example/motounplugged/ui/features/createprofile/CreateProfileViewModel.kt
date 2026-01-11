@@ -25,6 +25,7 @@ data class CreateProfileUiState(
     val duration: Int = 0,               // duration of the profile
     val batterySave: Boolean = false,       // Battery Saving switch
     val passwordRequired: Boolean = false, // if password is required to deactivate the profile
+    val interruptions: Boolean = false,   // Notifications Interruptions Button
     val isEditing: Boolean = false,      // true = edit mode
     val isLoading: Boolean = false,      // show progress indicator
     val saveSuccess: Boolean = false,    // one-time success flag (UI should handle reset)
@@ -43,10 +44,11 @@ sealed interface CreateProfileEvent {
     data object OnSelectAppsClick : CreateProfileEvent
     data class OnWallpaperSelected(val uri: String) : CreateProfileEvent
     data class OnDurationChanged(val minutes: Int) : CreateProfileEvent
-    data object OnInterruptionsClick : CreateProfileEvent
+    data class OnInterruptionsClick(val enabled: Boolean) : CreateProfileEvent
     data class OnBatterySaveClick(val enabled: Boolean): CreateProfileEvent
     data class OnRequirePasswordChange(val enabled: Boolean) : CreateProfileEvent
     data class OnAppsSelected(val apps: List<AppInfo>) : CreateProfileEvent
+    data object OnClearWallpaper : CreateProfileEvent
 
 }
 
@@ -78,8 +80,8 @@ class CreateProfileViewModel(
             is CreateProfileEvent.OnDurationChanged ->
                 _uiState.update { it.copy(duration = event.minutes) }
 
-            CreateProfileEvent.OnInterruptionsClick -> {
-                println("Usuário clicou em gerenciar interrupções")
+            is CreateProfileEvent.OnInterruptionsClick -> {
+                _uiState.update { it.copy(interruptions = event.enabled) }
             }
 
             is CreateProfileEvent.OnRequirePasswordChange ->
@@ -96,6 +98,9 @@ class CreateProfileViewModel(
 
             is CreateProfileEvent.OnBatterySaveClick ->
             _uiState.update { it.copy(batterySave = event.enabled) }
+
+            is CreateProfileEvent.OnClearWallpaper ->
+                clearWallpaper()
 
         }
 
@@ -121,6 +126,7 @@ class CreateProfileViewModel(
                 appCount = currentState.appCount,
                 wallpaperUri = currentState.wallpaperUri,
                 passwordRequired = currentState.passwordRequired,
+                interruptions = currentState.interruptions,
                 duration = currentState.duration,
                 batterySave = currentState.batterySave
             )
@@ -170,6 +176,7 @@ class CreateProfileViewModel(
                         passwordRequired = profile.passwordRequired,
                         duration = profile.duration,
                         batterySave = profile.batterySave,
+                        interruptions = profile.interruptions,
                         isEditing = true,
                         hasLoadedProfile = true
                     )
@@ -203,6 +210,10 @@ class CreateProfileViewModel(
         }
     }
 
-
+    fun clearWallpaper() {
+        _uiState.update {
+            it.copy(wallpaperUri = null)
+        }
+    }
 
 }
