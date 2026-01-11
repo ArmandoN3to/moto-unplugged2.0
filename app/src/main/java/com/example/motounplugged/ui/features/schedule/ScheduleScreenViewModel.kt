@@ -16,7 +16,7 @@ data class ScheduleUiState(
 
     // Alterado para Set<WeekDaysAtribute>
     val selectedDays: Set<WeekDaysAtribute> = emptySet(),
-    val startHour: Int = 8,
+    val startHour: Int = 0,
     val startMinute: Int = 0,
 
     val profiles: List<ProfilesEntity> = emptyList(),

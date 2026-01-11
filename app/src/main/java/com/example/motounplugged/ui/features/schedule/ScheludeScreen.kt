@@ -65,6 +65,7 @@ fun ScheduleScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(top = 10.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(8.dp))
@@ -82,7 +83,10 @@ fun ScheduleScreen(
                 Text(
                     "Nenhum perfil encontrado.",
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING, vertical = 8.dp)
+                    modifier = Modifier
+                        .padding(horizontal = HORIZONTAL_PADDING, vertical = 8.dp)
+                        .padding(start = 85.dp)
+
                 )
             }
 
