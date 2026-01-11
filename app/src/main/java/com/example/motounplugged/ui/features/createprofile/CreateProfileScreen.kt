@@ -252,17 +252,12 @@ private fun CreateProfileContent(
             subtitle = "Gerenciar alertas e notificações",
             checked = uiState.interruptions,
             onCheckedChange = {
-                val notificationsManager =
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as
-                            NotificationManager
-                if (!notificationsManager.isNotificationPolicyAccessGranted){
-                    // Força o app a abrir o dnd para permissão
-                    try {
-                        notificationsManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-                    }catch (e: SecurityException){
-                    }
+                val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                if (!nm.isNotificationPolicyAccessGranted) {
                     context.startActivity(
                         Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     )
                 } else {
                     onEvent(CreateProfileEvent.OnInterruptionsClick(it))
