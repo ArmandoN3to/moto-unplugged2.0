@@ -2,6 +2,7 @@ package com.example.motounplugged.di
 
 import androidx.room.Room
 import com.example.motounplugged.database.MotoUnpluggedDataBase
+import com.example.motounplugged.database.datastore.FocusDataStore
 import com.example.motounplugged.repositories.BlockedAppsRepository
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.domain.usecase.GetInstalledAppsUseCase
@@ -44,6 +45,13 @@ val databaseModule = module {
     single { get<MotoUnpluggedDataBase>().blockedAppsDao() }
 
 }
+// Dados do DataStore
+val dataStoreModule = module {
+    single {
+        FocusDataStore(androidContext())
+    }
+
+}
 
 // --- Repositórios ---
 val repositoryModule = module {
@@ -77,7 +85,7 @@ val viewModelModule = module {
         RegisterScreenViewModel(get())
     }
     viewModel {
-        HomeScreenViewModel(get(), get())
+        HomeScreenViewModel(get(), get(), get())
     }
     /*viewModel{
         LoginScreenViewModel(get())

@@ -1,6 +1,7 @@
 package com.example.motounplugged
 
 import android.app.Application
+import com.example.motounplugged.di.dataStoreModule
 import com.example.motounplugged.di.databaseModule
 import com.example.motounplugged.di.repositoryModule
 import com.example.motounplugged.di.viewModelModule
@@ -14,7 +15,9 @@ class MotoUnpluggedApplication : Application() {
 
         startKoin{
             androidContext(this@MotoUnpluggedApplication)
-            modules(listOf(databaseModule,repositoryModule, viewModelModule,useCaseModule))
+            modules(listOf(databaseModule,repositoryModule, viewModelModule,useCaseModule,
+                dataStoreModule
+            ))
         }
     }
 
