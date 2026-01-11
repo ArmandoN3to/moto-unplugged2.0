@@ -12,6 +12,7 @@ data class ProfilesEntity (
     val wallpaperUri: String? = null,
     val duration: Int = 0,
     val passwordRequired: Boolean = false,
-    val batterySave: Boolean = false
+    val batterySave: Boolean = false,
+    val interruptions: Boolean = true
 )
 

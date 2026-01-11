@@ -34,7 +34,8 @@ fun ProfileCard(
     Card(
         modifier = modifier
             .fillMaxWidth(0.9f)
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp).
+            clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFEFEFEF)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -42,8 +43,8 @@ fun ProfileCard(
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.
-                    fillMaxWidth().
-                    clickable { onClick() },
+                    fillMaxWidth()
+                    ,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

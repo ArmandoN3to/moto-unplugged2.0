@@ -1,5 +1,12 @@
 package com.example.motounplugged.ui.features.createprofile
 
+import android.app.Activity
+import android.app.KeyguardManager
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -25,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.filled.BatterySaver
+import androidx.compose.material.icons.filled.Close
 
 
 import androidx.compose.ui.draw.clip
@@ -43,6 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.AsyncImage
 
@@ -133,6 +142,8 @@ private fun CreateProfileContent(
             durationText = uiState.duration.toString()
         }
     }
+    // Salva se o usuário confirmou sua senha
+    var pendingPasswordRequired by remember { mutableStateOf<Boolean?>(null) }
 
 
     Column(
@@ -140,7 +151,7 @@ private fun CreateProfileContent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
             value = uiState.profileName,
@@ -150,9 +161,6 @@ private fun CreateProfileContent(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
-
-
-        Spacer(Modifier.height(24.dp))
 
         // Card para selecionar apps
         Card(
@@ -194,9 +202,6 @@ private fun CreateProfileContent(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
 
-
-        Spacer(Modifier.height(16.dp))
-
         Column {
             SettingsRow(
                 icon = Icons.Default.Wallpaper,
@@ -207,27 +212,57 @@ private fun CreateProfileContent(
 
             if (uiState.wallpaperUri != null) {
                 Spacer(Modifier.height(8.dp))
+                Box {
+                    AsyncImage(
+                        model = uiState.wallpaperUri,
+                        contentDescription = "Preview wallpaper",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                    )
 
-                AsyncImage(
-                    model = uiState.wallpaperUri,
-                    contentDescription = "Preview wallpaper",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                )
+                    IconButton(
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        onClick = {onEvent(CreateProfileEvent.OnClearWallpaper)}
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Remove Wallpaper"
+                        )
+                    }
+                }
             }
         }
 
+        val context = LocalContext.current
 
-        SettingsRow(
+        SettingsSwitchRow(
             icon = Icons.Default.NotificationsNone,
             title = "Interrupções",
             subtitle = "Gerenciar alertas e notificações",
-            onClick = { onEvent(CreateProfileEvent.OnInterruptionsClick) }
+            checked = uiState.interruptions,
+            onCheckedChange = {
+                val notificationsManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as
+                            NotificationManager
+                if (!notificationsManager.isNotificationPolicyAccessGranted){
+                    // Força o app a abrir o dnd para permissão
+                    try {
+                        notificationsManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+                    }catch (e: SecurityException){
+                    }
+                    context.startActivity(
+                        Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                    )
+                } else {
+                    onEvent(CreateProfileEvent.OnInterruptionsClick(it))
+                }
+
+            }
         )
 
-        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp))
 
         OutlinedTextField(
             value = durationText,
@@ -256,17 +291,48 @@ private fun CreateProfileContent(
         )
 
 
-        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp))
+
+        val keyguardManager =
+            context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        val unlockLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // agora sim altera o estado real
+                pendingPasswordRequired?.let {
+                    onEvent(CreateProfileEvent.OnRequirePasswordChange(it))
+                }
+            }
+
+            // limpa o estado temporário
+            pendingPasswordRequired = null
+        }
 
         SettingsSwitchRow(
             icon = Icons.Default.Password,
             title = "Requer senha",
-            subtitle = "Solicitar senha para sair do modo",
+            subtitle =
+                if (uiState.passwordRequired)
+                    "Senha do dispositivo será exigida para sair do modo"
+                else
+                    "Desativado",
             checked = uiState.passwordRequired,
-            onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
-        )
+            onCheckedChange = { newValue ->
 
-        Spacer(Modifier.height(16.dp))
+                // guarda a intenção do usuário
+                pendingPasswordRequired = newValue
+
+                if (keyguardManager.isDeviceSecure) {
+                    val intent = keyguardManager.createConfirmDeviceCredentialIntent(
+                        "Confirmar identidade",
+                        "Digite a senha do dispositivo para alterar esta configuração"
+                    )
+                    unlockLauncher.launch(intent)
+                }
+            }
+        )
 
         Button(
             onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
