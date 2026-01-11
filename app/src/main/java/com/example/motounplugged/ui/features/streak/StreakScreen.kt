@@ -134,7 +134,7 @@ fun StreakScreen(
                         )
                 ){
                     Text(
-                        text = "28",
+                        text = "7",
                         fontStyle = FontStyle.Italic,
                         fontSize = 20.sp,
                         color = Color.Black,
@@ -323,7 +323,7 @@ fun StreakScreen(
                     ) {
 
                         Text(
-                            "Compartilhar tela",
+                            "Compartilhar ofensiva",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -339,7 +339,7 @@ fun StreakScreen(
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.clickable {
-                                    shareToWhatsApp(context, "Minha mensagem de ofensiva!")
+                                    shareToWhatsApp(context, "Minha ofensiva no Moto Unplugged é de 12 dias!")
                                 }
                             ) {
                                 Image(
@@ -354,7 +354,7 @@ fun StreakScreen(
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.clickable {
-                                    shareToInstagram(context, "Minha mensagem de ofensiva!")
+                                    shareToInstagram(context, "Minha ofensiva no Moto Unplugged é de 12 dias!")
                                 }
                             ) {
                                 Image(
@@ -369,7 +369,7 @@ fun StreakScreen(
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.clickable {
-                                    shareToFacebook(context, "Minha mensagem de ofensiva!")
+                                    shareToFacebook(context, "Minha ofensiva no Moto Unplugged é de 12 dias!")
                                 }
                             ) {
                                 Image(

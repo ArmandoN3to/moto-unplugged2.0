@@ -2,6 +2,7 @@ package com.example.motounplugged.ui.features.createprofile
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.AsyncImage
 
@@ -148,7 +150,14 @@ private fun CreateProfileContent(
             label = { Text("Nome do Perfil") },
             leadingIcon = { Icon(Icons.Default.AppRegistration, contentDescription = null) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.Gray,
+                focusedLabelColor = Color.DarkGray,
+                unfocusedLabelColor = Color.Gray,
+                cursorColor = Color.Gray
+            )
         )
 
 
@@ -195,8 +204,6 @@ private fun CreateProfileContent(
         }
 
 
-        Spacer(Modifier.height(16.dp))
-
         Column {
             SettingsRow(
                 icon = Icons.Default.Wallpaper,
@@ -218,7 +225,6 @@ private fun CreateProfileContent(
                 )
             }
         }
-
 
         SettingsRow(
             icon = Icons.Default.NotificationsNone,
@@ -252,7 +258,15 @@ private fun CreateProfileContent(
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
-            singleLine = true
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.Gray,
+                focusedLabelColor = Color.DarkGray,
+                unfocusedLabelColor = Color.Gray,
+                cursorColor = Color.Gray
+            )
+
         )
 
 
@@ -264,6 +278,7 @@ private fun CreateProfileContent(
             subtitle = "Solicitar senha para sair do modo",
             checked = uiState.passwordRequired,
             onCheckedChange = { onEvent(CreateProfileEvent.OnRequirePasswordChange(it)) }
+
         )
 
         Spacer(Modifier.height(16.dp))
@@ -271,7 +286,13 @@ private fun CreateProfileContent(
         Button(
             onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
             modifier = Modifier.fillMaxWidth(),
-            enabled = uiState.profileName.isNotBlank() && !uiState.isLoading
+            enabled = uiState.profileName.isNotBlank() && !uiState.isLoading,
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.Gray,
+                contentColor = Color.White,          // texto branco
+                disabledContainerColor = Color.LightGray,
+                disabledContentColor = Color.White
+            )
         ) {
             Text(
                 text = if (uiState.isEditing) "Atualizar Perfil" else "Salvar",

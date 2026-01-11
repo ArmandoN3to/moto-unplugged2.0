@@ -56,31 +56,24 @@ fun GeneralSettingsScreen(
 
         Column (
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(top = 10.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             GeneralSettingsCard(
                 title = "Idioma",
-                information = "Portugues(Sistema Padrao)",
+                information = "Português (Sistema Padrão)",
                 onClick = {}
             )
             GeneralSettingsCard(
-                title = "Regiao",
+                title = "Região",
                 information = "Brasil",
                 onClick = {}
             )
             GeneralSettingsCard(
                 title = "Formato",
-                information = "Portugues(Brasil)",
-                onClick = {}
-            )
-            NavigationSettingsCard(
-                title = "Preferencias",
-                onClick = {}
-            )
-            NavigationSettingsCard(
-                title = "Notificações",
+                information = "Português (Brasil)",
                 onClick = {}
             )
         }
