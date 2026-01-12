@@ -35,7 +35,6 @@ fun ProfilesScreen(
                 navController.navigate("create_profile_screen?profileId=$profileId")
             },
             onToggleProfile = { profile, newValue ->
-                // Desativa outro perfil ativo
                 if (newValue) {
                     profiles.forEach { other ->
                         if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
@@ -95,6 +94,7 @@ fun ProfilesScreenContent(
                     title = profile.profileName,
                     count = profile.appCount,
                     isActive = profile.isImmediatelyActive,
+                    isPasswordRequired = profile.passwordRequired,
                     onToggle = { newValue ->
                         onToggleProfile(profile, newValue)
                     },

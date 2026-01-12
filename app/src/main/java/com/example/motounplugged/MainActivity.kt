@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.features.register.RegisterScreen
 import com.example.motounplugged.ui.navigation.AppNavHost
@@ -23,7 +24,7 @@ import com.google.firebase.FirebaseApp
 
 //import androidx.core.splashscreen.installSplashScreen
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
