@@ -1,5 +1,14 @@
 package com.example.motounplugged.ui.features.home
 
+import android.app.Activity
+import android.app.KeyguardManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -14,23 +23,31 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.motounplugged.R
+import com.example.motounplugged.database.entities.ProfilesEntity
+import com.example.motounplugged.models.Profile
+import com.example.motounplugged.services.FocusActions
+import com.example.motounplugged.services.FocusModeService
 import com.example.motounplugged.ui.navigation.AppScreens
 
 @Composable
@@ -41,6 +58,76 @@ fun HomeScreen(
 ){
 
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val isFocusActive by viewModel.isFocusActive.collectAsState()
+
+    val keyguardManager =
+        context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+
+    fun startFocusService(context: Context, uiState: HomeUiState) {
+        val profile = uiState.activeProfile ?: return
+
+        val intent = Intent(context, FocusModeService::class.java).apply {
+            action = FocusActions.ACTION_START
+            putExtra("profileId", profile.idProfile)
+            putExtra("durationMinutes", profile.duration)
+            putExtra("interruptions", profile.interruptions)
+            putExtra("passwordRequired", profile.passwordRequired)
+        }
+
+        ContextCompat.startForegroundService(context, intent)
+    }
+
+    fun stopFocusService(context: Context) {
+        val intent = Intent(context, FocusModeService::class.java).apply {
+            action = FocusActions.ACTION_STOP
+        }
+        context.startService(intent)
+    }
+
+    val unlockLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            stopFocusService(context)
+        }
+    }
+
+    fun requestDeviceAuthentication() {
+        if (!keyguardManager.isDeviceSecure) {
+            // Aqui você pode usar Snackbar / Toast
+            Toast.makeText(
+                context,
+                "Defina uma senha no dispositivo para desativar o modo foco",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val intent = keyguardManager.createConfirmDeviceCredentialIntent(
+            "Confirmar identidade",
+            "Digite a senha do dispositivo para sair do modo foco"
+        )
+
+        unlockLauncher.launch(intent)
+    }
+
+    // Permissão para notficaições
+    val notificationPermissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                startFocusService(context, uiState)
+            } else {
+                Toast.makeText(
+                    context,
+                    "Permissão de notificação é necessária para o modo foco",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
 
     Column (
         modifier = modifier
@@ -135,7 +222,7 @@ fun HomeScreen(
                     Spacer(Modifier.height(8.dp))
 
                     Text(
-                        text = "Duração: ${profile!!.duration} min",
+                        text = "Duração: ${profile.duration} min",
                         fontSize = 14.sp,
                         fontStyle = FontStyle.Normal,
                         color = Color.Black
@@ -166,10 +253,37 @@ fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
 
                     ElevatedButton(
-                        onClick = { viewModel.onActivateProfile() },
-                        modifier = Modifier.fillMaxWidth()
+                        onClick = {
+                            if (isFocusActive) {
+                                if (uiState.activeProfile!!.passwordRequired) {
+                                    requestDeviceAuthentication()
+                                } else {
+                                    stopFocusService(context)
+                                }
+                            } else {
+                                if (ContextCompat.checkSelfPermission(
+                                        context,
+                                        android.Manifest.permission.POST_NOTIFICATIONS
+                                    ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    notificationPermissionLauncher.launch(
+                                        android.Manifest.permission.POST_NOTIFICATIONS
+                                    )
+                                }
+
+                                startFocusService(context, uiState)
+                            }
+                        } ,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                                containerColor = if (!isFocusActive) Color.hsv(205f,1f, 0.95f) else Color.Gray,
+                                contentColor = Color.White
+                        )
                     ) {
-                        Text("Ativar",color = Color.DarkGray)
+                        Text(
+                            text = if (isFocusActive) "Desativar" else "Ativar",
+                            color = Color.White
+                        )
                     }
 
                 }
@@ -322,7 +436,7 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Normal,
-                    color = Color.DarkGray,
+                    color = Color.Black,
                     modifier = Modifier
                         .padding(1.dp)
                 )
@@ -340,18 +454,16 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
                     fontStyle = FontStyle.Normal,
-                    color = Color.DarkGray,
+                    color = Color.Black,
                     modifier = Modifier
                         .padding(1.dp)
                 )
             }
         }
 
-
-
-
-
     }
+
 }
+
 
 

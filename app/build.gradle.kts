@@ -70,6 +70,9 @@ dependencies {
     //implementação material extended
     implementation("androidx.compose.material:material-icons-extended: 2.6.0")
 
+    //implementação do datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended.android)
