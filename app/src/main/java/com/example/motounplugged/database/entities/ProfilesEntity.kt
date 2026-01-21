@@ -5,14 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Profiles")
 data class ProfilesEntity (
-    @PrimaryKey (autoGenerate = true) val idProfile: Int = 0,
-    val profileName: String,
+    @PrimaryKey (autoGenerate = true) val id: Int = 0,
+    val ProfileName: String,
     val appCount: Int = 0,
-    val isImmediatelyActive: Boolean = false,
-    val wallpaperUri: String? = null,
-    val duration: Int = 0,
-    val passwordRequired: Boolean = false,
-    val batterySave: Boolean = false,
-    val interruptions: Boolean = true
+    val isImmediatelyActive: Boolean = false
 )
 

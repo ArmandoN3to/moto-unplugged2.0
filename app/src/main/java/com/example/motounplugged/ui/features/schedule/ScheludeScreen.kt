@@ -1,450 +1,216 @@
-package com.example.motounplugged.ui.features.schedule
+package com.example.motounplugged.ui.screens
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color // Importar Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.database.entities.SessionsEntity
 import com.example.motounplugged.database.entities.atributeenums.WeekDaysAtribute
+import com.example.motounplugged.ui.features.schedule.ScheduleScreenViewModel
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
-// Constantes de estilo
-private val HORIZONTAL_PADDING = 16.dp
-private val VERTICAL_SPACER = 24.dp
-private val ICON_SIZE = 20.dp
-private val CARD_CORNER_RADIUS = 8.dp
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
-    profileId: Int,
     viewModel: ScheduleScreenViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
+    val weekDays = listOf("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab")
+    val selectedDays = remember { mutableStateListOf<String>() }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Column(
-                        // Centraliza o conteúdo (os dois textos)
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Agendamento",
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = "Agende suas Sessões de Foco",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            // Removido o padding top desnecessário
-                        )
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(top = 10.dp)
-                .verticalScroll(rememberScrollState()),
+    var startTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
+    var endTime by remember { mutableStateOf(LocalTime.of(0, 0)) }
+    var selectedProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
+
+    var showStartTimePicker by remember { mutableStateOf(false) }
+    var showEndTimePicker by remember { mutableStateOf(false) }
+
+    val sessions by viewModel.sessions.collectAsState()
+    val profiles by viewModel.profiles.collectAsState()
+
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // --- Seleção dos dias da semana ---
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Spacer(Modifier.height(8.dp))
-
-            // Seletor de Perfil
-            if (uiState.profiles.isNotEmpty()) {
-                ProfileSelector(
-                    profiles = uiState.profiles,
-                    selectedProfileId = uiState.selectedProfileId,
-                    onProfileSelected = { profileId ->
-                        viewModel.onEvent(ScheduleEvent.OnProfileSelected(profileId))
-                    }
-                )
-            } else {
-                Text(
-                    "Nenhum perfil encontrado.",
-                    style = MaterialTheme.typography.bodyLarge,
+            weekDays.forEach { day ->
+                val isSelected = selectedDays.contains(day)
+                Button(
+                    onClick = {
+                        if (isSelected) selectedDays.remove(day) else selectedDays.add(day)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) Color.Gray else Color.LightGray
+                    ),
                     modifier = Modifier
-                        .padding(horizontal = HORIZONTAL_PADDING, vertical = 8.dp)
-                        .padding(start = 85.dp)
-
-                )
+                        .padding(horizontal = 4.dp)
+                        .width(44.dp)
+                        .height(38.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text(day, fontSize = 16.sp)
+                }
             }
-
-            // Separador após a primeira seção
-            Spacer(Modifier.height(VERTICAL_SPACER / 2))
-            Divider(Modifier.padding(horizontal = HORIZONTAL_PADDING))
-            Spacer(Modifier.height(VERTICAL_SPACER / 2))
-
-
-            // Seletor de Dias da Semana
-            DaysOfWeekSelector(
-                selectedDays = uiState.selectedDays,
-                onDayToggle = { day ->
-                    viewModel.onEvent(ScheduleEvent.OnDayToggle(day))
-                }
-            )
-
-            Divider(Modifier.padding(horizontal = HORIZONTAL_PADDING))
-
-            Spacer(Modifier.height(VERTICAL_SPACER))
-
-            // Seletor de Horário de Início
-            StartTimeSelector(
-                hour = uiState.startHour,
-                minute = uiState.startMinute,
-                onHourChange = { hour ->
-                    viewModel.onEvent(ScheduleEvent.OnStartHourChange(hour))
-                },
-                onMinuteChange = { minute ->
-                    viewModel.onEvent(ScheduleEvent.OnStartMinuteChange(minute))
-                }
-            )
-
-            Divider(Modifier.padding(horizontal = HORIZONTAL_PADDING))
-            Spacer(Modifier.height(VERTICAL_SPACER))
-
-            // Lista de Sessões Agendadas
-            SessionsListComponent(
-                sessions = uiState.sessions,
-                onDeleteSession = { session ->
-                    viewModel.onEvent(ScheduleEvent.OnDeleteSession(session))
-                }
-            )
-
-            Spacer(Modifier.height(VERTICAL_SPACER * 2))
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = HORIZONTAL_PADDING) // Mantém o padding lateral
-                .padding(bottom = 16.dp), // Espaçamento da base da tela
-            contentAlignment = Alignment.BottomCenter
-        ) {
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // --- Hora de início ---
+        Text("Hora de Início", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(
+            text = startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+            fontWeight = FontWeight.Bold,
+            fontSize = 36.sp
+        )
+        Button(onClick = { showStartTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecionar Hora de Início", fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // --- Hora de fim ---
+        Text("Hora de Fim", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(
+            text = endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+            fontWeight = FontWeight.Bold,
+            fontSize = 36.sp
+        )
+        Button(onClick = { showEndTimePicker = true }, colors = ButtonDefaults.buttonColors(Color.Gray)) {
+            Text("Selecionar Hora de Fim", fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // --- Seleção de perfil ---
+        Text("Selecione o Perfil", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        profiles.forEach { profile ->
+            val isSelected = selectedProfile?.id == profile.id
             Button(
-                onClick = { viewModel.onEvent(ScheduleEvent.OnSaveSession) },
+                onClick = { selectedProfile = profile },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .padding(vertical = 4.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray, contentColor = Color.DarkGray
-            )
-            ) {
-                Text(
-                    text = "Salvar Agendamento",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    containerColor = if (isSelected) Color.Gray else Color.LightGray
                 )
+            ) {
+                Text(profile.ProfileName)
             }
         }
-    }
-}
+        Spacer(modifier = Modifier.height(20.dp))
 
-// ------------------------------------ Componentes ------------------------------------
-
-@Composable
-private fun SectionTitleRow(
-    icon: ImageVector,
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.padding(horizontal = HORIZONTAL_PADDING)) {
-        Icon(
-            icon,
-            contentDescription = null,
-            modifier = Modifier.size(ICON_SIZE),
-            tint = Color.Gray // Ícone de seção agora é preto
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(
-            title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProfileSelector(
-    profiles: List<ProfilesEntity>,
-    selectedProfileId: Int?,
-    onProfileSelected: (Int) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    val selectedProfile = profiles.firstOrNull { it.idProfile == selectedProfileId }
-
-    Column(Modifier.fillMaxWidth()) {
-        SectionTitleRow(icon = Icons.Default.AccountCircle, title = "Perfil")
-
-        Spacer(Modifier.height(8.dp))
-
-        Box(modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING)) {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
-            ) {
-                OutlinedTextField(
-                    value = selectedProfile?.profileName ?: "Selecione um perfil",
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Perfil") },
-                    modifier = Modifier.menuAnchor().fillMaxWidth(),
-                    trailingIcon = {
-                        // Ícone de dropdown (seta)
-                        Icon(
-                            Icons.Default.ArrowDropDown, // Usando ArrowDropDown como trailingIcon
-                            contentDescription = null,
-                            tint = Color.Gray // Ícone em preto
-                        )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.DarkGray,
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedLabelColor = Color.DarkGray,
-                    unfocusedLabelColor = Color.Gray,
-                    cursorColor = Color.DarkGray
-                )
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    profiles.forEach { profile ->
-                        DropdownMenuItem(
-                            text = { Text(profile.profileName) },
-                            onClick = {
-                                expanded = false
-                                onProfileSelected(profile.idProfile)
-                            }
-                        )
+        // --- Botão para salvar sessão ---
+        Button(
+            onClick = {
+                val selectedDaysEnums = selectedDays.mapNotNull { day ->
+                    when (day) {
+                        "Dom" -> WeekDaysAtribute.DOMINGO
+                        "Seg" -> WeekDaysAtribute.SEGUNDA
+                        "Ter" -> WeekDaysAtribute.TERCA
+                        "Qua" -> WeekDaysAtribute.QUARTA
+                        "Qui" -> WeekDaysAtribute.QUINTA
+                        "Sex" -> WeekDaysAtribute.SEXTA
+                        "Sab" -> WeekDaysAtribute.SABADO
+                        else -> null
                     }
                 }
-            }
-        }
-    }
-}
 
-@Composable
-fun DurationComponent(
-    duration: Int,
-    onDurationChange: (Int) -> Unit
-) {
-    Column(Modifier.fillMaxWidth()) {
-        SectionTitleRow(icon = Icons.Default.Timer, title = "Duração do Agendamento")
-
-        Spacer(Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = duration.toString(),
-            onValueChange = {
-                val value = it.toIntOrNull()
-                if (value != null && value >= 0) {
-                    onDurationChange(value)
+                selectedProfile?.let { profile ->
+                    val session = SessionsEntity(
+                        id = 0, // autogerado pelo Room
+                        namePerfil = profile.ProfileName,
+                        startHour = startTime.toString(),
+                        endHour = endTime.toString(),
+                        dayOfWeek = selectedDaysEnums, // agora é uma lista
+                        isActive = true,
+                        id_profile = profile.id
+                    )
+                    viewModel.save(session)
                 }
             },
-            label = { Text("Duração (minutos)") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = HORIZONTAL_PADDING),
-            singleLine = true
-        )
-    }
-}
-
-@Composable
-fun DaysOfWeekSelector(
-    selectedDays: Set<WeekDaysAtribute>,
-    onDayToggle: (WeekDaysAtribute) -> Unit
-) {
-    val orderedDays = WeekDaysAtribute.entries.sortedBy {
-        if (it == WeekDaysAtribute.DOMINGO) 7 else it.id_day - 1
-    }
-
-    val dayLabels = mapOf(
-        WeekDaysAtribute.SEGUNDA to "S",
-        WeekDaysAtribute.TERCA to "T",
-        WeekDaysAtribute.QUARTA to "Q",
-        WeekDaysAtribute.QUINTA to "Q",
-        WeekDaysAtribute.SEXTA to "S",
-        WeekDaysAtribute.SABADO to "S",
-        WeekDaysAtribute.DOMINGO to "D",
-    )
-
-    Column(Modifier.fillMaxWidth()) {
-        SectionTitleRow(icon = Icons.Default.CalendarToday, title = "Dias da Semana")
-
-        Spacer(Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = HORIZONTAL_PADDING),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            enabled = selectedProfile != null && selectedDays.isNotEmpty()
         ) {
-            orderedDays.forEach { day ->
-                FilterChip(
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color.Gray,
-                        selectedLabelColor = Color.White,
-                        containerColor = Color.LightGray,
-                        labelColor = Color.Black
-                    ),
-                    selected = selectedDays.contains(day),
-                    onClick = { onDayToggle(day) },
-                    label = {
-                        Text(
-                            text = dayLabels[day] ?: day.name.take(1),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 2.dp)
-                )
-            }
+            Text("Agendar Sessão", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
-    }
-}
 
-@Composable
-fun StartTimeSelector(
-    hour: Int,
-    minute: Int,
-    onHourChange: (Int) -> Unit,
-    onMinuteChange: (Int) -> Unit
-) {
-    Column(Modifier.fillMaxWidth()) {
-        SectionTitleRow(icon = Icons.Default.Schedule, title = "Horário de Início")
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(Modifier.height(8.dp))
+        // --- Sessões agendadas ---
+        Text("Sessões Agendadas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(HORIZONTAL_PADDING),
-            modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING)
-        ) {
-            OutlinedTextField(
-                value = hour.toString(),
-                onValueChange = {
-                    val v = it.toIntOrNull()
-                    if (v != null && v in 0..23) onHourChange(v)
-                    else if (it.isEmpty() || it == "0") onHourChange(0)
-                },
-                label = { Text("Hora (0-23)") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f),
-                singleLine = true
-            )
-
-            OutlinedTextField(
-                value = minute.toString(),
-                onValueChange = {
-                    val v = it.toIntOrNull()
-                    if (v != null && v in 0..59) onMinuteChange(v)
-                    else if (it.isEmpty() || it == "0") onMinuteChange(0)
-                },
-                label = { Text("Minuto (0-59)") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f),
-                singleLine = true
-            )
-        }
-    }
-}
-
-@Composable
-fun SessionsListComponent(
-    sessions: List<SessionsEntity>,
-    onDeleteSession: (SessionsEntity) -> Unit
-) {
-    Column(Modifier.fillMaxWidth()) {
-        SectionTitleRow(icon = Icons.Default.ListAlt, title = "Sessões Agendadas")
-
-        Spacer(Modifier.height(8.dp))
-
-        if (sessions.isEmpty()) {
-            Text(
-                "Nenhuma sessão cadastrada",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING)
-            )
-        } else {
-            Column(
+        sessions.forEach { session ->
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = HORIZONTAL_PADDING),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(vertical = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.LightGray)
             ) {
-                sessions.forEach { session ->
-
-                    // --- CARTÃO INDIVIDUAL DA SESSÃO ---
-                    Card(
-                        shape = RoundedCornerShape(CARD_CORNER_RADIUS),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
-                        val sortedDays = session.daysOfWeek.sortedBy { it.id_day }
-                        val daysString = sortedDays.joinToString(", ") {
-                            it.name.take(3)
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "${session.startHour.toString().padStart(2, '0')}:${session.startMinute.toString().padStart(2, '0')} - $daysString",
-                                modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-
-                            // Botão de apagar
-                            IconButton(
-                                onClick = { onDeleteSession(session) },
-                                modifier = Modifier.size(36.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = "Apagar Sessão",
-                                    tint = Color.DarkGray //
-                                )
-                            }
-                        }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(session.namePerfil, fontWeight = FontWeight.Bold)
+                        Text("${session.startHour} - ${session.endHour}")
+                        Text("Dias: ${session.dayOfWeek.joinToString(", ")}")
                     }
+                    Switch(
+                        checked = session.isActive,
+                        onCheckedChange = { viewModel.update(session.copy(isActive = it)) }
+                    )
                 }
             }
         }
+    }
+
+    // --- TimePicker início ---
+    if (showStartTimePicker) {
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                startTime = LocalTime.of(hour, minute)
+                showStartTimePicker = false
+            },
+            startTime.hour, startTime.minute, true
+        ).show()
+    }
+
+    // --- TimePicker fim ---
+    if (showEndTimePicker) {
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                endTime = LocalTime.of(hour, minute)
+                showEndTimePicker = false
+            },
+            endTime.hour, endTime.minute, true
+        ).show()
     }
 }

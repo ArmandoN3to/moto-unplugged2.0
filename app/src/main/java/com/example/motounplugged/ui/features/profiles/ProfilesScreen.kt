@@ -10,10 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.compose.ui.unit.sp
 import com.example.motounplugged.database.entities.ProfilesEntity
 import com.example.motounplugged.ui.components.EditProfileDialog
 import com.example.motounplugged.ui.components.ProfileCard
@@ -22,103 +19,75 @@ import com.example.motounplugged.ui.features.profiles.ProfilesScreenViewModel
 
 @Composable
 fun ProfilesScreen(
-    viewModel: ProfilesScreenViewModel,
-    navController: NavHostController
-) {
-    val profiles by viewModel.profiles.collectAsState()
+    viewModel: ProfilesScreenViewModel, // chama a minha model que tem o flow
+    modifier: Modifier = Modifier) {
 
-    Scaffold { padding ->
+       // profiles vai receber o meu stateflow e coletar esse estado
+       val profiles by viewModel.profiles.collectAsState()
+       var editingProfile by remember { mutableStateOf<ProfilesEntity?>(null) }
 
-        ProfilesScreenContent(
-            profiles = profiles,
-            onProfileClick = { profileId ->
-                navController.navigate("create_profile_screen?profileId=$profileId")
-            },
-            onToggleProfile = { profile, newValue ->
-                // Desativa outro perfil ativo
-                if (newValue) {
-                    profiles.forEach { other ->
-                        if (other.idProfile != profile.idProfile && other.isImmediatelyActive) {
-                            viewModel.update(other.copy(isImmediatelyActive = false))
-                        }
-                    }
-                }
+        Box(
+            modifier = modifier
+                .padding()
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
 
-                viewModel.update(profile.copy(isImmediatelyActive = newValue))
-            },
-            modifier = Modifier.padding(padding)
-        )
-    }
-}
-
-
-@Composable
-fun ProfilesScreenContent(
-    profiles: List<ProfilesEntity>,
-    onProfileClick: (Int) -> Unit,
-    onToggleProfile: (ProfilesEntity, Boolean) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Perfis de Foco",
-            fontSize = 25.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        Text(
-            text = "Crie e personalize seus perfis",
-            fontSize = 20.sp,
-            color = Color.Gray,
-            modifier = Modifier.padding(top = 5.dp, bottom = 16.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(
-                items = profiles,
-                key = { it.idProfile }
-            ) { profile ->
-                ProfileCard(
-                    title = profile.profileName,
-                    count = profile.appCount,
-                    isActive = profile.isImmediatelyActive,
-                    onToggle = { newValue ->
-                        onToggleProfile(profile, newValue)
-                    },
-                    onClick = {
-                        onProfileClick(profile.idProfile)
-                    }
-                )
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(
+                    items = profiles,
+                    key = { it.id}
+                ) { profile ->
+                    ProfileCard(
+                        title = profile.ProfileName,
+                        count = profile.appCount,
+                        isActive = profile.isImmediatelyActive,
+                        onToggle = { newValue ->
+                            if (newValue){
+                                profiles.forEach { other ->
+                                    if (other.id != profile.id && other.isImmediatelyActive){
+                                        viewModel.update(other.copy(isImmediatelyActive = false))
+                                    }
+                                }
+                            }
+                            val updated = profile.copy(isImmediatelyActive = newValue)
+                            viewModel.update(updated)
+                        }
+                    )
+                }
             }
         }
+
+        // se um perfil foi selecionado para edição
+        editingProfile?.let { profile ->
+            EditProfileDialog(
+                profile = profile,
+                onDismiss = { editingProfile = null },
+                onSave = { updated ->
+                    viewModel.update(updated)
+                    editingProfile = null
+                }
+            )
+        }
     }
-}
+
 
 
 @Composable
-fun FAB_new_profile(navController: NavHostController) {
+fun FAB_new_profile(onClick: () -> Unit) {
     FloatingActionButton(
-        onClick = {
-            navController.navigate("create_profile_screen?profileId=-1")
-        },
+        onClick = { onClick() },
         containerColor = Color.LightGray,
         contentColor = Color.Black
     ) {
         Icon(Icons.Filled.Add, contentDescription = "Adicionar perfil")
     }
 }
-
 

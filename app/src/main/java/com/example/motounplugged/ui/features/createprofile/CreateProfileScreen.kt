@@ -1,123 +1,51 @@
 package com.example.motounplugged.ui.features.createprofile
 
-import android.app.Activity
-import android.app.KeyguardManager
-import android.app.Notification
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
-import android.provider.Settings
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
-import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.material.icons.filled.BatterySaver
-import androidx.compose.material.icons.filled.Close
-
-
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.example.motounplugged.ui.navigation.AppScreens
-import com.example.motounplugged.models.AppInfo
+import com.example.motounplugged.ui.theme.MotoUnpluggedTheme
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
-import coil.compose.AsyncImage
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
-    profileId: Int?,
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Carrega o perfil apenas uma vez se estiver em modo edição
-    LaunchedEffect(profileId) {
-        if (profileId != null && profileId != -1) {
-            viewModel.loadProfile(profileId)  // agora só roda se não tiver carregado antes
-        }
-    }
-
-    // Aplicativos salvos
-    val selectedApps = navController
-        .currentBackStackEntry
-        ?.savedStateHandle
-        ?.getStateFlow<List<AppInfo>?>("selectedApps", null)
-        ?.collectAsState()
-        ?.value
-
-    // Retorna aplicativos salvos
-    LaunchedEffect(selectedApps) {
-        selectedApps?.let { viewModel.setSelectedApps(it) }
-    }
-
-    // Navega após salvar
-    LaunchedEffect(uiState.saveSuccess) {
-        if (uiState.saveSuccess) {
-            navController.navigate(AppScreens.Profiles.route) {
-                popUpTo(AppScreens.Profiles.route) { inclusive = true }
-            }
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(if (uiState.isEditing) "Editar Perfil" else "Criar Perfil")
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        CreateProfileContent(
-            modifier = Modifier.padding(innerPadding),
-            uiState = uiState,
-            onEvent = viewModel::onEvent,
-            navController = navController
-        )
-    }
+    CreateProfileContent(
+        modifier = Modifier.padding(),
+        uiState = uiState,
+        onEvent = viewModel::onEvent, // Passa a referência da função de eventos
+        navController = navController
+    )
 }
 
 
@@ -128,65 +56,43 @@ private fun CreateProfileContent(
     onEvent: (CreateProfileEvent) -> Unit,
     navController: NavController
 ) {
-    // Launcher para seleção de wallpaper
-    val wallpaperPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri ->
-        uri?.let {
-            onEvent(CreateProfileEvent.OnWallpaperSelected(uri.toString()))
-        }
-    }
-
-    var durationText by remember { mutableStateOf("") }
-
-    LaunchedEffect(uiState.duration) {
-        if (uiState.isEditing || uiState.duration != 0) {
-            durationText = uiState.duration.toString()
-        }
-    }
-    // Salva se o usuário confirmou sua senha
-    var pendingPasswordRequired by remember { mutableStateOf<Boolean?>(null) }
-
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
+        Text(
+            text = "Criar Novo Perfil",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        // Seção para o nome do perfil
         OutlinedTextField(
             value = uiState.profileName,
             onValueChange = { onEvent(CreateProfileEvent.OnProfileNameChange(it)) },
             label = { Text("Nome do Perfil") },
             leadingIcon = { Icon(Icons.Default.AppRegistration, contentDescription = null) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.DarkGray,
-                unfocusedLabelColor = Color.Gray,
-                cursorColor = Color.Gray
-            )
+            singleLine = true
         )
+
+
+         Spacer(Modifier.height(24.dp))
 
         // Card para selecionar apps
         Card(
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                        "selectedApps",
-                        uiState.selectedApps   // LIST<AppInfo>
-                    )
-                    val id = uiState.profileId ?: -1
-                    navController.navigate("${AppScreens.SelectApps.route}/$id")
-                }
+
+            modifier = Modifier.clickable {//navController.navigate(AppScreens.Lista de Apps.route
+            }
         ) {
             Row(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(Icons.Default.Apps, contentDescription = null, modifier = Modifier.size(28.dp))
@@ -198,7 +104,7 @@ private fun CreateProfileContent(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        "${uiState.appCount} aplicativos selecionados",
+                        if (uiState.selectedApps.isEmpty()) "Nenhum aplicativo selecionado" else "${uiState.selectedApps.size} aplicativos selecionados",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -206,168 +112,62 @@ private fun CreateProfileContent(
                 Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
             }
         }
-
-        if (uiState.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        }
-
-        Column {
-            SettingsRow(
-                icon = Icons.Default.Wallpaper,
-                title = "Wallpaper",
-                subtitle = if (uiState.wallpaperUri != null) "Selecionado" else "Nenhum selecionado",
-                onClick = { wallpaperPicker.launch("image/*") }
-            )
-
-            if (uiState.wallpaperUri != null) {
-                Spacer(Modifier.height(8.dp))
-                Box {
-                    AsyncImage(
-                        model = uiState.wallpaperUri,
-                        contentDescription = "Preview wallpaper",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                    )
-
-                    IconButton(
-                        modifier = Modifier.align(Alignment.TopEnd),
-                        onClick = {onEvent(CreateProfileEvent.OnClearWallpaper)}
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Remove Wallpaper"
-                        )
-                    }
-                }
-            }
-        }
-
-        val context = LocalContext.current
-
-        SettingsSwitchRow(
-            icon = Icons.Default.NotificationsNone,
-            title = "Interrupções",
-            subtitle = "Gerenciar alertas e notificações",
-            checked = uiState.interruptions,
-            onCheckedChange = {
-                val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-                if (!nm.isNotificationPolicyAccessGranted) {
-                    context.startActivity(
-                        Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    )
-                } else {
-                    onEvent(CreateProfileEvent.OnInterruptionsClick(it))
-                }
-
-            }
-        )
-
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp))
-
-        OutlinedTextField(
-            value = durationText,
-            onValueChange = { value ->
-                durationText = value
-
-                val number = value.toIntOrNull()
-                if (number != null) {
-                    onEvent(CreateProfileEvent.OnDurationChanged(number))
-                }
-            },
-            label = { Text("Duração (minutos)") },
-            leadingIcon = { Icon(Icons.Default.Alarm, contentDescription = null) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { focusState ->
-                    if (!focusState.isFocused && durationText.isBlank()) {
-                        // volta ao valor real salvo no viewmodel
-                        durationText = "0"
-                    }
-                },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
-            ),
-            singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.DarkGray,
-                unfocusedLabelColor = Color.Gray,
-                cursorColor = Color.Gray
-            )
-
-        )
-
-
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp))
-
-        val keyguardManager =
-            context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-
-        val unlockLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // agora sim altera o estado real
-                pendingPasswordRequired?.let {
-                    onEvent(CreateProfileEvent.OnRequirePasswordChange(it))
-                }
-            }
-
-            // limpa o estado temporário
-            pendingPasswordRequired = null
-        }
-
-        SettingsSwitchRow(
-            icon = Icons.Default.Password,
-            title = "Requer senha",
-            subtitle =
-                if (uiState.passwordRequired)
-                    "Senha do dispositivo será exigida para sair do modo"
-                else
-                    "Desativado",
-            checked = uiState.passwordRequired,
-            onCheckedChange = { newValue ->
-
-                // guarda a intenção do usuário
-                pendingPasswordRequired = newValue
-
-                if (keyguardManager.isDeviceSecure) {
-                    val intent = keyguardManager.createConfirmDeviceCredentialIntent(
-                        "Confirmar identidade",
-                        "Digite a senha do dispositivo para alterar esta configuração"
-                    )
-                    unlockLauncher.launch(intent)
-                }
-            }
-        )
+        Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { onEvent(CreateProfileEvent.OnSaveProfileClick) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = uiState.profileName.isNotBlank() && !uiState.isLoading,
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.Gray,
-                contentColor = Color.White,          // texto branco
-                disabledContainerColor = Color.LightGray,
-                disabledContentColor = Color.White
-            )
+            onClick = {
+                if (uiState.profileName.isNotBlank()){
+                    onEvent(CreateProfileEvent.OnSaveProfileClick)
+                    navController.navigate(AppScreens.Profiles.route)}
+
+                else{
+                    println("Nome do perfil não pode ser vazio")
+                }
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = MaterialTheme.shapes.medium,
+            enabled = uiState.profileName.isNotBlank()
+
+
         ) {
             Text(
-                text = if (uiState.isEditing) "Atualizar Perfil" else "Salvar",
+                text = "Salvar",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
         }
-
     }
 }
+//
+//        Spacer(Modifier.height(16.dp))
+//
+//
+//        // Item para Agendamento
+//        SettingsRow(
+//            icon = Icons.Default.Notifications,
+//            title = "Agendamento",
+//            subtitle = "Definir horários de ativação",
+//            onClick = { onEvent(CreateProfileEvent.OnSchedulingClick) }
+//        )
+//
+//        Divider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+//
+//        // Item para o Switch
+//        SettingsSwitchRow(
+//            icon = Icons.Default.Password,
+//            title = "Ativar ao salvar",
+//            subtitle = "O perfil será ativado imediatamente",
+//            checked = uiState.isImmediatelyActive,
+//            onCheckedChange = { onEvent(CreateProfileEvent.OnActivateImmediatelyChange(it)) }
+//        )
+//    }
+//}}
 
 
+/*
 @Composable
 private fun SettingsRow(
     icon: ImageVector,
@@ -386,14 +186,14 @@ private fun SettingsRow(
         Icon(icon, contentDescription = null, modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+            Text(title, style = MaterialTheme.typography.bodyLarge)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null)
     }
-}
+}*/
 
-@Composable
+/*@Composable
 private fun SettingsSwitchRow(
     icon: ImageVector,
     title: String,
@@ -416,8 +216,7 @@ private fun SettingsSwitchRow(
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
-
-
+*/
 
 /*@Preview(showBackground = true)
 @Composable
